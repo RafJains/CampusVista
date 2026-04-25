@@ -1,0 +1,5 @@
+crowd_rule_id,checkpoint_id,day_type,start_time,end_time,crowd_level,penalty_cost,description
+CR_CP004_WEEKDAY_MORNING,OUT_CP004,weekday,09:00,11:00,medium,15,Library front gets busy before classes
+CR_CP005_WEEKDAY_LUNCH,OUT_CP005,weekday,12:00,14:00,high,30,Canteen front lunch rush
+CR_CP006_WEEKDAY_AFTERNOON,OUT_CP006,weekday,15:00,17:00,high,25,Academic block transition rush
+CR_CP009_WEEKEND_EVENING,OUT_CP009,weekend,17:00,19:00,low,5,Light hostel-side evening crowd
