@@ -1,0 +1,8 @@
+alias_id,place_id,alias_text,alias_type
+AL_MAIN_GATE_1,PL_MAIN_GATE,main entrance,common_name
+AL_ADMIN_1,PL_ADMIN_BLOCK,admin office,common_name
+AL_LIBRARY_1,PL_LIBRARY,lib,nickname
+AL_LIBRARY_2,PL_LIBRARY,libary,alternate_spelling
+AL_CANTEEN_1,PL_CANTEEN,cafeteria,common_name
+AL_ACAD_1,PL_ACADEMIC_BLOCK,academic block,common_name
+AL_PARKING_1,PL_PARKING,parking lot,common_name

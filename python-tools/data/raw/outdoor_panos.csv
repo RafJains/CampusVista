@@ -1,0 +1,4 @@
+pano_id,checkpoint_id,image_file,thumbnail_file,orientation,description
+PANO_OUT_CP001,OUT_CP001,OUT_CP001.jpg,,north,Main gate outdoor panorama placeholder
+PANO_OUT_CP004,OUT_CP004,OUT_CP004.jpg,,north,Library front outdoor panorama placeholder
+PANO_OUT_CP006,OUT_CP006,OUT_CP006.jpg,,north,Academic block entrance panorama placeholder

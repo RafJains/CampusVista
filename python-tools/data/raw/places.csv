@@ -1,0 +1,11 @@
+place_id,place_name,place_type,checkpoint_id,description,keywords
+PL_MAIN_GATE,Main Gate,gate,OUT_CP001,Primary entry point,main gate entrance entry
+PL_ADMIN_BLOCK,Admin Block,admin_block,OUT_CP003,Administration building outdoor entrance,admin office administration block
+PL_LIBRARY,Library,library,OUT_CP004,Library front entrance,library books study reading
+PL_CANTEEN,Canteen,canteen,OUT_CP005,Canteen outdoor front area,canteen food cafeteria snacks
+PL_ACADEMIC_BLOCK,Academic Block,academic_block,OUT_CP006,Academic block entrance,academic classes lecture block
+PL_CENTRAL_LAWN,Central Lawn,landmark,OUT_CP007,Central outdoor landmark,lawn garden open area
+PL_PARKING,Visitor Parking,parking,OUT_CP008,Outdoor visitor parking,parking vehicle visitor lot
+PL_HOSTEL_GATE,Hostel Side Gate,hostel,OUT_CP009,Gate toward hostel side,hostel side gate
+PL_SPORTS_GROUND,Sports Ground,facility,OUT_CP010,Outdoor sports ground approach,sports ground field
+PL_SCIENCE_BLOCK,Science Block,academic_block,OUT_CP011,Science block entrance,science labs academic block

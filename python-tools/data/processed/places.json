@@ -1,0 +1,82 @@
+[
+  {
+    "checkpoint_id": "OUT_CP001",
+    "description": "Primary entry point",
+    "keywords": "main gate entrance entry",
+    "place_id": "PL_MAIN_GATE",
+    "place_name": "Main Gate",
+    "place_type": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "description": "Administration building outdoor entrance",
+    "keywords": "admin office administration block",
+    "place_id": "PL_ADMIN_BLOCK",
+    "place_name": "Admin Block",
+    "place_type": "admin_block"
+  },
+  {
+    "checkpoint_id": "OUT_CP004",
+    "description": "Library front entrance",
+    "keywords": "library books study reading",
+    "place_id": "PL_LIBRARY",
+    "place_name": "Library",
+    "place_type": "library"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "description": "Canteen outdoor front area",
+    "keywords": "canteen food cafeteria snacks",
+    "place_id": "PL_CANTEEN",
+    "place_name": "Canteen",
+    "place_type": "canteen"
+  },
+  {
+    "checkpoint_id": "OUT_CP006",
+    "description": "Academic block entrance",
+    "keywords": "academic classes lecture block",
+    "place_id": "PL_ACADEMIC_BLOCK",
+    "place_name": "Academic Block",
+    "place_type": "academic_block"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "description": "Central outdoor landmark",
+    "keywords": "lawn garden open area",
+    "place_id": "PL_CENTRAL_LAWN",
+    "place_name": "Central Lawn",
+    "place_type": "landmark"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "description": "Outdoor visitor parking",
+    "keywords": "parking vehicle visitor lot",
+    "place_id": "PL_PARKING",
+    "place_name": "Visitor Parking",
+    "place_type": "parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP009",
+    "description": "Gate toward hostel side",
+    "keywords": "hostel side gate",
+    "place_id": "PL_HOSTEL_GATE",
+    "place_name": "Hostel Side Gate",
+    "place_type": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP010",
+    "description": "Outdoor sports ground approach",
+    "keywords": "sports ground field",
+    "place_id": "PL_SPORTS_GROUND",
+    "place_name": "Sports Ground",
+    "place_type": "facility"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "description": "Science block entrance",
+    "keywords": "science labs academic block",
+    "place_id": "PL_SCIENCE_BLOCK",
+    "place_name": "Science Block",
+    "place_type": "academic_block"
+  }
+]

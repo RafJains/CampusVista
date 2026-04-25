@@ -1,0 +1,13 @@
+checkpoint_id,checkpoint_name,checkpoint_type,x_coord,y_coord,latitude,longitude,description,orientation
+OUT_CP001,Main Gate,gate,100,900,,,Primary public entry point,north
+OUT_CP002,Main Path Junction,junction,420,900,,,Junction after entering from main gate,east
+OUT_CP003,Admin Block Entrance,building_entry,680,740,,,Outdoor entrance checkpoint for admin block,north-east
+OUT_CP004,Library Front,facility_entry,980,620,,,Front outdoor area of the library,north
+OUT_CP005,Canteen Front,facility_entry,1100,930,,,Outdoor canteen approach area,east
+OUT_CP006,Academic Block Entrance,building_entry,1500,760,,,Main outdoor entrance for academic block,north
+OUT_CP007,Central Lawn Landmark,landmark,1350,1050,,,Central open landmark near main paths,south
+OUT_CP008,Visitor Parking,parking,320,1250,,,Outdoor visitor parking area,south
+OUT_CP009,Hostel Side Gate,gate,1770,1180,,,Gate toward hostel side,south-east
+OUT_CP010,Sports Ground Entrance,landmark,2100,1320,,,Outdoor entry point near sports ground,east
+OUT_CP011,Science Block Entrance,building_entry,2050,800,,,Outdoor entrance checkpoint for science block,north
+OUT_CP012,Rear Path Junction,junction,1900,980,,,Rear junction connecting academic and hostel side paths,east

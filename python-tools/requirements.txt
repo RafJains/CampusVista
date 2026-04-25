@@ -1,0 +1,9 @@
+# The first data-pipeline milestone runs on the Python standard library.
+# Install pytest if you prefer pytest over the included unittest suite.
+pytest>=8.0
+
+# Future training/preprocessing milestones from the final spec.
+pandas>=2.0
+numpy>=1.26
+opencv-python>=4.9
+tensorflow>=2.16
