@@ -1,0 +1,6 @@
+{
+  "campus_map_file": "campus_map.png",
+  "campus_map_width_px": 3000,
+  "campus_map_height_px": 1800,
+  "meters_per_pixel": 0.2
+}
