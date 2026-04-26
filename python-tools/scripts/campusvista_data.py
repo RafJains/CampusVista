@@ -6,6 +6,7 @@ import math
 import re
 import shutil
 import sqlite3
+import struct
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any
@@ -126,6 +127,8 @@ VALID_ALIAS_TYPES = {
 TIME_RE = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
 MAX_PANO_BYTES = 2 * 1024 * 1024
 MAX_TOTAL_PANO_BYTES = 60 * 1024 * 1024
+MAX_MAP_BYTES = 8 * 1024 * 1024
+SEED_DB_VERSION = 1
 
 
 class ValidationError(Exception):
@@ -248,8 +251,29 @@ def validate_config(config: dict[str, Any], errors: list[str]) -> None:
         errors.append("config.meters_per_pixel must be greater than 0")
 
     campus_map_file = str(config.get("campus_map_file", ""))
+    if not campus_map_file.strip():
+        errors.append("config.campus_map_file is required")
     if "/" in campus_map_file or "\\" in campus_map_file:
         errors.append("config.campus_map_file must be a filename, not a path")
+    if Path(campus_map_file).suffix.lower() != ".png":
+        errors.append("config.campus_map_file must be a .png file")
+    if campus_map_file and "/" not in campus_map_file and "\\" not in campus_map_file:
+        map_path = RAW_DIR / "maps" / campus_map_file
+        if not map_path.exists():
+            errors.append(f"campus map asset is missing: {map_path}")
+        else:
+            size = map_path.stat().st_size
+            if size == 0:
+                errors.append(f"campus map asset is empty: {map_path}")
+            if size > MAX_MAP_BYTES:
+                errors.append("campus map asset exceeds the 8 MB MVP budget")
+            _validate_png_file(
+                map_path,
+                int(width) if width > 0 else None,
+                int(height) if height > 0 else None,
+                "campus map asset",
+                errors,
+            )
 
 
 def validate_checkpoints(rows: list[dict[str, str]], errors: list[str]) -> None:
@@ -403,6 +427,7 @@ def validate_outdoor_panos(
             size = path.stat().st_size
             if size > MAX_PANO_BYTES:
                 errors.append(f"outdoor pano {pano_id} {filename} exceeds 2 MB")
+            _validate_jpeg_file(path, f"outdoor pano {pano_id} {field}", errors)
             total_size += size
     if total_size > MAX_TOTAL_PANO_BYTES:
         errors.append("outdoor pano assets exceed the 60 MB MVP budget")
@@ -484,6 +509,7 @@ def generate_all() -> dict[str, Path]:
         "seed_db": seed_db,
         "android_seed_db": ANDROID_ASSETS_DIR / "seed" / "campus_seed.db",
         "android_map_config": ANDROID_ASSETS_DIR / "config" / "map_config.json",
+        "android_map_asset": ANDROID_ASSETS_DIR / "maps" / str(config["campus_map_file"]),
         "android_labels": ANDROID_ASSETS_DIR / "ml" / "labels.txt",
     }
 
@@ -508,6 +534,7 @@ def create_seed_db(data: dict[str, list[dict[str, str]]], output_path: Path) -> 
     try:
         connection.execute("PRAGMA foreign_keys = ON")
         connection.executescript(SCHEMA_SQL)
+        connection.execute(f"PRAGMA user_version = {SEED_DB_VERSION}")
         _insert_rows(connection, data)
         connection.commit()
     finally:
@@ -517,11 +544,14 @@ def create_seed_db(data: dict[str, list[dict[str, str]]], output_path: Path) -> 
 def publish_android_assets(seed_db: Path, config: dict[str, Any]) -> None:
     (ANDROID_ASSETS_DIR / "seed").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "config").mkdir(parents=True, exist_ok=True)
+    (ANDROID_ASSETS_DIR / "maps").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "ml").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "pano" / "outdoor").mkdir(parents=True, exist_ok=True)
 
     shutil.copyfile(seed_db, ANDROID_ASSETS_DIR / "seed" / "campus_seed.db")
     _write_json(ANDROID_ASSETS_DIR / "config" / "map_config.json", config)
+    map_file = str(config["campus_map_file"])
+    shutil.copyfile(RAW_DIR / "maps" / map_file, ANDROID_ASSETS_DIR / "maps" / map_file)
     if LABELS_PATH.exists():
         shutil.copyfile(LABELS_PATH, ANDROID_ASSETS_DIR / "ml" / "labels.txt")
 
@@ -833,6 +863,41 @@ def _time_to_minutes(value: str) -> int:
 def _validate_filename_only(filename: str, label: str, errors: list[str]) -> None:
     if "/" in filename or "\\" in filename or Path(filename).name != filename:
         errors.append(f"{label} must be a filename only")
+
+
+def _validate_jpeg_file(path: Path, label: str, errors: list[str]) -> None:
+    try:
+        data = path.read_bytes()
+    except OSError as exception:
+        errors.append(f"{label} could not be read: {exception}")
+        return
+
+    if len(data) < 4 or data[:2] != b"\xff\xd8" or data[-2:] != b"\xff\xd9":
+        errors.append(f"{label} must be a valid JPEG file")
+
+
+def _validate_png_file(
+    path: Path,
+    expected_width: int | None,
+    expected_height: int | None,
+    label: str,
+    errors: list[str],
+) -> None:
+    try:
+        header = path.read_bytes()[:24]
+    except OSError as exception:
+        errors.append(f"{label} could not be read: {exception}")
+        return
+
+    if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
+        errors.append(f"{label} must be a valid PNG file")
+        return
+
+    width, height = struct.unpack(">II", header[16:24])
+    if expected_width is not None and width != expected_width:
+        errors.append(f"{label} width {width}px does not match config width {expected_width}px")
+    if expected_height is not None and height != expected_height:
+        errors.append(f"{label} height {height}px does not match config height {expected_height}px")
 
 
 def _blank_to_none(value: Any) -> Any:

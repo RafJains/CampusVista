@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CampusVista</string>
     <string name="app_tagline">Offline outdoor campus navigation</string>
+    <string name="campus_map_content_description">Outdoor campus map</string>
     <string name="startup_ready">Offline data ready</string>
     <string name="startup_status_format">%1$s\nMap: %2$d x %3$d px\nCheckpoints: %4$d | Places: %5$d</string>
 </resources>
