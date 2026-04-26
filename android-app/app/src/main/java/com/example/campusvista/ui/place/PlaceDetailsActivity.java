@@ -10,12 +10,12 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.CheckpointDto;
+import com.example.campusvista.network.BackendDtos.PanoDto;
+import com.example.campusvista.network.BackendDtos.PlaceDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendCheckpointDto;
-import com.example.campusvista.network.dto.BackendPanoDto;
-import com.example.campusvista.network.dto.BackendPlaceDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -47,9 +47,9 @@ public final class PlaceDetailsActivity extends Activity {
     }
 
     private void loadPlaceFromBackend(String placeId) {
-        BackendClient.getInstance(this).getPlace(placeId, new BackendCallback<BackendPlaceDto>() {
+        BackendClient.getInstance(this).getPlace(placeId, new BackendCallback<PlaceDto>() {
             @Override
-            public void onSuccess(BackendPlaceDto value) {
+            public void onSuccess(PlaceDto value) {
                 place = BackendMapper.toPlace(value);
                 loadCheckpointFromBackend(place.getCheckpointId());
             }
@@ -78,9 +78,9 @@ public final class PlaceDetailsActivity extends Activity {
     private void loadCheckpointFromBackend(String checkpointId) {
         BackendClient.getInstance(this).getCheckpoint(
                 checkpointId,
-                new BackendCallback<BackendCheckpointDto>() {
+                new BackendCallback<CheckpointDto>() {
                     @Override
-                    public void onSuccess(BackendCheckpointDto value) {
+                    public void onSuccess(CheckpointDto value) {
                         checkpoint = BackendMapper.toCheckpoint(value);
                         bindPlace();
                         bindActions();
@@ -107,9 +107,9 @@ public final class PlaceDetailsActivity extends Activity {
         }
         BackendClient.getInstance(this).getPano(
                 checkpoint.getCheckpointId(),
-                new BackendCallback<BackendPanoDto>() {
+                new BackendCallback<PanoDto>() {
                     @Override
-                    public void onSuccess(BackendPanoDto value) {
+                    public void onSuccess(PanoDto value) {
                         ViewFactory.setVisible(findViewById(R.id.placePanoButton), true);
                     }
 

@@ -3,11 +3,11 @@ package com.example.campusvista.network;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.network.dto.BackendCheckpointDto;
-import com.example.campusvista.network.dto.BackendEdgeDto;
-import com.example.campusvista.network.dto.BackendPanoDto;
-import com.example.campusvista.network.dto.BackendPlaceDto;
-import com.example.campusvista.network.dto.BackendRouteResponse;
+import com.example.campusvista.network.BackendDtos.CheckpointDto;
+import com.example.campusvista.network.BackendDtos.EdgeDto;
+import com.example.campusvista.network.BackendDtos.PanoDto;
+import com.example.campusvista.network.BackendDtos.PlaceDto;
+import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.example.campusvista.routing.Graph;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
@@ -20,7 +20,7 @@ public final class BackendMapper {
     private BackendMapper() {
     }
 
-    public static Checkpoint toCheckpoint(BackendCheckpointDto dto) {
+    public static Checkpoint toCheckpoint(CheckpointDto dto) {
         if (dto == null) {
             return null;
         }
@@ -37,12 +37,12 @@ public final class BackendMapper {
         );
     }
 
-    public static List<Checkpoint> toCheckpoints(List<BackendCheckpointDto> dtos) {
+    public static List<Checkpoint> toCheckpoints(List<CheckpointDto> dtos) {
         if (dtos == null || dtos.isEmpty()) {
             return Collections.emptyList();
         }
         List<Checkpoint> checkpoints = new ArrayList<>();
-        for (BackendCheckpointDto dto : dtos) {
+        for (CheckpointDto dto : dtos) {
             Checkpoint checkpoint = toCheckpoint(dto);
             if (checkpoint != null) {
                 checkpoints.add(checkpoint);
@@ -51,7 +51,7 @@ public final class BackendMapper {
         return checkpoints;
     }
 
-    public static Place toPlace(BackendPlaceDto dto) {
+    public static Place toPlace(PlaceDto dto) {
         if (dto == null) {
             return null;
         }
@@ -65,12 +65,12 @@ public final class BackendMapper {
         );
     }
 
-    public static List<Place> toPlaces(List<BackendPlaceDto> dtos) {
+    public static List<Place> toPlaces(List<PlaceDto> dtos) {
         if (dtos == null || dtos.isEmpty()) {
             return Collections.emptyList();
         }
         List<Place> places = new ArrayList<>();
-        for (BackendPlaceDto dto : dtos) {
+        for (PlaceDto dto : dtos) {
             Place place = toPlace(dto);
             if (place != null) {
                 places.add(place);
@@ -79,7 +79,7 @@ public final class BackendMapper {
         return places;
     }
 
-    public static OutdoorPano toPano(BackendPanoDto dto) {
+    public static OutdoorPano toPano(PanoDto dto) {
         if (dto == null) {
             return null;
         }
@@ -94,7 +94,7 @@ public final class BackendMapper {
     }
 
     public static RouteResult toRouteResult(
-            BackendRouteResponse response,
+            RouteResponseDto response,
             RouteMode fallbackMode
     ) {
         RouteMode routeMode = parseRouteMode(response == null ? null : response.routeMode, fallbackMode);
@@ -123,12 +123,12 @@ public final class BackendMapper {
         );
     }
 
-    private static List<Graph.DirectedEdge> toEdges(List<BackendEdgeDto> dtos) {
+    private static List<Graph.DirectedEdge> toEdges(List<EdgeDto> dtos) {
         if (dtos == null || dtos.isEmpty()) {
             return Collections.emptyList();
         }
         List<Graph.DirectedEdge> edges = new ArrayList<>();
-        for (BackendEdgeDto dto : dtos) {
+        for (EdgeDto dto : dtos) {
             edges.add(new Graph.DirectedEdge(
                     dto.edgeId,
                     dto.fromCheckpointId,

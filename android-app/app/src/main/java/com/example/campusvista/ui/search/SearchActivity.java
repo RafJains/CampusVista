@@ -12,10 +12,10 @@ import android.widget.TextView;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.PlaceDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendPlaceDto;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
@@ -66,9 +66,9 @@ public final class SearchActivity extends Activity {
                 query,
                 initialType,
                 RESULT_LIMIT,
-                new BackendCallback<List<BackendPlaceDto>>() {
+                new BackendCallback<List<PlaceDto>>() {
                     @Override
-                    public void onSuccess(List<BackendPlaceDto> value) {
+                    public void onSuccess(List<PlaceDto> value) {
                         bindResults(BackendMapper.toPlaces(value), null);
                     }
 

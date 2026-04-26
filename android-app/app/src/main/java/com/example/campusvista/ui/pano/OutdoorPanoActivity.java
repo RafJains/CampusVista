@@ -10,10 +10,10 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.PanoDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendPanoDto;
 import com.example.campusvista.pano.OutdoorPanoViewer;
 import com.example.campusvista.ui.common.NavExtras;
 
@@ -40,9 +40,9 @@ public final class OutdoorPanoActivity extends Activity {
     private void loadPanoFromBackend() {
         BackendClient.getInstance(this).getPano(
                 checkpointId,
-                new BackendCallback<BackendPanoDto>() {
+                new BackendCallback<PanoDto>() {
                     @Override
-                    public void onSuccess(BackendPanoDto value) {
+                    public void onSuccess(PanoDto value) {
                         OutdoorPano pano = BackendMapper.toPano(value);
                         bindPano(pano, "Python backend");
                     }
