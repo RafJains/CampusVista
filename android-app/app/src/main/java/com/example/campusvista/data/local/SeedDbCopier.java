@@ -15,6 +15,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public final class SeedDbCopier {
+    private static final String[] REQUIRED_NON_EMPTY_TABLES = {
+            "checkpoints",
+            "places",
+            "edges",
+            "crowd_rules",
+            "outdoor_panos",
+            "recognition_refs",
+            "search_aliases"
+    };
+
     private SeedDbCopier() {
     }
 
@@ -110,7 +120,10 @@ public final class SeedDbCopier {
                     SQLiteDatabase.OPEN_READONLY
             );
             cursor = database.rawQuery("PRAGMA integrity_check", null);
-            return cursor.moveToFirst() && "ok".equalsIgnoreCase(cursor.getString(0));
+            if (!cursor.moveToFirst() || !"ok".equalsIgnoreCase(cursor.getString(0))) {
+                return false;
+            }
+            return hasRequiredSeedContent(database);
         } catch (SQLiteException exception) {
             return false;
         } finally {
@@ -121,6 +134,25 @@ public final class SeedDbCopier {
                 database.close();
             }
         }
+    }
+
+    private static boolean hasRequiredSeedContent(SQLiteDatabase database) {
+        for (String table : REQUIRED_NON_EMPTY_TABLES) {
+            Cursor cursor = null;
+            try {
+                cursor = database.rawQuery("SELECT COUNT(*) FROM " + table, null);
+                if (!cursor.moveToFirst() || cursor.getLong(0) <= 0) {
+                    return false;
+                }
+            } catch (SQLiteException exception) {
+                return false;
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        return true;
     }
 
     private static String sha256(File file) throws IOException {
