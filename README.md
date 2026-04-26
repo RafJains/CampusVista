@@ -1,210 +1,204 @@
 # CampusVista
 
-CampusVista is an offline-first Android campus navigation app for outdoor campus routing. It uses a 2D campus map, outdoor checkpoints, 360 panorama images, local SQLite data, A* routing, Dijkstra fallback, static crowd penalties, local search, and optional on-device TensorFlow Lite outdoor location recognition.
+CampusVista is now a Python-heavy campus navigation system.
 
-## Features
+```text
+Android app = Java/XML mobile frontend
+Python backend = search, routing, data access, graph intelligence, and recognition-ready logic
+```
 
-- Offline outdoor campus navigation
-- 2D campus map with checkpoint markers
-- A* shortest-path routing
+The Android app remains the user interface for splash, home, map, search input, current location selection, route display, outdoor navigation, pano display, and camera capture. The Python FastAPI backend is the primary intelligence layer for SQLite access, fuzzy search, A* routing, Dijkstra fallback, crowd-aware route cost, nearest-checkpoint snapping, instruction generation, route validation, map coordinate calculations, panorama metadata, data cleaning, seed DB generation, and recognition placeholders.
+
+The previous Android offline routing code is intentionally kept as fallback/reference during the transition.
+
+## Runtime Architecture
+
+```text
+Android App
+   |
+   | HTTP API request
+   v
+Python FastAPI Backend
+   |
+   | sqlite3 / JSON / CSV
+   v
+CampusVista data
+```
+
+For emulator demos, Android should call:
+
+```text
+http://10.0.2.2:8000
+```
+
+For a real phone on the same network, Android should call:
+
+```text
+http://<laptop-ip>:8000
+```
+
+This architecture is not true standalone offline Android unless the Python server is running locally or bundled on-device later.
+
+## Current Features
+
+- Java/XML Android MVP UI
+- Python FastAPI backend foundation
+- SQLite-backed checkpoint/place access
+- Fuzzy place search with aliases
+- A* outdoor routing
 - Dijkstra fallback routing
-- Avoid-crowded-path option
-- Local SQLite database
-- Local search with alias and fuzzy fallback
-- Outdoor 360 panorama viewer
-- Optional TFLite-based outdoor location recognition
-- Generated outdoor route instructions
+- Avoid-crowded path cost mode
+- Nearest-checkpoint snapping from map coordinates
+- Generated route instructions
+- Outdoor pano metadata lookup
+- Recognition-ready placeholder API
+- Python data validation and seed DB generation
 
-## MVP Scope
+## API Endpoints
 
-### Included
+- `GET /health`
+- `GET /checkpoints`
+- `GET /checkpoints/{checkpoint_id}`
+- `GET /checkpoints/nearest?x=100&y=900`
+- `GET /map/config`
+- `GET /places/search?q=library`
+- `GET /places/{place_id}`
+- `GET /panos/{checkpoint_id}`
+- `POST /route`
+- `GET /recognition/refs`
+- `POST /recognize`
 
-- Outdoor checkpoints
-- Outdoor route edges
-- Outdoor map navigation
-- Outdoor 360 panoramas
-- Local search
-- Static crowd-aware routing
-- Android-side routing
-- SQLite seed database
-- Python tools for data validation and DB/model generation
+Example route request:
 
-### Not Included
+```json
+{
+  "start_checkpoint_id": "OUT_CP001",
+  "destination_query": "library",
+  "route_mode": "avoid_crowded"
+}
+```
 
-- Indoor navigation
-- Room-level routing
-- GPS navigation
-- Real-time crowd tracking
-- Backend/FastAPI runtime dependency
-- Full 3D campus model
-- Personalization
-- QR checkpoint dependency
+Example route response:
+
+```json
+{
+  "route_found": true,
+  "algorithm": "astar",
+  "route_mode": "shortest",
+  "total_distance": 191,
+  "estimated_time": "3 min",
+  "checkpoint_ids": ["OUT_CP001", "OUT_CP002", "OUT_CP003", "OUT_CP004"],
+  "instructions": [
+    "Start walking toward Main Path Junction.",
+    "Turn left toward Admin Block Entrance.",
+    "Turn right toward Library Front.",
+    "You have arrived at Library."
+  ]
+}
+```
 
 ## Tech Stack
 
 ### Android
 
-- Android Studio
 - Java
 - XML layouts
-- SQLite
-- SQLiteOpenHelper / DBHelper
-- TensorFlow Lite
-- CameraX or Camera Intent
-- Custom map rendering
+- Retrofit planned for API calls
+- Camera intent placeholder
+- Local UI rendering
+- Existing SQLite/routing fallback retained during transition
 
-### Python Tools
+### Python Backend
 
-- Python
-- pandas
-- numpy
-- sqlite3
-- TensorFlow
-- OpenCV
-- pytest
-
-## Routing Logic
-
-CampusVista models the campus as a graph.
-
-```text
-Checkpoint = Node
-Walkable path = Edge
-````
-
-Shortest path:
-
-```text
-cost = distance_meters
-```
-
-Avoid crowded path:
-
-```text
-cost = distance_meters + crowdPenalty(to_checkpoint_id)
-```
-
-A* is used for primary routing. Dijkstra is used as fallback. BFS is not used for final routing because the graph is weighted.
-
-## Database Tables
-
-The MVP uses these SQLite tables:
-
-* `checkpoints`
-* `places`
-* `edges`
-* `crowd_rules`
-* `outdoor_panos`
-* `recognition_refs`
-* `search_aliases`
+- FastAPI
+- Uvicorn
+- SQLite via `sqlite3`
+- Pydantic
+- Standard-library graph/routing logic
+- pandas/numpy reserved for future data/ML work
+- OpenCV/TensorFlow/TFLite optional for future recognition
 
 ## Folder Structure
 
 ```text
 CampusVista/
-├── android-app/
-│   └── app/src/main/
-│       ├── java/com/example/campusvista/
-│       │   ├── ui/
-│       │   ├── viewmodel/
-│       │   ├── data/
-│       │   ├── routing/
-│       │   ├── recognition/
-│       │   ├── map/
-│       │   ├── pano/
-│       │   ├── search/
-│       │   └── util/
-│       ├── res/
-│       ├── assets/
-│       │   ├── config/map_config.json
-│       │   ├── seed/campus_seed.db
-│       │   ├── maps/campus_map.png
-│       │   ├── pano/outdoor/
-│       │   └── ml/
-│       └── AndroidManifest.xml
-│
-├── python-tools/
-│   ├── data/
-│   ├── scripts/
-│   ├── tests/
-│   └── requirements.txt
-│
-├── docs/
-├── README.md
-└── .gitignore
+|-- android-app/
+|   `-- app/src/main/
+|       |-- java/com/example/campusvista/
+|       |-- res/
+|       `-- assets/
+|-- python-backend/
+|   |-- app/
+|   |   |-- main.py
+|   |   |-- db.py
+|   |   |-- models.py
+|   |   |-- routes/
+|   |   |-- services/
+|   |   `-- utils/
+|   |-- data/
+|   |   |-- campus_seed.db
+|   |   |-- map_config.json
+|   |   `-- pano/outdoor/
+|   |-- tests/
+|   |-- requirements.txt
+|   `-- README.md
+|-- python-tools/
+|   |-- data/
+|   |-- scripts/
+|   `-- tests/
+|-- docs/
+`-- README.md
 ```
 
-## Setup
-
-Clone the repo:
+## Run Python Backend
 
 ```bash
-git clone https://github.com/your-username/CampusVista.git
-cd CampusVista
-```
-
-Open this folder in Android Studio:
-
-```text
-CampusVista/android-app
-```
-
-Required Android assets:
-
-```text
-assets/config/map_config.json
-assets/seed/campus_seed.db
-assets/maps/campus_map.png
-assets/pano/outdoor/
-assets/ml/campus_location_model.tflite
-assets/ml/labels.txt
-```
-
-The TFLite model is optional until recognition is implemented.
-
-## Python Tools Setup
-
-```bash
-cd python-tools
-python -m venv venv
-venv\Scripts\activate
+cd python-backend
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Run validations:
+## Run Validation
 
 ```bash
-python scripts/validate_checkpoints.py
-python scripts/validate_edges.py
-python scripts/validate_crowd_rules.py
-python scripts/validate_map_scale.py
-python scripts/generate_seed_db.py
+python -m unittest discover -s python-backend/tests
+python -m unittest discover -s python-tools/tests
 ```
 
-## Future Scope
+Android build:
 
-* Indoor navigation
-* Room-level search
-* Floor maps
-* Indoor 360 panoramas
-* GPS-assisted positioning
-* Real-time crowd estimation
-* Admin dashboard
-* Backend-based sync
-* Advanced recognition
+```bash
+cd android-app
+gradlew.bat :app:assembleDebug
+```
+
+## MVP Scope
+
+Included:
+
+- Outdoor checkpoints and route edges
+- Python-backed search and routing
+- Static crowd-aware routing
+- Outdoor pano metadata and assets
+- Recognition-ready backend placeholder
+- Android frontend MVP screens
+
+Not included yet:
+
+- Android Retrofit API migration
+- Production recognition model
+- Indoor navigation
+- GPS turn-by-turn navigation
+- Real-time crowd tracking
+- Admin dashboard
 
 ## Status
 
 ```text
-MVP design finalized
-Outdoor-only scope locked
-Offline-first architecture finalized
-Implementation in progress
-```
-
-## Authors
-
-CampusVista Team
-
-```
+Architecture pivot accepted
+Python backend foundation implemented
+Android frontend still uses local fallback logic
+Next milestone: Android Retrofit API integration
 ```

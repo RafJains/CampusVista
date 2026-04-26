@@ -79,6 +79,9 @@ public final class InstructionBuilder {
         String name = next.getCheckpointName();
 
         if ("building_entry".equals(type)) {
+            if (name.toLowerCase(Locale.US).contains("entrance")) {
+                return name;
+            }
             return name + " entrance";
         }
         if ("gate".equals(type)
@@ -107,6 +110,9 @@ public final class InstructionBuilder {
             return "Head toward " + name + ".";
         }
         if ("building_entry".equals(type)) {
+            if (name.toLowerCase(Locale.US).contains("entrance")) {
+                return "Head toward " + name + ".";
+            }
             return "Head toward " + name + " entrance.";
         }
         if ("landmark".equals(type) || "junction".equals(type)) {
