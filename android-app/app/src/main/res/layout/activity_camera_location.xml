@@ -11,64 +11,67 @@
         android:padding="18dp">
 
         <TextView
-            android:id="@+id/placeName"
+            android:id="@+id/cameraLocationTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Use Camera to Detect Outdoor Location"
             android:textColor="@color/cv_ink"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/placeType"
+            android:id="@+id/recognitionStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="@color/cv_green_dark"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/placeDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/cv_card"
             android:padding="14dp"
             android:textColor="@color/cv_ink"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/placeCheckpoint"
+        <ImageView
+            android:id="@+id/capturedImagePreview"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/cv_map_panel"
+            android:contentDescription="Captured outdoor image"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pano_placeholder" />
+
+        <Button
+            android:id="@+id/captureOutdoorImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/cv_button_primary"
+            android:text="Capture Outdoor Image"
+            android:textColor="@color/cv_white" />
+
+        <LinearLayout
+            android:id="@+id/recognitionSuggestionList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textColor="@color/cv_muted"
-            android:textSize="14sp" />
+            android:orientation="vertical" />
 
         <Button
-            android:id="@+id/routeHereButton"
+            android:id="@+id/fallbackSelectOnMapButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/cv_button_primary"
-            android:text="Route Here"
-            android:textColor="@color/cv_white" />
-
-        <Button
-            android:id="@+id/placePanoButton"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:background="@drawable/cv_button_secondary"
-            android:text="Outdoor Pano"
+            android:text="Select On Map"
             android:textColor="@color/cv_green_dark" />
 
         <Button
-            android:id="@+id/setCurrentButton"
+            android:id="@+id/fallbackSearchLocationButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/cv_button_secondary"
-            android:text="Set As Current Location"
+            android:text="Search Outdoor Location"
             android:textColor="@color/cv_green_dark" />
     </LinearLayout>
 </ScrollView>
