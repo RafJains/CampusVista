@@ -34,11 +34,7 @@ public final class SetLocationActivity extends Activity {
         findViewById(R.id.openSearchLocationButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SearchActivity.class)));
         findViewById(R.id.cameraDetectButton).setOnClickListener(view ->
-                Toast.makeText(
-                        this,
-                        "Outdoor recognition model is not installed yet.",
-                        Toast.LENGTH_SHORT
-                ).show());
+                startActivity(new Intent(this, CameraLocationActivity.class)));
     }
 
     @Override
