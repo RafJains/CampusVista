@@ -1,60 +1,44 @@
 # CampusVista
 
-CampusVista is now a Python-heavy campus navigation system.
+CampusVista is a campus navigation MVP with a Python-heavy architecture:
 
 ```text
-Android app = Java/XML mobile frontend
-Python backend = search, routing, data access, graph intelligence, and recognition-ready logic
+Android app -> FastAPI backend -> SQLite / JSON / assets
 ```
 
-The Android app remains the user interface for splash, home, map, search input, current location selection, route display, outdoor navigation, pano display, and camera capture. The Python FastAPI backend is the primary intelligence layer for SQLite access, fuzzy search, A* routing, Dijkstra fallback, crowd-aware route cost, nearest-checkpoint snapping, instruction generation, route validation, map coordinate calculations, panorama metadata, data cleaning, seed DB generation, and recognition placeholders.
+Android is the Java/XML frontend. It handles splash, map display, search UI, location selection, route screens, panorama display, camera capture, and API calls. The Python FastAPI backend is the primary intelligence layer for database access, search, fuzzy matching, graph routing, crowd-aware costs, nearest-checkpoint snapping, instruction generation, map metadata, panorama metadata, and the recognition-ready placeholder flow.
 
-The previous Android offline routing code is intentionally kept as fallback/reference during the transition.
+The older Android SQLite/repository/routing code remains in the app only as a minimal fallback for demos when the backend is unavailable.
 
-## Runtime Architecture
+## Runtime
 
-```text
-Android App
-   |
-   | HTTP API request
-   v
-Python FastAPI Backend
-   |
-   | sqlite3 / JSON / CSV
-   v
-CampusVista data
-```
-
-For emulator demos, Android should call:
+For emulator demos, Android calls:
 
 ```text
 http://10.0.2.2:8000
 ```
 
-For a real phone on the same network, Android should call:
+For a real phone on the same Wi-Fi network, set the Android backend URL to:
 
 ```text
 http://<laptop-ip>:8000
 ```
 
-This architecture is not true standalone offline Android unless the Python server is running locally or bundled on-device later.
+This is not a standalone offline Android app unless the Python backend is also running locally or bundled later.
 
-## Current Features
+## MVP Features
 
-- Java/XML Android MVP UI
-- Python FastAPI backend foundation
-- SQLite-backed checkpoint/place access
+- Python FastAPI API for checkpoints, places, routing, panos, and recognition placeholders
+- SQLite-backed campus seed data
 - Fuzzy place search with aliases
-- A* outdoor routing
-- Dijkstra fallback routing
-- Avoid-crowded path cost mode
+- A* routing with Dijkstra fallback
+- Crowd-aware route cost mode
 - Nearest-checkpoint snapping from map coordinates
-- Generated route instructions
-- Outdoor pano metadata lookup
-- Recognition-ready placeholder API
-- Python data validation and seed DB generation
+- Generated outdoor walking instructions
+- Java/XML Android screens using Retrofit as the primary data path
+- Android local fallback for search, checkpoints, routing, and panos
 
-## API Endpoints
+## API
 
 - `GET /health`
 - `GET /checkpoints`
@@ -64,9 +48,9 @@ This architecture is not true standalone offline Android unless the Python serve
 - `GET /places/search?q=library`
 - `GET /places/{place_id}`
 - `GET /panos/{checkpoint_id}`
-- `POST /route`
 - `GET /recognition/refs`
 - `POST /recognize`
+- `POST /route`
 
 Example route request:
 
@@ -97,60 +81,34 @@ Example route response:
 }
 ```
 
-## Tech Stack
-
-### Android
-
-- Java
-- XML layouts
-- Retrofit API client
-- Camera intent placeholder
-- Python backend primary for search, routing, checkpoints, panos, snapping, and recognition placeholder
-- Existing SQLite/routing fallback retained for demos when backend is unavailable
-
-### Python Backend
-
-- FastAPI
-- Uvicorn
-- SQLite via `sqlite3`
-- Pydantic
-- Standard-library graph/routing logic
-- pandas/numpy reserved for future data/ML work
-- OpenCV/TensorFlow/TFLite optional for future recognition
-
-## Folder Structure
+## Simplified Structure
 
 ```text
 CampusVista/
 |-- android-app/
-|   `-- app/src/main/
-|       |-- java/com/example/campusvista/
-|       |-- res/
-|       `-- assets/
+|   |-- app/src/main/java/com/example/campusvista/
+|   |   |-- network/        # Retrofit client, backend DTOs, backend mappers
+|   |   |-- ui/             # MVP screens
+|   |   |-- data/           # local fallback repositories
+|   |   |-- routing/        # local fallback routing
+|   |   `-- recognition/    # camera/recognition fallback scaffolding
+|   `-- app/src/main/res/
 |-- python-backend/
 |   |-- app/
 |   |   |-- main.py
 |   |   |-- db.py
 |   |   |-- models.py
-|   |   |-- routes/
-|   |   |-- services/
+|   |   |-- routes/api.py   # all MVP API endpoints
+|   |   |-- services/       # search, routing, crowd, panos, recognition
 |   |   `-- utils/
 |   |-- data/
-|   |   |-- campus_seed.db
-|   |   |-- map_config.json
-|   |   `-- pano/outdoor/
 |   |-- tests/
-|   |-- requirements.txt
-|   `-- README.md
-|-- python-tools/
-|   |-- data/
-|   |-- scripts/
-|   `-- tests/
-|-- docs/
-`-- README.md
+|   `-- requirements.txt
+|-- python-tools/           # seed DB generation and validation
+`-- docs/
 ```
 
-## Run Python Backend
+## Run Backend
 
 ```bash
 cd python-backend
@@ -160,44 +118,17 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Run Validation
+## Build And Test
 
 ```bash
 python -m unittest discover -s python-backend/tests
 python -m unittest discover -s python-tools/tests
-```
-
-Android build:
-
-```bash
 cd android-app
 gradlew.bat :app:assembleDebug
 ```
 
-## MVP Scope
+## MVP Boundaries
 
-Included:
+Included now: outdoor navigation, map-based location selection, search, route preview/options, outdoor nav, panorama lookup/display, and recognition-ready fallback screens.
 
-- Outdoor checkpoints and route edges
-- Python-backed search and routing
-- Static crowd-aware routing
-- Outdoor pano metadata and assets
-- Recognition-ready backend placeholder
-- Android frontend MVP screens
-
-Not included yet:
-
-- Production recognition model
-- Indoor navigation
-- GPS turn-by-turn navigation
-- Real-time crowd tracking
-- Admin dashboard
-
-## Status
-
-```text
-Architecture pivot accepted
-Python backend foundation implemented
-Android Retrofit integration implemented
-Python backend is now primary; Android local logic remains fallback
-```
+Not included yet: production ML recognition, indoor navigation, live crowd feeds, GPS turn-by-turn, admin tools, and packaged on-device Python.

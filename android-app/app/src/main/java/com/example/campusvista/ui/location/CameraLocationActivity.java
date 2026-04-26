@@ -15,13 +15,13 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.RecognitionRef;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.CheckpointDto;
+import com.example.campusvista.network.BackendDtos.RecognitionCandidateDto;
+import com.example.campusvista.network.BackendDtos.RecognitionRequestDto;
+import com.example.campusvista.network.BackendDtos.RecognitionResponseDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendCheckpointDto;
-import com.example.campusvista.network.dto.BackendRecognitionCandidateDto;
-import com.example.campusvista.network.dto.BackendRecognitionRequest;
-import com.example.campusvista.network.dto.BackendRecognitionResponse;
 import com.example.campusvista.recognition.ConfidenceChecker;
 import com.example.campusvista.recognition.ImagePreprocessor;
 import com.example.campusvista.recognition.RecognitionResult;
@@ -109,10 +109,10 @@ public final class CameraLocationActivity extends Activity {
         suggestionList.removeAllViews();
         statusView.setText("Sending captured image to Python recognition API...");
         BackendClient.getInstance(this).recognize(
-                new BackendRecognitionRequest(),
-                new BackendCallback<BackendRecognitionResponse>() {
+                new RecognitionRequestDto(),
+                new BackendCallback<RecognitionResponseDto>() {
                     @Override
-                    public void onSuccess(BackendRecognitionResponse value) {
+                    public void onSuccess(RecognitionResponseDto value) {
                         handleBackendRecognition(value, capturedBitmap);
                     }
 
@@ -125,7 +125,7 @@ public final class CameraLocationActivity extends Activity {
     }
 
     private void handleBackendRecognition(
-            BackendRecognitionResponse response,
+            RecognitionResponseDto response,
             Bitmap capturedBitmap
     ) {
         if ("accepted".equals(response.status) && response.checkpointId != null) {
@@ -163,11 +163,11 @@ public final class CameraLocationActivity extends Activity {
         showFallback(result);
     }
 
-    private void showBackendManualConfirmation(BackendRecognitionResponse response) {
+    private void showBackendManualConfirmation(RecognitionResponseDto response) {
         statusView.setText("Python backend returned a low-confidence match. Confirm one suggestion.");
         int count = Math.min(2, response.candidates.size());
         for (int i = 0; i < count; i++) {
-            BackendRecognitionCandidateDto candidate = response.candidates.get(i);
+            RecognitionCandidateDto candidate = response.candidates.get(i);
             double confidence = candidate.confidence == null ? 0.0 : candidate.confidence;
             suggestionList.addView(ViewFactory.listButton(
                     this,
@@ -247,9 +247,9 @@ public final class CameraLocationActivity extends Activity {
     private void acceptCheckpointId(String checkpointId, String mode) {
         BackendClient.getInstance(this).getCheckpoint(
                 checkpointId,
-                new BackendCallback<BackendCheckpointDto>() {
+                new BackendCallback<CheckpointDto>() {
                     @Override
-                    public void onSuccess(BackendCheckpointDto value) {
+                    public void onSuccess(CheckpointDto value) {
                         Checkpoint checkpoint = BackendMapper.toCheckpoint(value);
                         if (checkpoint == null) {
                             acceptCheckpointIdLocal(checkpointId, mode);

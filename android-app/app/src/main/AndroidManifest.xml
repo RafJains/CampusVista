@@ -24,9 +24,6 @@
         <activity android:name=".ui.location.SetLocationActivity" />
         <activity android:name=".ui.home.HomeMapActivity" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>

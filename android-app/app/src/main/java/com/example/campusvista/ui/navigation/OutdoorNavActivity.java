@@ -10,12 +10,12 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.PanoDto;
+import com.example.campusvista.network.BackendDtos.RouteRequestDto;
+import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendPanoDto;
-import com.example.campusvista.network.dto.BackendRouteRequest;
-import com.example.campusvista.network.dto.BackendRouteResponse;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
@@ -66,7 +66,7 @@ public final class OutdoorNavActivity extends Activity {
             finish();
             return;
         }
-        BackendRouteRequest request = BackendRouteRequest.forCheckpoints(
+        RouteRequestDto request = RouteRequestDto.forCheckpoints(
                 startId,
                 destinationCheckpointId,
                 routeMode
@@ -77,9 +77,9 @@ public final class OutdoorNavActivity extends Activity {
         }
         BackendClient.getInstance(this).buildRoute(
                 request,
-                new BackendCallback<BackendRouteResponse>() {
+                new BackendCallback<RouteResponseDto>() {
                     @Override
-                    public void onSuccess(BackendRouteResponse value) {
+                    public void onSuccess(RouteResponseDto value) {
                         routeResult = BackendMapper.toRouteResult(value, routeMode);
                         handleRouteLoaded();
                     }
@@ -157,9 +157,9 @@ public final class OutdoorNavActivity extends Activity {
         if (checkpoint != null) {
             BackendClient.getInstance(this).getPano(
                     checkpoint.getCheckpointId(),
-                    new BackendCallback<BackendPanoDto>() {
+                    new BackendCallback<PanoDto>() {
                         @Override
-                        public void onSuccess(BackendPanoDto value) {
+                        public void onSuccess(PanoDto value) {
                             ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
                         }
 
