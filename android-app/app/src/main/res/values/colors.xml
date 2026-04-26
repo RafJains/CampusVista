@@ -1,0 +1,6 @@
+<resources>
+    <color name="cv_green">#1F7A5A</color>
+    <color name="cv_green_dark">#16583F</color>
+    <color name="cv_ink">#17211C</color>
+    <color name="cv_surface">#F7FAF8</color>
+</resources>
