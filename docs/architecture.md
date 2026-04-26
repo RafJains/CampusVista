@@ -25,6 +25,7 @@ Android owns UI and device interaction:
 - outdoor navigation screen
 - pano image display
 - camera capture
+- Retrofit calls to the Python backend
 
 Python owns the intelligence layer:
 
@@ -63,3 +64,17 @@ http://<laptop-ip>:8000
 ```
 
 The app is no longer a true standalone offline Android app unless the Python server is also available locally.
+
+## Android Integration Status
+
+The Android app now calls the backend first for:
+
+- place search
+- place and checkpoint lookup
+- route calculation
+- outdoor navigation route refresh
+- nearest checkpoint snapping from map/list coordinates
+- outdoor pano metadata
+- recognition placeholder flow
+
+If the backend is down, Android falls back to the existing local repositories and Java routing code.
