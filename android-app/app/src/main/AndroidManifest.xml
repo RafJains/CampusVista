@@ -11,8 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusVista">
 
+        <activity android:name=".ui.navigation.OutdoorNavActivity" />
+        <activity android:name=".ui.route.RoutePreviewActivity" />
+        <activity android:name=".ui.route.RouteOptionsActivity" />
+        <activity android:name=".ui.place.PlaceDetailsActivity" />
+        <activity android:name=".ui.search.SearchActivity" />
+        <activity android:name=".ui.location.SetLocationActivity" />
+        <activity android:name=".ui.home.HomeMapActivity" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
