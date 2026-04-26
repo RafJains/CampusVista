@@ -83,6 +83,10 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
                     len(data["checkpoints"]),
                     connection.execute("SELECT COUNT(*) FROM checkpoints").fetchone()[0],
                 )
+                self.assertEqual(
+                    cv.SEED_DB_VERSION,
+                    connection.execute("PRAGMA user_version").fetchone()[0],
+                )
             finally:
                 connection.close()
         finally:

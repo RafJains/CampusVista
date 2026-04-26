@@ -29,19 +29,28 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="260dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/cv_map_panel"
-            android:padding="16dp">
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/campusMapImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/campus_map_content_description"
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/mapSummary"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_gravity="bottom|start"
+                android:background="@drawable/cv_map_badge"
+                android:padding="10dp"
                 android:textColor="@color/cv_ink"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
         </FrameLayout>
 
         <LinearLayout

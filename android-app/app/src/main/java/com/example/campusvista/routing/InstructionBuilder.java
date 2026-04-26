@@ -36,15 +36,14 @@ public final class InstructionBuilder {
             Checkpoint next = checkpointPath.get(i + 1);
             Graph.DirectedEdge edge = edgePath.get(i);
 
-            if (next.getCheckpointId().equals(destinationCheckpoint.getCheckpointId())) {
-                instructions.add(arrivalInstruction(destinationName));
-            } else if (previous == null) {
+            if (previous == null) {
                 instructions.add("Start walking toward " + next.getCheckpointName() + ".");
             } else {
                 String direction = directionText(previous, current, next);
                 instructions.add(direction + " toward " + wordingTarget(next, edge) + ".");
             }
         }
+        instructions.add(arrivalInstruction(destinationName));
 
         return Collections.unmodifiableList(instructions);
     }
