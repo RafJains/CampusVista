@@ -12,6 +12,8 @@ local.properties
 # Python tooling
 __pycache__/
 *.py[cod]
+.venv/
+venv/
 python-tools/data/seed/tmp*/
 
 # Android Studio generated files and folders
