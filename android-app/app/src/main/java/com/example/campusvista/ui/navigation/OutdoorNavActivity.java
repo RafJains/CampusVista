@@ -17,6 +17,7 @@ import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
+import com.example.campusvista.ui.pano.OutdoorPanoActivity;
 
 public final class OutdoorNavActivity extends Activity {
     private String destinationCheckpointId;
@@ -44,7 +45,7 @@ public final class OutdoorNavActivity extends Activity {
 
         findViewById(R.id.navNextButton).setOnClickListener(view -> moveNext());
         findViewById(R.id.navCompleteButton).setOnClickListener(view -> completeRoute());
-        findViewById(R.id.navPanoButton).setOnClickListener(view -> showPanoInfo());
+        findViewById(R.id.navPanoButton).setOnClickListener(view -> openPano());
 
         computeRoute();
         updateStep();
@@ -114,7 +115,7 @@ public final class OutdoorNavActivity extends Activity {
         ViewFactory.setVisible(findViewById(R.id.navPanoButton), hasPano);
     }
 
-    private void showPanoInfo() {
+    private void openPano() {
         CampusVistaApp app = (CampusVistaApp) getApplication();
         Checkpoint checkpoint = checkpointForCurrentStep();
         if (checkpoint == null) {
@@ -125,11 +126,10 @@ public final class OutdoorNavActivity extends Activity {
         if (pano == null) {
             return;
         }
-        Toast.makeText(
-                this,
-                app.getPanoRepository().getImageAssetPath(pano),
-                Toast.LENGTH_SHORT
-        ).show();
+        Intent intent = new Intent(this, OutdoorPanoActivity.class);
+        intent.putExtra(NavExtras.EXTRA_CHECKPOINT_ID, checkpoint.getCheckpointId());
+        intent.putExtra(NavExtras.EXTRA_CHECKPOINT_NAME, checkpoint.getCheckpointName());
+        startActivity(intent);
     }
 
     private Checkpoint checkpointForCurrentStep() {
