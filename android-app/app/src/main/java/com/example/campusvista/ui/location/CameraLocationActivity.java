@@ -15,6 +15,13 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.RecognitionRef;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendCheckpointDto;
+import com.example.campusvista.network.dto.BackendRecognitionCandidateDto;
+import com.example.campusvista.network.dto.BackendRecognitionRequest;
+import com.example.campusvista.network.dto.BackendRecognitionResponse;
 import com.example.campusvista.recognition.ConfidenceChecker;
 import com.example.campusvista.recognition.ImagePreprocessor;
 import com.example.campusvista.recognition.RecognitionResult;
@@ -100,6 +107,47 @@ public final class CameraLocationActivity extends Activity {
 
     private void processCapturedImage(Bitmap capturedBitmap) {
         suggestionList.removeAllViews();
+        statusView.setText("Sending captured image to Python recognition API...");
+        BackendClient.getInstance(this).recognize(
+                new BackendRecognitionRequest(),
+                new BackendCallback<BackendRecognitionResponse>() {
+                    @Override
+                    public void onSuccess(BackendRecognitionResponse value) {
+                        handleBackendRecognition(value, capturedBitmap);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        processCapturedImageLocally(capturedBitmap);
+                    }
+                }
+        );
+    }
+
+    private void handleBackendRecognition(
+            BackendRecognitionResponse response,
+            Bitmap capturedBitmap
+    ) {
+        if ("accepted".equals(response.status) && response.checkpointId != null) {
+            acceptCheckpointId(response.checkpointId, "Detected by Python backend");
+            return;
+        }
+        if ("low_confidence".equals(response.status)
+                && response.candidates != null
+                && !response.candidates.isEmpty()) {
+            showBackendManualConfirmation(response);
+            return;
+        }
+
+        processCapturedImageLocally(capturedBitmap);
+        if (response.message != null && !response.message.trim().isEmpty()) {
+            statusView.setText(response.message
+                    + "\nUsing local fallback or manual options below.");
+        }
+    }
+
+    private void processCapturedImageLocally(Bitmap capturedBitmap) {
+        suggestionList.removeAllViews();
         Bitmap modelInput = imagePreprocessor.prepareForModel(capturedBitmap);
         RecognitionResult result = recognitionEngine.recognize(modelInput);
 
@@ -113,6 +161,26 @@ public final class CameraLocationActivity extends Activity {
             return;
         }
         showFallback(result);
+    }
+
+    private void showBackendManualConfirmation(BackendRecognitionResponse response) {
+        statusView.setText("Python backend returned a low-confidence match. Confirm one suggestion.");
+        int count = Math.min(2, response.candidates.size());
+        for (int i = 0; i < count; i++) {
+            BackendRecognitionCandidateDto candidate = response.candidates.get(i);
+            double confidence = candidate.confidence == null ? 0.0 : candidate.confidence;
+            suggestionList.addView(ViewFactory.listButton(
+                    this,
+                    UiText.cleanType(candidate.labelName)
+                            + "  -  "
+                            + String.format(Locale.US, "%.0f%%", confidence * 100.0)
+            ));
+            suggestionList.getChildAt(suggestionList.getChildCount() - 1)
+                    .setOnClickListener(view -> acceptCheckpointId(
+                            candidate.checkpointId,
+                            "Confirmed Python backend match"
+                    ));
+        }
     }
 
     private void showManualConfirmation(RecognitionResult result) {
@@ -167,6 +235,53 @@ public final class CameraLocationActivity extends Activity {
         Toast.makeText(
                 this,
                 mode + " " + checkpoint.getCheckpointName(),
+                Toast.LENGTH_SHORT
+        ).show();
+
+        Intent intent = new Intent(this, HomeMapActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    private void acceptCheckpointId(String checkpointId, String mode) {
+        BackendClient.getInstance(this).getCheckpoint(
+                checkpointId,
+                new BackendCallback<BackendCheckpointDto>() {
+                    @Override
+                    public void onSuccess(BackendCheckpointDto value) {
+                        Checkpoint checkpoint = BackendMapper.toCheckpoint(value);
+                        if (checkpoint == null) {
+                            acceptCheckpointIdLocal(checkpointId, mode);
+                            return;
+                        }
+                        acceptCheckpoint(checkpoint, mode);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        acceptCheckpointIdLocal(checkpointId, mode);
+                    }
+                }
+        );
+    }
+
+    private void acceptCheckpointIdLocal(String checkpointId, String mode) {
+        Checkpoint checkpoint = ((CampusVistaApp) getApplication())
+                .getCheckpointRepository()
+                .getCheckpointById(checkpointId);
+        if (checkpoint == null) {
+            statusView.setText("Recognition checkpoint is missing. Use fallback options.");
+            return;
+        }
+        acceptCheckpoint(checkpoint, mode);
+    }
+
+    private void acceptCheckpoint(Checkpoint checkpoint, String mode) {
+        LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
+        Toast.makeText(
+                this,
+                mode + ": " + checkpoint.getCheckpointName(),
                 Toast.LENGTH_SHORT
         ).show();
 

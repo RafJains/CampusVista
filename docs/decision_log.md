@@ -18,8 +18,8 @@ The project now prioritizes Python/backend/AI work. Python is better suited for 
 Impact:
 
 - FastAPI backend added under `python-backend/`
+- Android Retrofit client added under `android-app/app/src/main/java/com/example/campusvista/network/`
 - Android local routing remains as fallback/reference
-- Android Retrofit integration becomes the next milestone
 - The system is no longer standalone offline Android unless the Python backend is available locally
 
 ## Routing Ownership

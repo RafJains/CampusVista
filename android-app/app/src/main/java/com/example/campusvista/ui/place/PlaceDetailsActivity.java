@@ -10,6 +10,12 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendCheckpointDto;
+import com.example.campusvista.network.dto.BackendPanoDto;
+import com.example.campusvista.network.dto.BackendPlaceDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -21,6 +27,7 @@ import com.example.campusvista.ui.route.RouteOptionsActivity;
 public final class PlaceDetailsActivity extends Activity {
     private Place place;
     private Checkpoint checkpoint;
+    private boolean actionsBound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +35,105 @@ public final class PlaceDetailsActivity extends Activity {
         setContentView(R.layout.activity_place_details);
 
         String placeId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
-        CampusVistaApp app = (CampusVistaApp) getApplication();
-        place = placeId == null ? null : app.getPlaceRepository().getPlaceById(placeId);
-        if (place == null) {
+        if (placeId == null) {
             Toast.makeText(this, "Place not found.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        ((TextView) findViewById(R.id.placeName)).setText("Loading place...");
+        ViewFactory.setVisible(findViewById(R.id.placePanoButton), false);
+        loadPlaceFromBackend(placeId);
+    }
+
+    private void loadPlaceFromBackend(String placeId) {
+        BackendClient.getInstance(this).getPlace(placeId, new BackendCallback<BackendPlaceDto>() {
+            @Override
+            public void onSuccess(BackendPlaceDto value) {
+                place = BackendMapper.toPlace(value);
+                loadCheckpointFromBackend(place.getCheckpointId());
+            }
+
+            @Override
+            public void onFallback(Throwable throwable) {
+                loadPlaceLocal(placeId);
+            }
+        });
+    }
+
+    private void loadPlaceLocal(String placeId) {
+        CampusVistaApp app = (CampusVistaApp) getApplication();
+        place = app.getPlaceRepository().getPlaceById(placeId);
+        if (place == null) {
+            Toast.makeText(this, "Place not found.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         checkpoint = app.getCheckpointRepository().getCheckpointById(place.getCheckpointId());
         bindPlace();
+        bindActions();
+        bindPanoAvailabilityLocal();
+    }
 
+    private void loadCheckpointFromBackend(String checkpointId) {
+        BackendClient.getInstance(this).getCheckpoint(
+                checkpointId,
+                new BackendCallback<BackendCheckpointDto>() {
+                    @Override
+                    public void onSuccess(BackendCheckpointDto value) {
+                        checkpoint = BackendMapper.toCheckpoint(value);
+                        bindPlace();
+                        bindActions();
+                        bindPanoAvailabilityFromBackend();
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        checkpoint = ((CampusVistaApp) getApplication())
+                                .getCheckpointRepository()
+                                .getCheckpointById(checkpointId);
+                        bindPlace();
+                        bindActions();
+                        bindPanoAvailabilityLocal();
+                    }
+                }
+        );
+    }
+
+    private void bindPanoAvailabilityFromBackend() {
+        if (checkpoint == null) {
+            ViewFactory.setVisible(findViewById(R.id.placePanoButton), false);
+            return;
+        }
+        BackendClient.getInstance(this).getPano(
+                checkpoint.getCheckpointId(),
+                new BackendCallback<BackendPanoDto>() {
+                    @Override
+                    public void onSuccess(BackendPanoDto value) {
+                        ViewFactory.setVisible(findViewById(R.id.placePanoButton), true);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        bindPanoAvailabilityLocal();
+                    }
+                }
+        );
+    }
+
+    private void bindPanoAvailabilityLocal() {
         boolean hasPano = checkpoint != null
-                && app.getPanoRepository().hasOutdoorPano(checkpoint.getCheckpointId());
+                && ((CampusVistaApp) getApplication()).getPanoRepository()
+                .hasOutdoorPano(checkpoint.getCheckpointId());
         ViewFactory.setVisible(findViewById(R.id.placePanoButton), hasPano);
+    }
+
+    private void bindActions() {
+        if (actionsBound) {
+            return;
+        }
+        actionsBound = true;
+
         findViewById(R.id.placePanoButton).setOnClickListener(view -> {
             if (checkpoint == null) {
                 return;
@@ -53,11 +145,17 @@ public final class PlaceDetailsActivity extends Activity {
         });
 
         findViewById(R.id.setCurrentButton).setOnClickListener(view -> {
+            if (place == null) {
+                return;
+            }
             LocationStore.setCurrentCheckpointId(this, place.getCheckpointId());
             Toast.makeText(this, "Current location set.", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.routeHereButton).setOnClickListener(view -> {
+            if (place == null) {
+                return;
+            }
             if (LocationStore.getCurrentCheckpointId(this) == null) {
                 Toast.makeText(this, "Set current location first.", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, SetLocationActivity.class));
