@@ -11,11 +11,11 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.CheckpointDto;
+import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendCheckpointDto;
-import com.example.campusvista.network.dto.BackendNearestCheckpointDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
@@ -60,9 +60,9 @@ public final class SetLocationActivity extends Activity {
 
         checkpointList.removeAllViews();
         checkpointList.addView(ViewFactory.sectionLine(this, "Loading checkpoints from Python backend..."));
-        BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<BackendCheckpointDto>>() {
+        BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<CheckpointDto>>() {
             @Override
-            public void onSuccess(List<BackendCheckpointDto> value) {
+            public void onSuccess(List<CheckpointDto> value) {
                 bindCheckpointButtons(BackendMapper.toCheckpoints(value));
             }
 
@@ -92,9 +92,9 @@ public final class SetLocationActivity extends Activity {
         BackendClient.getInstance(this).getNearestCheckpoint(
                 selectedCheckpoint.getXCoord(),
                 selectedCheckpoint.getYCoord(),
-                new BackendCallback<BackendNearestCheckpointDto>() {
+                new BackendCallback<NearestCheckpointDto>() {
                     @Override
-                    public void onSuccess(BackendNearestCheckpointDto value) {
+                    public void onSuccess(NearestCheckpointDto value) {
                         Checkpoint nearest = BackendMapper.toCheckpoint(value.checkpoint);
                         setCurrentLocation(nearest == null ? selectedCheckpoint : nearest);
                     }

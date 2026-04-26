@@ -1,26 +1,11 @@
 package com.example.campusvista.data.local;
 
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public final class DBHelper extends SQLiteOpenHelper {
     private static DBHelper instance;
-
-    private static final String[] MVP_TABLES = {
-            "checkpoints",
-            "places",
-            "edges",
-            "crowd_rules",
-            "outdoor_panos",
-            "recognition_refs",
-            "search_aliases"
-    };
 
     public static synchronized DBHelper getInstance(Context context) {
         Context appContext = context.getApplicationContext();
@@ -126,12 +111,4 @@ public final class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Map<String, Long> getMvpTableCounts() {
-        SQLiteDatabase database = getReadableDatabase();
-        Map<String, Long> counts = new LinkedHashMap<>();
-        for (String table : MVP_TABLES) {
-            counts.put(table, DatabaseUtils.queryNumEntries(database, table));
-        }
-        return Collections.unmodifiableMap(counts);
-    }
 }
