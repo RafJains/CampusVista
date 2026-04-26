@@ -11,6 +11,11 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendCheckpointDto;
+import com.example.campusvista.network.dto.BackendNearestCheckpointDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
@@ -54,24 +59,62 @@ public final class SetLocationActivity extends Activity {
                 : "Current location: " + current.getCheckpointName());
 
         checkpointList.removeAllViews();
-        List<Checkpoint> checkpoints = app.getCheckpointRepository().getAllCheckpoints();
+        checkpointList.addView(ViewFactory.sectionLine(this, "Loading checkpoints from Python backend..."));
+        BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<BackendCheckpointDto>>() {
+            @Override
+            public void onSuccess(List<BackendCheckpointDto> value) {
+                bindCheckpointButtons(BackendMapper.toCheckpoints(value));
+            }
+
+            @Override
+            public void onFallback(Throwable throwable) {
+                selectedLocationLabel.setText(selectedLocationLabel.getText()
+                        + "\nPython backend unavailable. Showing offline checkpoint list.");
+                bindCheckpointButtons(app.getCheckpointRepository().getAllCheckpoints());
+            }
+        });
+    }
+
+    private void bindCheckpointButtons(List<Checkpoint> checkpoints) {
+        checkpointList.removeAllViews();
         for (Checkpoint checkpoint : checkpoints) {
             Button button = ViewFactory.listButton(
                     this,
                     checkpoint.getCheckpointName() + "  -  "
                             + UiText.cleanType(checkpoint.getCheckpointType())
             );
-            button.setOnClickListener(view -> {
-                LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
-                Toast.makeText(
-                        this,
-                        "Current location set to " + checkpoint.getCheckpointName(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                startActivity(new Intent(this, HomeMapActivity.class));
-                finish();
-            });
+            button.setOnClickListener(view -> setLocationViaNearestCheckpoint(checkpoint));
             checkpointList.addView(button);
         }
+    }
+
+    private void setLocationViaNearestCheckpoint(Checkpoint selectedCheckpoint) {
+        BackendClient.getInstance(this).getNearestCheckpoint(
+                selectedCheckpoint.getXCoord(),
+                selectedCheckpoint.getYCoord(),
+                new BackendCallback<BackendNearestCheckpointDto>() {
+                    @Override
+                    public void onSuccess(BackendNearestCheckpointDto value) {
+                        Checkpoint nearest = BackendMapper.toCheckpoint(value.checkpoint);
+                        setCurrentLocation(nearest == null ? selectedCheckpoint : nearest);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        setCurrentLocation(selectedCheckpoint);
+                    }
+                }
+        );
+    }
+
+    private void setCurrentLocation(Checkpoint checkpoint) {
+        LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
+        Toast.makeText(
+                this,
+                "Current location set to " + checkpoint.getCheckpointName(),
+                Toast.LENGTH_SHORT
+        ).show();
+        startActivity(new Intent(this, HomeMapActivity.class));
+        finish();
     }
 }
