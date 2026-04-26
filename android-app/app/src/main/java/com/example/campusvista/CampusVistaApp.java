@@ -12,6 +12,14 @@ import com.example.campusvista.data.repository.PanoRepository;
 import com.example.campusvista.data.repository.PlaceRepository;
 import com.example.campusvista.data.repository.RecognitionRepository;
 import com.example.campusvista.data.repository.SearchAliasRepository;
+import com.example.campusvista.routing.AStarRouter;
+import com.example.campusvista.routing.CrowdCostCalculator;
+import com.example.campusvista.routing.DijkstraRouter;
+import com.example.campusvista.routing.Graph;
+import com.example.campusvista.routing.GraphBuilder;
+import com.example.campusvista.routing.InstructionBuilder;
+import com.example.campusvista.routing.NearestCheckpointFinder;
+import com.example.campusvista.routing.RoutePlanner;
 
 public final class CampusVistaApp extends Application {
     private DBHelper dbHelper;
@@ -23,6 +31,13 @@ public final class CampusVistaApp extends Application {
     private PanoRepository panoRepository;
     private RecognitionRepository recognitionRepository;
     private SearchAliasRepository searchAliasRepository;
+    private Graph staticGraph;
+    private CrowdCostCalculator crowdCostCalculator;
+    private InstructionBuilder instructionBuilder;
+    private AStarRouter aStarRouter;
+    private DijkstraRouter dijkstraRouter;
+    private RoutePlanner routePlanner;
+    private NearestCheckpointFinder nearestCheckpointFinder;
 
     @Override
     public void onCreate() {
@@ -37,6 +52,22 @@ public final class CampusVistaApp extends Application {
         panoRepository = PanoRepository.getInstance(this);
         recognitionRepository = RecognitionRepository.getInstance(this);
         searchAliasRepository = SearchAliasRepository.getInstance(this);
+        staticGraph = GraphBuilder.getInstance(this).buildStaticGraph();
+        crowdCostCalculator = CrowdCostCalculator.getInstance(this);
+        instructionBuilder = new InstructionBuilder();
+        aStarRouter = new AStarRouter(
+                staticGraph,
+                crowdCostCalculator,
+                instructionBuilder,
+                mapConfig.getMetersPerPixel()
+        );
+        dijkstraRouter = new DijkstraRouter(
+                staticGraph,
+                crowdCostCalculator,
+                instructionBuilder
+        );
+        routePlanner = new RoutePlanner(aStarRouter, dijkstraRouter);
+        nearestCheckpointFinder = new NearestCheckpointFinder(staticGraph);
     }
 
     public DBHelper getDbHelper() {
@@ -73,5 +104,29 @@ public final class CampusVistaApp extends Application {
 
     public SearchAliasRepository getSearchAliasRepository() {
         return searchAliasRepository;
+    }
+
+    public Graph getStaticGraph() {
+        return staticGraph;
+    }
+
+    public CrowdCostCalculator getCrowdCostCalculator() {
+        return crowdCostCalculator;
+    }
+
+    public AStarRouter getAStarRouter() {
+        return aStarRouter;
+    }
+
+    public DijkstraRouter getDijkstraRouter() {
+        return dijkstraRouter;
+    }
+
+    public RoutePlanner getRoutePlanner() {
+        return routePlanner;
+    }
+
+    public NearestCheckpointFinder getNearestCheckpointFinder() {
+        return nearestCheckpointFinder;
     }
 }
