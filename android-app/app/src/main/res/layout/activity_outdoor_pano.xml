@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cv_surface"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/panoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Outdoor Panorama"
+        android:textColor="@color/cv_ink"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/panoLocationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/cv_green_dark"
+        android:textSize="15sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/cv_map_panel"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/panoImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="Outdoor panorama"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pano_placeholder" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/panoDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cv_card"
+        android:padding="14dp"
+        android:textColor="@color/cv_ink"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/backToMapButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cv_button_primary"
+        android:text="Back To Map"
+        android:textColor="@color/cv_white" />
+</LinearLayout>

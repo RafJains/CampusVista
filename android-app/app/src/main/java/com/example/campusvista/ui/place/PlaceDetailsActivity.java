@@ -13,7 +13,9 @@ import com.example.campusvista.data.model.Place;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
+import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.location.SetLocationActivity;
+import com.example.campusvista.ui.pano.OutdoorPanoActivity;
 import com.example.campusvista.ui.route.RouteOptionsActivity;
 
 public final class PlaceDetailsActivity extends Activity {
@@ -36,6 +38,19 @@ public final class PlaceDetailsActivity extends Activity {
 
         checkpoint = app.getCheckpointRepository().getCheckpointById(place.getCheckpointId());
         bindPlace();
+
+        boolean hasPano = checkpoint != null
+                && app.getPanoRepository().hasOutdoorPano(checkpoint.getCheckpointId());
+        ViewFactory.setVisible(findViewById(R.id.placePanoButton), hasPano);
+        findViewById(R.id.placePanoButton).setOnClickListener(view -> {
+            if (checkpoint == null) {
+                return;
+            }
+            Intent intent = new Intent(this, OutdoorPanoActivity.class);
+            intent.putExtra(NavExtras.EXTRA_CHECKPOINT_ID, checkpoint.getCheckpointId());
+            intent.putExtra(NavExtras.EXTRA_CHECKPOINT_NAME, checkpoint.getCheckpointName());
+            startActivity(intent);
+        });
 
         findViewById(R.id.setCurrentButton).setOnClickListener(view -> {
             LocationStore.setCurrentCheckpointId(this, place.getCheckpointId());
