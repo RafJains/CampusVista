@@ -3,4 +3,8 @@
     <color name="cv_green_dark">#16583F</color>
     <color name="cv_ink">#17211C</color>
     <color name="cv_surface">#F7FAF8</color>
+    <color name="cv_white">#FFFFFF</color>
+    <color name="cv_border">#D8E4DE</color>
+    <color name="cv_muted">#5D6D64</color>
+    <color name="cv_warning">#9A5B00</color>
 </resources>
