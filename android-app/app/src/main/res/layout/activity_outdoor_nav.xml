@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cv_surface"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/navTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Outdoor Navigation"
+        android:textColor="@color/cv_ink"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/navSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/cv_muted"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/navProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/cv_green_dark"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/navInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:background="@drawable/cv_card"
+        android:gravity="center"
+        android:padding="18dp"
+        android:textColor="@color/cv_ink"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/navPanoButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cv_button_secondary"
+        android:text="Outdoor Pano"
+        android:textColor="@color/cv_green_dark" />
+
+    <Button
+        android:id="@+id/navNextButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/cv_button_primary"
+        android:text="Next"
+        android:textColor="@color/cv_white" />
+
+    <Button
+        android:id="@+id/navCompleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/cv_button_secondary"
+        android:text="Complete Route"
+        android:textColor="@color/cv_green_dark" />
+</LinearLayout>
