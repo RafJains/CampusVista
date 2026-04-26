@@ -19,10 +19,10 @@ import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
 import com.example.campusvista.data.repository.MapConfigRepository;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendNearestCheckpointDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -195,9 +195,9 @@ public final class HomeMapActivity extends Activity {
         BackendClient.getInstance(this).getNearestCheckpoint(
                 mapX,
                 mapY,
-                new BackendCallback<BackendNearestCheckpointDto>() {
+                new BackendCallback<NearestCheckpointDto>() {
                     @Override
-                    public void onSuccess(BackendNearestCheckpointDto value) {
+                    public void onSuccess(NearestCheckpointDto value) {
                         Checkpoint checkpoint = BackendMapper.toCheckpoint(value.checkpoint);
                         if (checkpoint != null) {
                             setCurrentFromMap(checkpoint, "Python backend");

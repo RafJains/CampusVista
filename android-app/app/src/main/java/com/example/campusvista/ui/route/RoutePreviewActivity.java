@@ -10,11 +10,11 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
-import com.example.campusvista.network.BackendCallback;
 import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendClient.BackendCallback;
+import com.example.campusvista.network.BackendDtos.RouteRequestDto;
+import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.example.campusvista.network.BackendMapper;
-import com.example.campusvista.network.dto.BackendRouteRequest;
-import com.example.campusvista.network.dto.BackendRouteResponse;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
@@ -63,7 +63,7 @@ public final class RoutePreviewActivity extends Activity {
                 "Calculating route with Python backend..."
         );
         routeStepsList.removeAllViews();
-        BackendRouteRequest request = BackendRouteRequest.forCheckpoints(
+        RouteRequestDto request = RouteRequestDto.forCheckpoints(
                 startId,
                 destinationCheckpointId,
                 routeMode
@@ -74,9 +74,9 @@ public final class RoutePreviewActivity extends Activity {
         }
         BackendClient.getInstance(this).buildRoute(
                 request,
-                new BackendCallback<BackendRouteResponse>() {
+                new BackendCallback<RouteResponseDto>() {
                     @Override
-                    public void onSuccess(BackendRouteResponse value) {
+                    public void onSuccess(RouteResponseDto value) {
                         routeResult = BackendMapper.toRouteResult(value, routeMode);
                         bindRouteOrUnavailable(startId, "Python backend (" + value.algorithm + ")");
                     }

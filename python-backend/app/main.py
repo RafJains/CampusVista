@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app import db
-from app.routes import checkpoint_routes, recognition_routes, route_routes, search_routes
+from app.routes.api import router as api_router
 
 
 app = FastAPI(
@@ -25,10 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(search_routes.router)
-app.include_router(route_routes.router)
-app.include_router(checkpoint_routes.router)
-app.include_router(recognition_routes.router)
+app.include_router(api_router)
 
 if db.DATA_DIR.exists():
     app.mount("/assets", StaticFiles(directory=db.DATA_DIR), name="assets")

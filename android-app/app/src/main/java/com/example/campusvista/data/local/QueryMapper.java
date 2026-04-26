@@ -8,7 +8,6 @@ import com.example.campusvista.data.model.Edge;
 import com.example.campusvista.data.model.OutdoorPano;
 import com.example.campusvista.data.model.Place;
 import com.example.campusvista.data.model.RecognitionRef;
-import com.example.campusvista.data.model.SearchAlias;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,15 +86,6 @@ public final class QueryMapper {
         );
     }
 
-    public static SearchAlias toSearchAlias(Cursor cursor) {
-        return new SearchAlias(
-                getString(cursor, "alias_id"),
-                getString(cursor, "place_id"),
-                getString(cursor, "alias_text"),
-                getNullableString(cursor, "alias_type")
-        );
-    }
-
     public static List<Checkpoint> toCheckpoints(Cursor cursor) {
         List<Checkpoint> results = new ArrayList<>();
         try {
@@ -168,18 +158,6 @@ public final class QueryMapper {
         }
     }
 
-    public static List<SearchAlias> toSearchAliases(Cursor cursor) {
-        List<SearchAlias> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toSearchAlias(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
-    }
-
     public static Checkpoint firstCheckpointOrNull(Cursor cursor) {
         try {
             return cursor.moveToFirst() ? toCheckpoint(cursor) : null;
@@ -223,14 +201,6 @@ public final class QueryMapper {
     public static RecognitionRef firstRecognitionRefOrNull(Cursor cursor) {
         try {
             return cursor.moveToFirst() ? toRecognitionRef(cursor) : null;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public static SearchAlias firstSearchAliasOrNull(Cursor cursor) {
-        try {
-            return cursor.moveToFirst() ? toSearchAlias(cursor) : null;
         } finally {
             cursor.close();
         }
