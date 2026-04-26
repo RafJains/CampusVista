@@ -10,6 +10,12 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendPanoDto;
+import com.example.campusvista.network.dto.BackendRouteRequest;
+import com.example.campusvista.network.dto.BackendRouteResponse;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
@@ -22,6 +28,7 @@ import com.example.campusvista.ui.pano.OutdoorPanoActivity;
 public final class OutdoorNavActivity extends Activity {
     private String destinationCheckpointId;
     private String destinationName;
+    private String destinationPlaceId;
     private RouteMode routeMode;
     private RouteResult routeResult;
     private int instructionIndex;
@@ -41,14 +48,15 @@ public final class OutdoorNavActivity extends Activity {
 
         destinationCheckpointId = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID);
         destinationName = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_NAME);
+        destinationPlaceId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
         routeMode = parseRouteMode(getIntent().getStringExtra(NavExtras.EXTRA_ROUTE_MODE));
 
         findViewById(R.id.navNextButton).setOnClickListener(view -> moveNext());
         findViewById(R.id.navCompleteButton).setOnClickListener(view -> completeRoute());
         findViewById(R.id.navPanoButton).setOnClickListener(view -> openPano());
 
+        navSummary.setText("Loading route from Python backend...");
         computeRoute();
-        updateStep();
     }
 
     private void computeRoute() {
@@ -58,20 +66,53 @@ public final class OutdoorNavActivity extends Activity {
             finish();
             return;
         }
-        routeResult = ((CampusVistaApp) getApplication()).getRoutePlanner().computeRoute(
+        BackendRouteRequest request = BackendRouteRequest.forCheckpoints(
+                startId,
+                destinationCheckpointId,
+                routeMode
+        );
+        if (destinationPlaceId != null) {
+            request.destinationPlaceId = destinationPlaceId;
+            request.destinationCheckpointId = null;
+        }
+        BackendClient.getInstance(this).buildRoute(
+                request,
+                new BackendCallback<BackendRouteResponse>() {
+                    @Override
+                    public void onSuccess(BackendRouteResponse value) {
+                        routeResult = BackendMapper.toRouteResult(value, routeMode);
+                        handleRouteLoaded();
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        routeResult = computeLocalRoute(startId);
+                        handleRouteLoaded();
+                    }
+                }
+        );
+    }
+
+    private RouteResult computeLocalRoute(String startId) {
+        return ((CampusVistaApp) getApplication()).getRoutePlanner().computeRoute(
                 startId,
                 destinationCheckpointId,
                 routeMode,
                 destinationName
         );
-        if (!routeResult.isRouteFound()) {
+    }
+
+    private void handleRouteLoaded() {
+        if (routeResult == null || !routeResult.isRouteFound()) {
             Toast.makeText(
                     this,
                     "No outdoor route found between these points.",
                     Toast.LENGTH_SHORT
             ).show();
             finish();
+            return;
         }
+        updateStep();
     }
 
     private void updateStep() {
@@ -113,6 +154,22 @@ public final class OutdoorNavActivity extends Activity {
         boolean hasPano = checkpoint != null
                 && app.getPanoRepository().hasOutdoorPano(checkpoint.getCheckpointId());
         ViewFactory.setVisible(findViewById(R.id.navPanoButton), hasPano);
+        if (checkpoint != null) {
+            BackendClient.getInstance(this).getPano(
+                    checkpoint.getCheckpointId(),
+                    new BackendCallback<BackendPanoDto>() {
+                        @Override
+                        public void onSuccess(BackendPanoDto value) {
+                            ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
+                        }
+
+                        @Override
+                        public void onFallback(Throwable throwable) {
+                            ViewFactory.setVisible(findViewById(R.id.navPanoButton), hasPano);
+                        }
+                    }
+            );
+        }
     }
 
     private void openPano() {

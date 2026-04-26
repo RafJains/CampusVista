@@ -103,10 +103,10 @@ Example route response:
 
 - Java
 - XML layouts
-- Retrofit planned for API calls
+- Retrofit API client
 - Camera intent placeholder
-- Local UI rendering
-- Existing SQLite/routing fallback retained during transition
+- Python backend primary for search, routing, checkpoints, panos, snapping, and recognition placeholder
+- Existing SQLite/routing fallback retained for demos when backend is unavailable
 
 ### Python Backend
 
@@ -187,7 +187,6 @@ Included:
 
 Not included yet:
 
-- Android Retrofit API migration
 - Production recognition model
 - Indoor navigation
 - GPS turn-by-turn navigation
@@ -199,6 +198,6 @@ Not included yet:
 ```text
 Architecture pivot accepted
 Python backend foundation implemented
-Android frontend still uses local fallback logic
-Next milestone: Android Retrofit API integration
+Android Retrofit integration implemented
+Python backend is now primary; Android local logic remains fallback
 ```

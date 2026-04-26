@@ -12,6 +12,10 @@ import android.widget.TextView;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Place;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendPlaceDto;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
@@ -56,8 +60,31 @@ public final class SearchActivity extends Activity {
     }
 
     private void runSearch() {
-        CampusVistaApp app = (CampusVistaApp) getApplication();
         String query = searchInput.getText().toString().trim();
+        emptyState.setText("Searching Python backend...");
+        BackendClient.getInstance(this).searchPlaces(
+                query,
+                initialType,
+                RESULT_LIMIT,
+                new BackendCallback<List<BackendPlaceDto>>() {
+                    @Override
+                    public void onSuccess(List<BackendPlaceDto> value) {
+                        bindResults(BackendMapper.toPlaces(value), null);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        bindResults(
+                                localSearch(query),
+                                "Python backend unavailable. Showing offline fallback results."
+                        );
+                    }
+                }
+        );
+    }
+
+    private List<Place> localSearch(String query) {
+        CampusVistaApp app = (CampusVistaApp) getApplication();
         List<Place> places;
 
         if (query.isEmpty() && initialType != null) {
@@ -69,13 +96,16 @@ public final class SearchActivity extends Activity {
         } else {
             places = app.getPlaceRepository().searchPlaces(query, RESULT_LIMIT);
         }
-
-        bindResults(places);
+        return places;
     }
 
-    private void bindResults(List<Place> places) {
+    private void bindResults(List<Place> places, String note) {
         resultList.removeAllViews();
-        emptyState.setText(places.isEmpty() ? "No outdoor places found." : "");
+        if (places.isEmpty()) {
+            emptyState.setText("No outdoor places found.");
+        } else {
+            emptyState.setText(note == null ? "" : note);
+        }
 
         for (Place place : places) {
             Button button = ViewFactory.listButton(

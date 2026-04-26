@@ -18,6 +18,7 @@ import com.example.campusvista.ui.location.SetLocationActivity;
 public final class RouteOptionsActivity extends Activity {
     private String destinationCheckpointId;
     private String destinationName;
+    private String destinationPlaceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,11 @@ public final class RouteOptionsActivity extends Activity {
         destinationCheckpointId = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID);
         destinationName = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_NAME);
 
-        String placeId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
-        if (destinationCheckpointId == null && placeId != null) {
+        destinationPlaceId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
+        if (destinationCheckpointId == null && destinationPlaceId != null) {
             Place place = ((CampusVistaApp) getApplication())
                     .getPlaceRepository()
-                    .getPlaceById(placeId);
+                    .getPlaceById(destinationPlaceId);
             if (place != null) {
                 destinationCheckpointId = place.getCheckpointId();
                 destinationName = place.getPlaceName();
@@ -93,6 +94,7 @@ public final class RouteOptionsActivity extends Activity {
             return;
         }
         Intent intent = new Intent(this, RoutePreviewActivity.class);
+        intent.putExtra(NavExtras.EXTRA_PLACE_ID, destinationPlaceId);
         intent.putExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID, destinationCheckpointId);
         intent.putExtra(NavExtras.EXTRA_DESTINATION_NAME, destinationName);
         intent.putExtra(NavExtras.EXTRA_ROUTE_MODE, routeMode.name());

@@ -4,18 +4,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
 import com.example.campusvista.data.repository.MapConfigRepository;
+import com.example.campusvista.network.BackendCallback;
+import com.example.campusvista.network.BackendClient;
+import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.network.dto.BackendNearestCheckpointDto;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -52,6 +59,12 @@ public final class HomeMapActivity extends Activity {
                 startActivity(new Intent(this, SearchActivity.class)));
         findViewById(R.id.setLocationButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SetLocationActivity.class)));
+        campusMapImage.setOnTouchListener((view, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                snapMapTouchToCheckpoint(event.getX(), event.getY());
+            }
+            return true;
+        });
     }
 
     @Override
@@ -145,10 +158,72 @@ public final class HomeMapActivity extends Activity {
             }
             campusMapImage.setVisibility(View.VISIBLE);
             campusMapImage.setImageBitmap(bitmap);
+            campusMapImage.setClickable(true);
             return true;
         } catch (IOException exception) {
             campusMapImage.setVisibility(View.GONE);
             return false;
         }
+    }
+
+    private void snapMapTouchToCheckpoint(float touchX, float touchY) {
+        Drawable drawable = campusMapImage.getDrawable();
+        if (drawable == null) {
+            return;
+        }
+
+        int imageWidth = drawable.getIntrinsicWidth();
+        int imageHeight = drawable.getIntrinsicHeight();
+        int viewWidth = campusMapImage.getWidth();
+        int viewHeight = campusMapImage.getHeight();
+        if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) {
+            return;
+        }
+
+        float scale = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight);
+        float displayedWidth = imageWidth * scale;
+        float displayedHeight = imageHeight * scale;
+        float left = (viewWidth - displayedWidth) / 2f;
+        float top = (viewHeight - displayedHeight) / 2f;
+        if (touchX < left || touchX > left + displayedWidth
+                || touchY < top || touchY > top + displayedHeight) {
+            return;
+        }
+
+        double mapX = (touchX - left) / scale;
+        double mapY = (touchY - top) / scale;
+        BackendClient.getInstance(this).getNearestCheckpoint(
+                mapX,
+                mapY,
+                new BackendCallback<BackendNearestCheckpointDto>() {
+                    @Override
+                    public void onSuccess(BackendNearestCheckpointDto value) {
+                        Checkpoint checkpoint = BackendMapper.toCheckpoint(value.checkpoint);
+                        if (checkpoint != null) {
+                            setCurrentFromMap(checkpoint, "Python backend");
+                        }
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        Checkpoint checkpoint = ((CampusVistaApp) getApplication())
+                                .getNearestCheckpointFinder()
+                                .findNearest(mapX, mapY);
+                        if (checkpoint != null) {
+                            setCurrentFromMap(checkpoint, "offline fallback");
+                        }
+                    }
+                }
+        );
+    }
+
+    private void setCurrentFromMap(Checkpoint checkpoint, String source) {
+        LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
+        Toast.makeText(
+                this,
+                "Snapped to " + checkpoint.getCheckpointName() + " via " + source,
+                Toast.LENGTH_SHORT
+        ).show();
+        bindHomeData();
     }
 }
