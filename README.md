@@ -199,4 +199,4 @@ gradlew.bat :app:assembleDebug
 
 Included now: outdoor navigation, map-based location selection, search, route preview/options, outdoor nav, panorama lookup/display, and recognition-ready fallback screens.
 
-Not included yet: production ML recognition, indoor navigation, live crowd feeds, GPS turn-by-turn, admin tools, and packaged on-device Python.
+Not included yet: production ML recognition, indoor navigation, live crowd feeds, GPS turn-by-turn, admin tools, and packaged on-device Python. 
