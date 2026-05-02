@@ -14,9 +14,9 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
     def test_final_spec_source_data_validates(self) -> None:
         data, config = cv.validate_all()
 
-        self.assertGreaterEqual(len(data["checkpoints"]), 10)
-        self.assertGreaterEqual(len(data["edges"]), 10)
-        self.assertEqual(config["meters_per_pixel"], 0.2)
+        self.assertEqual(len(data["checkpoints"]), 75)
+        self.assertEqual(len(data["edges"]), 110)
+        self.assertEqual(config["meters_per_pixel"], 0.1489)
 
     def test_astar_heuristic_is_admissible_for_all_edges(self) -> None:
         data, config = cv.validate_all()
@@ -54,6 +54,7 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
         expected_tables = {
             "checkpoints",
             "places",
+            "place_checkpoints",
             "edges",
             "crowd_rules",
             "outdoor_panos",
@@ -82,6 +83,10 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
                 self.assertEqual(
                     len(data["checkpoints"]),
                     connection.execute("SELECT COUNT(*) FROM checkpoints").fetchone()[0],
+                )
+                self.assertGreater(
+                    connection.execute("SELECT COUNT(*) FROM place_checkpoints").fetchone()[0],
+                    len(data["places"]),
                 )
                 self.assertEqual(
                     cv.SEED_DB_VERSION,
