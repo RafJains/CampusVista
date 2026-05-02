@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.graphics.Matrix;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,12 +38,27 @@ import java.io.InputStream;
 import java.util.List;
 
 public final class HomeMapActivity extends Activity {
+    private static final float MAP_MAX_ZOOM_MULTIPLIER = 5f;
+
     private ImageView campusMapImage;
     private TextView currentLocationLabel;
     private TextView mapSummary;
     private LinearLayout categoryRow;
     private LinearLayout featuredPlacesList;
     private LinearLayout checkpointList;
+    private final Matrix mapMatrix = new Matrix();
+    private ScaleGestureDetector mapScaleDetector;
+    private GestureDetector mapGestureDetector;
+    private Bitmap campusMapBitmap;
+    private float mapMinScale;
+    private float mapMaxScale;
+    private float mapScale;
+    private float mapTranslateX;
+    private float mapTranslateY;
+    private float mapLastX;
+    private float mapLastY;
+    private float mapLastFocusX;
+    private float mapLastFocusY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +71,12 @@ public final class HomeMapActivity extends Activity {
         categoryRow = findViewById(R.id.categoryRow);
         featuredPlacesList = findViewById(R.id.featuredPlacesList);
         checkpointList = findViewById(R.id.checkpointList);
+        configureMapGestures();
 
         findViewById(R.id.openSearchButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SearchActivity.class)));
         findViewById(R.id.setLocationButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SetLocationActivity.class)));
-        campusMapImage.setOnTouchListener((view, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                snapMapTouchToCheckpoint(event.getX(), event.getY());
-            }
-            return true;
-        });
     }
 
     @Override
@@ -158,40 +170,214 @@ public final class HomeMapActivity extends Activity {
             }
             campusMapImage.setVisibility(View.VISIBLE);
             campusMapImage.setImageBitmap(bitmap);
+            campusMapImage.setAdjustViewBounds(false);
+            campusMapImage.setScaleType(ImageView.ScaleType.MATRIX);
             campusMapImage.setClickable(true);
+            campusMapBitmap = bitmap;
+            campusMapImage.post(this::resetMapViewport);
             return true;
         } catch (IOException exception) {
+            campusMapBitmap = null;
             campusMapImage.setVisibility(View.GONE);
             return false;
         }
     }
 
-    private void snapMapTouchToCheckpoint(float touchX, float touchY) {
-        Drawable drawable = campusMapImage.getDrawable();
-        if (drawable == null) {
-            return;
+    private void configureMapGestures() {
+        campusMapImage.setScaleType(ImageView.ScaleType.MATRIX);
+        mapScaleDetector = new ScaleGestureDetector(
+                this,
+                new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                    @Override
+                    public boolean onScaleBegin(ScaleGestureDetector detector) {
+                        mapLastFocusX = detector.getFocusX();
+                        mapLastFocusY = detector.getFocusY();
+                        requestMapParentInterception(true);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onScale(ScaleGestureDetector detector) {
+                        float focusX = detector.getFocusX();
+                        float focusY = detector.getFocusY();
+                        panMap(focusX - mapLastFocusX, focusY - mapLastFocusY);
+                        mapLastFocusX = focusX;
+                        mapLastFocusY = focusY;
+                        zoomMap(detector.getScaleFactor(), focusX, focusY);
+                        return true;
+                    }
+                }
+        );
+        mapGestureDetector = new GestureDetector(
+                this,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDown(MotionEvent event) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent event) {
+                        snapMapTouchToCheckpoint(event.getX(), event.getY());
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onDoubleTap(MotionEvent event) {
+                        if (mapScale <= mapMinScale * 1.2f) {
+                            setMapScale(mapMinScale * 2.5f, event.getX(), event.getY());
+                        } else {
+                            resetMapViewport();
+                        }
+                        return true;
+                    }
+                }
+        );
+        campusMapImage.setOnTouchListener((view, event) -> handleMapTouch(event));
+    }
+
+    private boolean handleMapTouch(MotionEvent event) {
+        if (campusMapBitmap == null) {
+            return false;
         }
 
-        int imageWidth = drawable.getIntrinsicWidth();
-        int imageHeight = drawable.getIntrinsicHeight();
+        mapScaleDetector.onTouchEvent(event);
+        mapGestureDetector.onTouchEvent(event);
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                mapLastX = event.getX();
+                mapLastY = event.getY();
+                requestMapParentInterception(true);
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                if (!mapScaleDetector.isInProgress() && event.getPointerCount() == 1) {
+                    float dx = event.getX() - mapLastX;
+                    float dy = event.getY() - mapLastY;
+                    mapLastX = event.getX();
+                    mapLastY = event.getY();
+                    panMap(dx, dy);
+                }
+                return true;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mapLastFocusX = mapScaleDetector.getFocusX();
+                mapLastFocusY = mapScaleDetector.getFocusY();
+                requestMapParentInterception(true);
+                return true;
+            case MotionEvent.ACTION_POINTER_UP:
+                updateLastMapPointAfterPointerUp(event);
+                return true;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                requestMapParentInterception(false);
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    private void resetMapViewport() {
+        if (campusMapBitmap == null) {
+            return;
+        }
         int viewWidth = campusMapImage.getWidth();
         int viewHeight = campusMapImage.getHeight();
-        if (imageWidth <= 0 || imageHeight <= 0 || viewWidth <= 0 || viewHeight <= 0) {
+        if (viewWidth <= 0 || viewHeight <= 0) {
             return;
         }
 
-        float scale = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight);
-        float displayedWidth = imageWidth * scale;
-        float displayedHeight = imageHeight * scale;
-        float left = (viewWidth - displayedWidth) / 2f;
-        float top = (viewHeight - displayedHeight) / 2f;
-        if (touchX < left || touchX > left + displayedWidth
-                || touchY < top || touchY > top + displayedHeight) {
+        mapMinScale = Math.min(
+                (float) viewWidth / campusMapBitmap.getWidth(),
+                (float) viewHeight / campusMapBitmap.getHeight()
+        );
+        mapMaxScale = mapMinScale * MAP_MAX_ZOOM_MULTIPLIER;
+        mapScale = mapMinScale;
+        mapTranslateX = (viewWidth - campusMapBitmap.getWidth() * mapScale) / 2f;
+        mapTranslateY = (viewHeight - campusMapBitmap.getHeight() * mapScale) / 2f;
+        applyMapMatrix();
+    }
+
+    private void zoomMap(float scaleFactor, float focusX, float focusY) {
+        if (mapScale <= 0f) {
+            resetMapViewport();
+        }
+        setMapScale(mapScale * scaleFactor, focusX, focusY);
+    }
+
+    private void setMapScale(float targetScale, float focusX, float focusY) {
+        if (campusMapBitmap == null || mapScale <= 0f) {
             return;
         }
 
-        double mapX = (touchX - left) / scale;
-        double mapY = (touchY - top) / scale;
+        float nextScale = Math.max(mapMinScale, Math.min(mapMaxScale, targetScale));
+        float mapFocusX = (focusX - mapTranslateX) / mapScale;
+        float mapFocusY = (focusY - mapTranslateY) / mapScale;
+        mapTranslateX = focusX - mapFocusX * nextScale;
+        mapTranslateY = focusY - mapFocusY * nextScale;
+        mapScale = nextScale;
+        clampMapToViewport();
+        applyMapMatrix();
+    }
+
+    private void panMap(float dx, float dy) {
+        if (campusMapBitmap == null || mapScale <= 0f) {
+            return;
+        }
+        mapTranslateX += dx;
+        mapTranslateY += dy;
+        clampMapToViewport();
+        applyMapMatrix();
+    }
+
+    private void updateLastMapPointAfterPointerUp(MotionEvent event) {
+        int liftedIndex = event.getActionIndex();
+        int nextIndex = liftedIndex == 0 ? 1 : 0;
+        if (nextIndex < event.getPointerCount()) {
+            mapLastX = event.getX(nextIndex);
+            mapLastY = event.getY(nextIndex);
+        }
+    }
+
+    private void clampMapToViewport() {
+        int viewWidth = campusMapImage.getWidth();
+        int viewHeight = campusMapImage.getHeight();
+        float scaledWidth = campusMapBitmap.getWidth() * mapScale;
+        float scaledHeight = campusMapBitmap.getHeight() * mapScale;
+
+        if (scaledWidth <= viewWidth) {
+            mapTranslateX = (viewWidth - scaledWidth) / 2f;
+        } else {
+            mapTranslateX = Math.max(viewWidth - scaledWidth, Math.min(0f, mapTranslateX));
+        }
+
+        if (scaledHeight <= viewHeight) {
+            mapTranslateY = (viewHeight - scaledHeight) / 2f;
+        } else {
+            mapTranslateY = Math.max(viewHeight - scaledHeight, Math.min(0f, mapTranslateY));
+        }
+    }
+
+    private void applyMapMatrix() {
+        mapMatrix.reset();
+        mapMatrix.postScale(mapScale, mapScale);
+        mapMatrix.postTranslate(mapTranslateX, mapTranslateY);
+        campusMapImage.setImageMatrix(mapMatrix);
+    }
+
+    private void requestMapParentInterception(boolean disallowIntercept) {
+        if (campusMapImage.getParent() != null) {
+            campusMapImage.getParent().requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+    }
+
+    private void snapMapTouchToCheckpoint(float touchX, float touchY) {
+        double[] mapPoint = viewPointToMapPoint(touchX, touchY);
+        if (mapPoint == null) {
+            return;
+        }
+
+        double mapX = mapPoint[0];
+        double mapY = mapPoint[1];
         BackendClient.getInstance(this).getNearestCheckpoint(
                 mapX,
                 mapY,
@@ -200,7 +386,7 @@ public final class HomeMapActivity extends Activity {
                     public void onSuccess(NearestCheckpointDto value) {
                         Checkpoint checkpoint = BackendMapper.toCheckpoint(value.checkpoint);
                         if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint, "Python backend");
+                            setCurrentFromMap(checkpoint, "live campus service");
                         }
                     }
 
@@ -210,11 +396,26 @@ public final class HomeMapActivity extends Activity {
                                 .getNearestCheckpointFinder()
                                 .findNearest(mapX, mapY);
                         if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint, "offline fallback");
+                            setCurrentFromMap(checkpoint, "saved campus map");
                         }
                     }
                 }
         );
+    }
+
+    private double[] viewPointToMapPoint(float touchX, float touchY) {
+        if (campusMapBitmap == null || mapScale <= 0f) {
+            return null;
+        }
+
+        double mapX = (touchX - mapTranslateX) / mapScale;
+        double mapY = (touchY - mapTranslateY) / mapScale;
+        if (mapX < 0 || mapY < 0
+                || mapX > campusMapBitmap.getWidth()
+                || mapY > campusMapBitmap.getHeight()) {
+            return null;
+        }
+        return new double[]{mapX, mapY};
     }
 
     private void setCurrentFromMap(Checkpoint checkpoint, String source) {

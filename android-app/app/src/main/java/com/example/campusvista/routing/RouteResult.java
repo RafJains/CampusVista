@@ -16,6 +16,7 @@ public final class RouteResult {
     private final double totalDistanceMeters;
     private final double totalCost;
     private final List<String> instructions;
+    private final List<String> warnings;
 
     private RouteResult(
             boolean routeFound,
@@ -26,7 +27,8 @@ public final class RouteResult {
             List<Graph.DirectedEdge> edgePath,
             double totalDistanceMeters,
             double totalCost,
-            List<String> instructions
+            List<String> instructions,
+            List<String> warnings
     ) {
         this.routeFound = routeFound;
         this.startCheckpointId = startCheckpointId;
@@ -37,6 +39,32 @@ public final class RouteResult {
         this.totalDistanceMeters = totalDistanceMeters;
         this.totalCost = totalCost;
         this.instructions = immutableCopy(instructions);
+        this.warnings = immutableCopy(warnings);
+    }
+
+    public static RouteResult success(
+            String startCheckpointId,
+            String destinationCheckpointId,
+            RouteMode routeMode,
+            List<Checkpoint> checkpointPath,
+            List<Graph.DirectedEdge> edgePath,
+            double totalDistanceMeters,
+            double totalCost,
+            List<String> instructions,
+            List<String> warnings
+    ) {
+        return new RouteResult(
+                true,
+                startCheckpointId,
+                destinationCheckpointId,
+                routeMode,
+                checkpointPath,
+                edgePath,
+                totalDistanceMeters,
+                totalCost,
+                instructions,
+                warnings
+        );
     }
 
     public static RouteResult success(
@@ -49,8 +77,7 @@ public final class RouteResult {
             double totalCost,
             List<String> instructions
     ) {
-        return new RouteResult(
-                true,
+        return success(
                 startCheckpointId,
                 destinationCheckpointId,
                 routeMode,
@@ -58,7 +85,8 @@ public final class RouteResult {
                 edgePath,
                 totalDistanceMeters,
                 totalCost,
-                instructions
+                instructions,
+                Collections.<String>emptyList()
         );
     }
 
@@ -76,6 +104,7 @@ public final class RouteResult {
                 Collections.<Graph.DirectedEdge>emptyList(),
                 0.0,
                 Double.POSITIVE_INFINITY,
+                Collections.<String>emptyList(),
                 Collections.<String>emptyList()
         );
     }
@@ -114,6 +143,10 @@ public final class RouteResult {
 
     public List<String> getInstructions() {
         return instructions;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
     }
 
     private static <T> List<T> immutableCopy(List<T> input) {

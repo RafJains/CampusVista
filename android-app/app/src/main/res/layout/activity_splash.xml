@@ -5,32 +5,48 @@
     android:background="@color/cv_surface"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="28dp">
+    android:padding="32dp">
+
+    <ImageView
+        android:id="@+id/splashMark"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:contentDescription="@string/app_name"
+        android:elevation="3dp"
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/splashTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:letterSpacing="0"
         android:text="@string/app_name"
         android:textColor="@color/cv_ink"
-        android:textSize="36sp"
+        android:textSize="38sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/splashTagline"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:lineSpacingExtra="2dp"
         android:text="@string/app_tagline"
         android:textColor="@color/cv_muted"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/splashStatus"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/cv_card"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:padding="14dp"
         android:text="@string/startup_ready"
-        android:textColor="@color/cv_green_dark"
+        android:textColor="@color/cv_blue_dark"
         android:textSize="14sp" />
 </LinearLayout>

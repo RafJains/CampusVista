@@ -107,7 +107,7 @@ public final class CameraLocationActivity extends Activity {
 
     private void processCapturedImage(Bitmap capturedBitmap) {
         suggestionList.removeAllViews();
-        statusView.setText("Sending captured image to Python recognition API...");
+        statusView.setText("Checking outdoor location...");
         BackendClient.getInstance(this).recognize(
                 new RecognitionRequestDto(),
                 new BackendCallback<RecognitionResponseDto>() {
@@ -129,7 +129,7 @@ public final class CameraLocationActivity extends Activity {
             Bitmap capturedBitmap
     ) {
         if ("accepted".equals(response.status) && response.checkpointId != null) {
-            acceptCheckpointId(response.checkpointId, "Detected by Python backend");
+            acceptCheckpointId(response.checkpointId, "Detected by live recognition");
             return;
         }
         if ("low_confidence".equals(response.status)
@@ -142,7 +142,7 @@ public final class CameraLocationActivity extends Activity {
         processCapturedImageLocally(capturedBitmap);
         if (response.message != null && !response.message.trim().isEmpty()) {
             statusView.setText(response.message
-                    + "\nUsing local fallback or manual options below.");
+                    + "\nUse the options below if needed.");
         }
     }
 
@@ -164,7 +164,7 @@ public final class CameraLocationActivity extends Activity {
     }
 
     private void showBackendManualConfirmation(RecognitionResponseDto response) {
-        statusView.setText("Python backend returned a low-confidence match. Confirm one suggestion.");
+        statusView.setText("Live recognition was uncertain. Confirm one suggestion.");
         int count = Math.min(2, response.candidates.size());
         for (int i = 0; i < count; i++) {
             RecognitionCandidateDto candidate = response.candidates.get(i);
@@ -178,7 +178,7 @@ public final class CameraLocationActivity extends Activity {
             suggestionList.getChildAt(suggestionList.getChildCount() - 1)
                     .setOnClickListener(view -> acceptCheckpointId(
                             candidate.checkpointId,
-                            "Confirmed Python backend match"
+                            "Confirmed live recognition match"
                     ));
         }
     }

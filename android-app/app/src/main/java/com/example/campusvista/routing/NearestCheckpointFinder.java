@@ -14,8 +14,8 @@ public final class NearestCheckpointFinder {
         double bestDistanceSquared = Double.POSITIVE_INFINITY;
 
         for (Checkpoint checkpoint : graph.getCheckpoints()) {
-            double dx = checkpoint.getXCoord() - xCoord;
-            double dy = checkpoint.getYCoord() - yCoord;
+            double dx = checkpoint.getMapX() - xCoord;
+            double dy = checkpoint.getMapY() - yCoord;
             double distanceSquared = dx * dx + dy * dy;
             if (distanceSquared < bestDistanceSquared) {
                 bestDistanceSquared = distanceSquared;

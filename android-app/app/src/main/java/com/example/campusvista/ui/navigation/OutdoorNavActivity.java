@@ -1,8 +1,11 @@
 package com.example.campusvista.ui.navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import com.example.campusvista.network.BackendDtos.PanoDto;
 import com.example.campusvista.network.BackendDtos.RouteRequestDto;
 import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.example.campusvista.network.BackendMapper;
+import com.example.campusvista.pano.OutdoorPanoViewer;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
@@ -23,7 +27,10 @@ import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
-import com.example.campusvista.ui.pano.OutdoorPanoActivity;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public final class OutdoorNavActivity extends Activity {
     private String destinationCheckpointId;
@@ -32,10 +39,19 @@ public final class OutdoorNavActivity extends Activity {
     private RouteMode routeMode;
     private RouteResult routeResult;
     private int instructionIndex;
+    private boolean panoMode;
+    private boolean warningsShown;
+    private final Map<String, OutdoorPano> backendPanosByCheckpoint = new HashMap<>();
 
     private TextView navSummary;
     private TextView navProgress;
     private TextView navInstruction;
+    private TextView panoCheckpointName;
+    private TextView panoInstruction;
+    private ImageView panoImage;
+    private Button panoPreviousButton;
+    private Button panoNextButton;
+    private OutdoorPanoViewer panoViewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +61,15 @@ public final class OutdoorNavActivity extends Activity {
         navSummary = findViewById(R.id.navSummary);
         navProgress = findViewById(R.id.navProgress);
         navInstruction = findViewById(R.id.navInstruction);
+        panoCheckpointName = findViewById(R.id.navPanoCheckpointName);
+        panoInstruction = findViewById(R.id.navPanoInstruction);
+        panoImage = findViewById(R.id.navPanoImage);
+        panoPreviousButton = findViewById(R.id.navPanoPreviousButton);
+        panoNextButton = findViewById(R.id.navPanoNextButton);
+        panoViewer = new OutdoorPanoViewer(
+                this,
+                ((CampusVistaApp) getApplication()).getPanoRepository()
+        );
 
         destinationCheckpointId = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID);
         destinationName = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_NAME);
@@ -53,9 +78,13 @@ public final class OutdoorNavActivity extends Activity {
 
         findViewById(R.id.navNextButton).setOnClickListener(view -> moveNext());
         findViewById(R.id.navCompleteButton).setOnClickListener(view -> completeRoute());
-        findViewById(R.id.navPanoButton).setOnClickListener(view -> openPano());
+        findViewById(R.id.navPanoButton).setOnClickListener(view -> setPanoMode(true));
+        panoPreviousButton.setOnClickListener(view -> movePrevious());
+        panoNextButton.setOnClickListener(view -> moveNext());
+        findViewById(R.id.navBackToMapButton).setOnClickListener(view -> setPanoMode(false));
 
-        navSummary.setText("Loading route from Python backend...");
+        ViewFactory.setVisible(findViewById(R.id.navPanoButton), false);
+        navSummary.setText("Preparing your route...");
         computeRoute();
     }
 
@@ -80,12 +109,15 @@ public final class OutdoorNavActivity extends Activity {
                 new BackendCallback<RouteResponseDto>() {
                     @Override
                     public void onSuccess(RouteResponseDto value) {
+                        backendPanosByCheckpoint.clear();
+                        cacheBackendPanos(value);
                         routeResult = BackendMapper.toRouteResult(value, routeMode);
                         handleRouteLoaded();
                     }
 
                     @Override
                     public void onFallback(Throwable throwable) {
+                        backendPanosByCheckpoint.clear();
                         routeResult = computeLocalRoute(startId);
                         handleRouteLoaded();
                     }
@@ -112,7 +144,9 @@ public final class OutdoorNavActivity extends Activity {
             finish();
             return;
         }
+        ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
         updateStep();
+        showCrowdWarningsIfNeeded();
     }
 
     private void updateStep() {
@@ -125,6 +159,7 @@ public final class OutdoorNavActivity extends Activity {
             navProgress.setText("Route complete");
             navInstruction.setText("You have arrived at " + destinationName + ".");
             ViewFactory.setVisible(findViewById(R.id.navNextButton), false);
+            updatePanoStep();
             return;
         }
 
@@ -132,61 +167,52 @@ public final class OutdoorNavActivity extends Activity {
                 + " - " + Math.round(routeResult.getTotalDistanceMeters()) + " m");
         navProgress.setText("Step " + (instructionIndex + 1) + " of " + total);
         navInstruction.setText(routeResult.getInstructions().get(instructionIndex));
-        bindPanoButton();
+        ViewFactory.setVisible(findViewById(R.id.navNextButton), true);
+        updatePanoStep();
     }
 
     private void moveNext() {
+        if (routeResult == null) {
+            return;
+        }
+        if (instructionIndex >= routeResult.getInstructions().size() - 1) {
+            if (panoMode) {
+                completeRoute();
+                return;
+            }
+        }
         instructionIndex++;
         updateStep();
     }
 
+    private void movePrevious() {
+        if (instructionIndex <= 0) {
+            return;
+        }
+        instructionIndex--;
+        updateStep();
+    }
+
     private void completeRoute() {
-        LocationStore.setCurrentCheckpointId(this, destinationCheckpointId);
+        LocationStore.setCurrentCheckpointId(this, finalCheckpointId());
         Intent intent = new Intent(this, HomeMapActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    private void bindPanoButton() {
-        CampusVistaApp app = (CampusVistaApp) getApplication();
-        Checkpoint checkpoint = checkpointForCurrentStep();
-        boolean hasPano = checkpoint != null
-                && app.getPanoRepository().hasOutdoorPano(checkpoint.getCheckpointId());
-        ViewFactory.setVisible(findViewById(R.id.navPanoButton), hasPano);
-        if (checkpoint != null) {
-            BackendClient.getInstance(this).getPano(
-                    checkpoint.getCheckpointId(),
-                    new BackendCallback<PanoDto>() {
-                        @Override
-                        public void onSuccess(PanoDto value) {
-                            ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
-                        }
-
-                        @Override
-                        public void onFallback(Throwable throwable) {
-                            ViewFactory.setVisible(findViewById(R.id.navPanoButton), hasPano);
-                        }
-                    }
-            );
+    private String finalCheckpointId() {
+        if (routeResult != null && !routeResult.getCheckpointPath().isEmpty()) {
+            Checkpoint finalCheckpoint = routeResult.getCheckpointPath()
+                    .get(routeResult.getCheckpointPath().size() - 1);
+            if (finalCheckpoint != null && finalCheckpoint.getCheckpointId() != null) {
+                return finalCheckpoint.getCheckpointId();
+            }
         }
-    }
-
-    private void openPano() {
-        CampusVistaApp app = (CampusVistaApp) getApplication();
-        Checkpoint checkpoint = checkpointForCurrentStep();
-        if (checkpoint == null) {
-            return;
+        if (routeResult != null && routeResult.getDestinationCheckpointId() != null) {
+            return routeResult.getDestinationCheckpointId();
         }
-        OutdoorPano pano = app.getPanoRepository()
-                .getOutdoorPanoForCheckpoint(checkpoint.getCheckpointId());
-        if (pano == null) {
-            return;
-        }
-        Intent intent = new Intent(this, OutdoorPanoActivity.class);
-        intent.putExtra(NavExtras.EXTRA_CHECKPOINT_ID, checkpoint.getCheckpointId());
-        intent.putExtra(NavExtras.EXTRA_CHECKPOINT_NAME, checkpoint.getCheckpointName());
-        startActivity(intent);
+        return destinationCheckpointId;
     }
 
     private Checkpoint checkpointForCurrentStep() {
@@ -197,10 +223,90 @@ public final class OutdoorNavActivity extends Activity {
         return routeResult.getCheckpointPath().get(checkpointIndex);
     }
 
-    private static RouteMode parseRouteMode(String value) {
-        if (RouteMode.AVOID_CROWDED_PATH.name().equals(value)) {
-            return RouteMode.AVOID_CROWDED_PATH;
+    private void setPanoMode(boolean enabled) {
+        panoMode = enabled;
+        ViewFactory.setVisible(navInstruction, !enabled);
+        ViewFactory.setVisible(findViewById(R.id.navPanoPanel), enabled);
+        ViewFactory.setVisible(findViewById(R.id.navPanoButton), !enabled);
+        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), !enabled);
+        updatePanoStep();
+    }
+
+    private void updatePanoStep() {
+        if (!panoMode || routeResult == null) {
+            return;
         }
+
+        Checkpoint checkpoint = checkpointForCurrentStep();
+        if (checkpoint == null) {
+            panoCheckpointName.setText("Checkpoint unavailable");
+            panoInstruction.setText("");
+            panoImage.setImageResource(R.drawable.ic_pano_placeholder);
+            panoPreviousButton.setEnabled(false);
+            return;
+        }
+
+        int total = routeResult.getInstructions().size();
+        panoCheckpointName.setText(checkpoint.getCheckpointName());
+        if (instructionIndex < total) {
+            panoInstruction.setText(routeResult.getInstructions().get(instructionIndex));
+        } else {
+            panoInstruction.setText("You have arrived at " + destinationName + ".");
+        }
+
+        OutdoorPano pano = panoForCheckpoint(checkpoint.getCheckpointId());
+        panoViewer.loadPano(panoImage, pano, false);
+        panoPreviousButton.setEnabled(instructionIndex > 0);
+        panoNextButton.setText(instructionIndex >= total - 1 ? "Finish" : "Next");
+    }
+
+    private OutdoorPano panoForCheckpoint(String checkpointId) {
+        OutdoorPano backendPano = backendPanosByCheckpoint.get(checkpointId);
+        if (backendPano != null) {
+            return backendPano;
+        }
+        return ((CampusVistaApp) getApplication())
+                .getPanoRepository()
+                .getOutdoorPanoForCheckpoint(checkpointId);
+    }
+
+    private void cacheBackendPanos(RouteResponseDto value) {
+        if (value == null || value.panos == null) {
+            return;
+        }
+        for (PanoDto dto : value.panos) {
+            OutdoorPano pano = BackendMapper.toPano(dto);
+            if (pano != null && pano.getCheckpointId() != null) {
+                backendPanosByCheckpoint.put(pano.getCheckpointId(), pano);
+            }
+        }
+    }
+
+    private static RouteMode parseRouteMode(String value) {
         return RouteMode.SHORTEST_PATH;
+    }
+
+    private void showCrowdWarningsIfNeeded() {
+        if (warningsShown || routeResult == null || routeResult.getWarnings().isEmpty()) {
+            return;
+        }
+        StringBuilder message = new StringBuilder();
+        for (String warning : routeResult.getWarnings()) {
+            if (warning != null && warning.toLowerCase(Locale.US).contains("may be")) {
+                if (message.length() > 0) {
+                    message.append("\n\n");
+                }
+                message.append(warning);
+            }
+        }
+        if (message.length() == 0) {
+            return;
+        }
+        warningsShown = true;
+        new AlertDialog.Builder(this)
+                .setTitle("Crowd Notice")
+                .setMessage(message.toString())
+                .setPositiveButton("OK", null)
+                .show();
     }
 }

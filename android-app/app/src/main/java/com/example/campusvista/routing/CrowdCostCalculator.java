@@ -3,12 +3,13 @@ package com.example.campusvista.routing;
 import android.content.Context;
 
 import com.example.campusvista.data.model.CrowdRule;
+import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.repository.CrowdRepository;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,28 +30,15 @@ public final class CrowdCostCalculator {
     }
 
     public Map<String, Double> getCurrentPenaltyByCheckpoint() {
-        return getPenaltyByCheckpoint(Calendar.getInstance());
+        return Collections.emptyMap();
     }
 
     public Map<String, Double> getPenaltyByCheckpoint(Calendar now) {
-        String dayType = getDayType(now);
-        String currentTime = formatTime(now);
-        List<CrowdRule> activeRules = crowdRepository.getActiveCrowdRules(dayType, currentTime);
-        Map<String, Double> penalties = new HashMap<>();
-
-        for (CrowdRule rule : activeRules) {
-            Double previousPenalty = penalties.get(rule.getCheckpointId());
-            if (previousPenalty == null || rule.getPenaltyCost() > previousPenalty) {
-                penalties.put(rule.getCheckpointId(), rule.getPenaltyCost());
-            }
-        }
-
-        return Collections.unmodifiableMap(penalties);
+        return Collections.emptyMap();
     }
 
     public double getPenaltyForCheckpoint(String checkpointId) {
-        Double penalty = getCurrentPenaltyByCheckpoint().get(checkpointId);
-        return penalty == null ? 0.0 : penalty;
+        return 0.0;
     }
 
     public double calculateEdgeCost(
@@ -58,11 +46,31 @@ public final class CrowdCostCalculator {
             RouteMode routeMode,
             Map<String, Double> penaltyByCheckpoint
     ) {
-        if (routeMode != RouteMode.AVOID_CROWDED_PATH) {
-            return edge.getDistanceMeters();
+        return edge.getDistanceMeters();
+    }
+
+    public List<String> getCurrentWarningsForCheckpoints(List<Checkpoint> checkpoints) {
+        if (checkpoints == null || checkpoints.isEmpty()) {
+            return Collections.emptyList();
         }
-        Double penalty = penaltyByCheckpoint.get(edge.getToCheckpointId());
-        return edge.getDistanceMeters() + (penalty == null ? 0.0 : penalty);
+        Calendar now = Calendar.getInstance();
+        String dayType = getDayType(now);
+        String currentTime = formatTime(now);
+        List<String> warnings = new ArrayList<>();
+        for (Checkpoint checkpoint : checkpoints) {
+            CrowdRule rule = crowdRepository.getActiveCrowdRuleForCheckpoint(
+                    checkpoint.getCheckpointId(),
+                    dayType,
+                    currentTime
+            );
+            if (rule != null) {
+                warnings.add(checkpoint.getCheckpointName()
+                        + " may be " + rule.getCrowdLevel().replace("_", " ")
+                        + " between " + rule.getStartTime()
+                        + " and " + rule.getEndTime() + ".");
+            }
+        }
+        return warnings;
     }
 
     public static String getDayType(Calendar calendar) {
