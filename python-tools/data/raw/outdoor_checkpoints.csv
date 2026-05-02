@@ -1,13 +1,76 @@
-checkpoint_id,checkpoint_name,checkpoint_type,x_coord,y_coord,latitude,longitude,description,orientation
-OUT_CP001,Main Gate,gate,100,900,,,Primary public entry point,north
-OUT_CP002,Main Path Junction,junction,420,900,,,Junction after entering from main gate,east
-OUT_CP003,Admin Block Entrance,building_entry,680,740,,,Outdoor entrance checkpoint for admin block,north-east
-OUT_CP004,Library Front,facility_entry,980,620,,,Front outdoor area of the library,north
-OUT_CP005,Canteen Front,facility_entry,1100,930,,,Outdoor canteen approach area,east
-OUT_CP006,Academic Block Entrance,building_entry,1500,760,,,Main outdoor entrance for academic block,north
-OUT_CP007,Central Lawn Landmark,landmark,1350,1050,,,Central open landmark near main paths,south
-OUT_CP008,Visitor Parking,parking,320,1250,,,Outdoor visitor parking area,south
-OUT_CP009,Hostel Side Gate,gate,1770,1180,,,Gate toward hostel side,south-east
-OUT_CP010,Sports Ground Entrance,landmark,2100,1320,,,Outdoor entry point near sports ground,east
-OUT_CP011,Science Block Entrance,building_entry,2050,800,,,Outdoor entrance checkpoint for science block,north
-OUT_CP012,Rear Path Junction,junction,1900,980,,,Rear junction connecting academic and hostel side paths,east
+checkpoint_id,checkpoint_name,checkpoint_type,x_coord,y_coord,raw_map_x,raw_map_y,latitude,longitude,description,orientation
+OUT_CP001,Campus Entry Gate 1,gate,0,0,97.251,43.182,,,Campus entry gate-1,south_west
+OUT_CP002,Junction 3_5,junction,0.412,133.605,97.664,176.786,,,Joins checkpoint 3 & 5,south_west
+OUT_CP003,Reception Entry,facility_entry,116.035,138.071,213.287,181.253,,,Entry to campus' reception,south_west
+OUT_CP004,Admission Cell Entry,facility_entry,182.279,138.327,279.53,181.509,,,Entry to admission cell,south_west
+OUT_CP005,ABB-3 Entry_1,facility_entry,1.775,345.879,99.026,389.06,,,Entry to ABB-3,south_west
+OUT_CP006,Cafe Entry_1,facility_entry,0.422,514.629,97.673,557.811,,,Entry to campus' cafe (Annapurna),south_west
+OUT_CP007,Portico_1,facility_entry,0.768,906.686,98.02,949.867,,,Fire truck stand,south_west
+OUT_CP008,Parking _1,parking,2.05,1091.633,99.302,1134.815,,,Parking for 4 wheelers,south_west
+OUT_CP009,Parking_2,parking,2.13,1224.359,99.381,1267.54,,,Parking for 2 wheelers,south_west
+OUT_CP010,Campus Corner South_West,corner,3.341,1677.483,100.592,1720.665,,,Campus corner,south_west
+OUT_CP011,ABB 2 Entry_1,facility_entry,125.184,1674.506,222.436,1717.687,,,Back entry to ABB-2,south_west
+OUT_CP012,Junction 11_13,junction,343.831,1675.823,441.082,1719.004,,,Joins checkpoint 11 & 13,south_west
+OUT_CP013,Narrow Passage_1,passage,635.576,1678.615,732.828,1721.797,,,Narrow passage 1,south_west
+OUT_CP014,Girls Hostel Entry Back_1,hostel_entry,788.464,1674.708,885.715,1717.89,,,Entry to girls' hostel,south_west
+OUT_CP015,Junction 14_16,junction,943.157,1673.587,1040.408,1716.768,,,Joins checkpoint 14 & 16,south_west
+OUT_CP016,Laundry Entry,facility_entry,1236.14,1669.98,1333.391,1713.162,,,Entry to campus laundry,south_west
+OUT_CP017,Narrow Passage_2,passage,1491.179,1671.182,1588.43,1714.364,,,Narrow passage 2,south_west
+OUT_CP018,Narrow Passage_3,passage,1802.887,1671.399,1900.139,1714.581,,,Narrow passage 3,south_west
+OUT_CP019,Girls Hostel Entry Back_2,hostel_entry,1948.678,1671.202,2045.93,1714.383,,,Entry to girls' hostel,south_west
+OUT_CP020,Junction 20_22,junction,2106.476,1670.693,2203.727,1713.875,,,Joins checkpoint 20 & 22,south_west
+OUT_CP021,Campus Entry Gate 3,gate,2179.356,1670.324,2276.607,1713.506,,,Campus entry gate-3,south_west
+OUT_CP022,Main Passage Entry,passage,2114.029,1281.355,2211.28,1324.537,,,Main passage,south_west
+OUT_CP023,Campus Corner North_East,corner,2111.862,878.014,2209.114,921.196,,,Campus corner,south_west
+OUT_CP024,Girls Hostel Entry_3,hostel_entry,1957.605,874.464,2054.856,917.645,,,Entry to girls' hostel,south_west
+OUT_CP025,Narrow Passage_4,passage,1814.269,870.3,1911.521,913.481,,,Narrow passage 4,south_west
+OUT_CP026,Junction 25_27,junction,1643.953,867.771,1741.204,910.953,,,Joins checkpoint 25 & 27,south_west
+OUT_CP027,Narrow Passage_5,passage,1509.769,865.857,1607.021,909.038,,,Narrow passage 5,south_west
+OUT_CP028,Junction 27_29,junction,1271.951,859.068,1369.203,902.25,,,Joins checkpoint 27 & 29,south_west
+OUT_CP029,Junction 30_MainPassage,junction,989.094,855.439,1086.346,898.621,,,Joins checkpoint 30 & Main Passage,south_west
+OUT_CP030,ABB 1 Entry_1,facility_entry,991.174,642.125,1088.426,685.307,,,Entry to ABB-1,south_west
+OUT_CP031,ABB 1 Entry_2,facility_entry,991.594,456.803,1088.846,499.984,,,Entry to ABB-1,south_west
+OUT_CP032,ABB 1 Entry_3,facility_entry,993.075,277.3,1090.326,320.482,,,Entry to ABB-1,south_west
+OUT_CP033,Junction 32_35,junction,991.096,93.918,1088.348,137.099,,,Joins checkpoint 32 & 35,south_west
+OUT_CP034,Campus Entry Gate 2,gate,992.686,12.59,1089.937,55.771,,,Campus entry gate 2,south_west
+OUT_CP035,Junction 33_36,junction,813.236,89.103,910.487,132.285,,,Joins checkpoint 33 & 36,south_west
+OUT_CP036,Junction 35_37,junction,649.169,87.342,746.42,130.524,,,Joins checkpoint 35 & 37,south_west
+OUT_CP037,Junction 4_38,junction,294.885,80.766,392.137,123.948,,,Joins checkpoint 4 & 37,south_west
+OUT_CP038,Junction 39_46,junction,288.181,250.653,385.432,293.835,,,Joins checkpoint 39 & 46,south_west
+OUT_CP039,ABB 3 Entry_2,facility_entry,287.293,349.126,384.545,392.308,,,Entry to ABB-3,south_west
+OUT_CP040,Cafe Entry_2,facility_entry,288.693,519.675,385.944,562.857,,,Entry to campus cafe (Annapurna),south_west
+OUT_CP041,ABB 3 Entry_3,facility_entry,286.642,710.455,383.894,753.637,,,Entry to ABB-3,south_west
+OUT_CP042,Junction 41_43,junction,286.336,796.891,383.587,840.072,,,Joins checkpoint 41 & 43,south_west
+OUT_CP043,Sports Complex Entry_1,facility_entry,284.983,910.859,382.234,954.041,,,Entry to sports complex,south_west
+OUT_CP044,Portico_2,facility_entry,291.156,1038.393,388.407,1081.574,,,Fire truck stand,south_west
+OUT_CP045,Sports Complex Entry_2,facility_entry,287.088,1179.96,384.339,1223.141,,,Entry to sports complex,south_west
+OUT_CP046,Junction 38_52,junction,464.492,253.607,561.744,296.788,,,Joins checkpoint 38 & 52,south_west
+OUT_CP047,OAT Front,oat_front,465.618,394.933,562.87,438.115,,,Front entrance of OAT,south_west
+OUT_CP048,Lawn,lawn,465.476,563.783,562.727,606.964,,,Lawn,south_west
+OUT_CP049,Junction 42_55,junction,465.752,801.082,563.004,844.264,,,Joins checkpoint 42 & 55,south_west
+OUT_CP050,Sports Complex_1,sports_complex,424.008,963.199,521.259,1006.38,,,Sports complex,south_west
+OUT_CP051,Sports Complex_2,sports_complex,423.891,1086.497,521.143,1129.678,,,Sports complex,south_west
+OUT_CP052,ABB 1 Entry_4,facility_entry,644.099,259.992,741.35,303.174,,,Entry to ABB-1,south_west
+OUT_CP053,ABB 1 Entry_5,facility_entry,645.875,438.898,743.127,482.08,,,Entry to ABB-1,south_west
+OUT_CP054,ABB 1 Entry_6,facility_entry,640.379,621.936,737.63,665.118,,,Entry to ABB-1,south_west
+OUT_CP055,ABB 1 Entry_7,facility_entry,639.584,807.379,736.835,850.561,,,Entry to ABB-1,south_west
+OUT_CP056,Sports Complex Entry_3,sports_complex,594.63,905.324,691.881,948.505,,,Entry to sports complex,south_west
+OUT_CP057,Junction 56_58,junction,595.344,1036.727,692.595,1079.909,,,Joins checkpoint 56 & 58,south_west
+OUT_CP058,Sports Complex Entry_4,junction,595.222,1176.323,692.473,1219.505,,,Entry to sports complex,south_west
+OUT_CP059,Junction 9_60,junction,126.577,1227.531,223.828,1270.713,,,Joins checkpoint 9 & 60,south_west
+OUT_CP060,Junction 45_61,junction,288.249,1232.819,385.501,1276,,,Joins checkpoint 45 & 61,south_west
+OUT_CP061,ABB 2 Entry_2,facility_entry,360.791,1234.657,458.043,1277.839,,,Entrance to ABB 2,south_west
+OUT_CP062,Narrow Passage_6,narrow_passage,637.678,1243.084,734.929,1286.266,,,Narrow passage,south_west
+OUT_CP063,Entrance to Girls' Hostel,hostel_entry,794.419,1246.092,891.671,1289.273,,,Entry to girls' hostel,south_west
+OUT_CP064,Junction 63_65,junction,992.263,1249.905,1089.514,1293.087,,,Joins checkpoint 63 & 65,south_west
+OUT_CP065,Annapurna (Mess),facility_entry,1317.856,1259.12,1415.107,1302.302,,,Entrance to Annapurna (mess),south_west
+OUT_CP066,Narrow Passage_7,narrow_passage,1496.837,1263.349,1594.088,1306.53,,,Narrow passage,south_west
+OUT_CP067,A to Z,retail_store,1665.939,1266.726,1763.19,1309.908,,,A to Z,south_west
+OUT_CP068,Narrow Passage_8,narrow_passage,1805.319,1272.033,1902.57,1315.214,,,Narrow passage,south_west
+OUT_CP069,Junction 68_70,junction,1959.379,1275.39,2056.631,1318.572,,,Joins checkpoint 68 & 70,south_west
+OUT_CP070,Junction 13_62,junction,639.434,1468.589,736.685,1511.77,,,Joins checkpoint 13 & 62,south_west
+OUT_CP071,Junction 17_66,junction,1494.263,1469.287,1591.515,1512.469,,,Joins checkpoint 17 & 66,south_west
+OUT_CP072,Junction 18_68,junction,1805.078,1469.613,1902.329,1512.795,,,Joins checkpoint 18 & 68,south_west
+OUT_CP073,Junction 27_66,junction,1501.708,1080.849,1598.96,1124.031,,,Joins checkpoint 27 & 66,south_west
+OUT_CP074,Junction 25_68,junction,1810.715,1080.684,1907.966,1123.865,,,Joins checkpoint 25 & 68,south_west
+OUT_CP075,Checkpoint 75,outdoor_path,149.989,907.513,247.24,950.694,,,,

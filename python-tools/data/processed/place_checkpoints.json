@@ -1,0 +1,284 @@
+[
+  {
+    "checkpoint_id": "OUT_CP001",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_001"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_002"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_003"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_004"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_005"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_006"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_007"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_008"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_009"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_010"
+  },
+  {
+    "checkpoint_id": "OUT_CP034",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_010"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_011"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_012"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_013"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_014"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_015"
+  },
+  {
+    "checkpoint_id": "OUT_CP053",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_015"
+  },
+  {
+    "checkpoint_id": "OUT_CP054",
+    "entrance_name": "Entrance 3",
+    "is_primary": "0",
+    "place_id": "PL_015"
+  },
+  {
+    "checkpoint_id": "OUT_CP055",
+    "entrance_name": "Entrance 4",
+    "is_primary": "0",
+    "place_id": "PL_015"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_016"
+  },
+  {
+    "checkpoint_id": "OUT_CP031",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_016"
+  },
+  {
+    "checkpoint_id": "OUT_CP030",
+    "entrance_name": "Entrance 3",
+    "is_primary": "0",
+    "place_id": "PL_016"
+  },
+  {
+    "checkpoint_id": "OUT_CP029",
+    "entrance_name": "Entrance 4",
+    "is_primary": "0",
+    "place_id": "PL_016"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_017"
+  },
+  {
+    "checkpoint_id": "OUT_CP059",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_017"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "entrance_name": "Entrance 3",
+    "is_primary": "0",
+    "place_id": "PL_017"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_018"
+  },
+  {
+    "checkpoint_id": "OUT_CP012",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_018"
+  },
+  {
+    "checkpoint_id": "OUT_CP013",
+    "entrance_name": "Entrance 3",
+    "is_primary": "0",
+    "place_id": "PL_018"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_019"
+  },
+  {
+    "checkpoint_id": "OUT_CP039",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_019"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "entrance_name": "Entrance 3",
+    "is_primary": "0",
+    "place_id": "PL_019"
+  },
+  {
+    "checkpoint_id": "OUT_CP041",
+    "entrance_name": "Entrance 4",
+    "is_primary": "0",
+    "place_id": "PL_019"
+  },
+  {
+    "checkpoint_id": "OUT_CP042",
+    "entrance_name": "Entrance 5",
+    "is_primary": "0",
+    "place_id": "PL_019"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_020"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_024"
+  },
+  {
+    "checkpoint_id": "OUT_CP049",
+    "entrance_name": "Entrance 2",
+    "is_primary": "0",
+    "place_id": "PL_024"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_025"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_026"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_027"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_028"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_029"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_030"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_031"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_032"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_033"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "entrance_name": "Primary entrance",
+    "is_primary": "1",
+    "place_id": "PL_034"
+  }
+]

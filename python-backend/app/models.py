@@ -11,6 +11,8 @@ class CheckpointOut(BaseModel):
     checkpoint_type: str
     x_coord: float
     y_coord: float
+    raw_map_x: float | None = None
+    raw_map_y: float | None = None
     latitude: float | None = None
     longitude: float | None = None
     description: str | None = None
@@ -91,6 +93,7 @@ class RouteResponse(BaseModel):
     checkpoint_ids: list[str] = Field(default_factory=list)
     checkpoints: list[CheckpointOut] = Field(default_factory=list)
     edges: list[EdgeOut] = Field(default_factory=list)
+    panos: list[PanoOut | None] = Field(default_factory=list)
     instructions: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
 
