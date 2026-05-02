@@ -33,4 +33,11 @@ if db.DATA_DIR.exists():
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok", "service": "campusvista-python-backend"}
+    db_path = db.get_db_path()
+    db_ready = db_path.exists()
+    return {
+        "status": "ok" if db_ready else "degraded",
+        "service": "campusvista-python-backend",
+        "database": "ready" if db_ready else "missing",
+        "database_path": str(db_path),
+    }

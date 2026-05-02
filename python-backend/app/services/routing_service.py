@@ -9,6 +9,7 @@ from app import db
 from app.models import RouteRequest
 from app.services.crowd_service import CrowdService, normalize_route_mode, parse_now
 from app.services.instruction_service import InstructionService
+from app.services.pano_service import PanoService
 from app.services.search_service import SearchService
 from app.utils.distance_utils import (
     coordinate_distance_pixels,
@@ -23,6 +24,7 @@ class RoutingService:
         self.db_path = db_path
         self.crowd_service = CrowdService(db_path)
         self.instruction_service = InstructionService()
+        self.pano_service = PanoService(db_path)
         self.search_service = SearchService(db_path)
 
     def compute_route(self, request: RouteRequest | Mapping[str, Any]) -> dict[str, Any]:
@@ -35,11 +37,13 @@ class RoutingService:
         config = self.get_map_config()
         meters_per_pixel = float(config["meters_per_pixel"])
         route_mode = normalize_route_mode(payload.get("route_mode"))
+        now = parse_now(payload.get("now_iso"))
         start_id, start_warning = self.resolve_start(payload, graph, meters_per_pixel)
         destination_id, destination_name, destination_warning = self.resolve_destination(
             payload,
             graph,
             meters_per_pixel,
+            start_id,
         )
 
         warnings = [warning for warning in [start_warning, destination_warning] if warning]
@@ -57,6 +61,7 @@ class RoutingService:
                 [],
                 destination_name,
             )
+            crowd_warnings = self.crowd_service.warnings_for_checkpoints([start_id], now)
             return self._route_response(
                 route_found=True,
                 algorithm="none",
@@ -69,15 +74,10 @@ class RoutingService:
                 total_distance=0.0,
                 total_cost=0.0,
                 instructions=instructions,
-                warnings=warnings,
+                warnings=warnings + crowd_warnings,
             )
 
-        now = parse_now(payload.get("now_iso"))
-        penalties = (
-            self.crowd_service.get_penalty_by_checkpoint(now)
-            if route_mode == "avoid_crowded"
-            else {}
-        )
+        penalties: dict[str, float] = {}
         edge_path, total_cost = self._a_star(
             graph,
             start_id,
@@ -121,6 +121,10 @@ class RoutingService:
             destination_name,
         )
         validation_warnings = self.validate_route(checkpoints, edge_path)
+        crowd_warnings = self.crowd_service.warnings_for_checkpoints(
+            [str(checkpoint["checkpoint_id"]) for checkpoint in checkpoints],
+            now,
+        )
         return self._route_response(
             route_found=True,
             algorithm=algorithm,
@@ -133,7 +137,7 @@ class RoutingService:
             total_distance=total_distance,
             total_cost=total_cost,
             instructions=instructions,
-            warnings=warnings + validation_warnings,
+            warnings=warnings + validation_warnings + crowd_warnings,
         )
 
     def get_checkpoints(self) -> list[dict[str, Any]]:
@@ -213,6 +217,7 @@ class RoutingService:
         payload: Mapping[str, Any],
         graph: Graph,
         meters_per_pixel: float,
+        start_id: str | None = None,
     ) -> tuple[str | None, str | None, str | None]:
         checkpoint_id = payload.get("destination_checkpoint_id")
         if checkpoint_id:
@@ -227,15 +232,25 @@ class RoutingService:
         if place_id:
             place = self.search_service.get_place(str(place_id))
             if place:
-                return place["checkpoint_id"], place["place_name"], None
+                destination_id = self._best_destination_checkpoint(
+                    graph,
+                    start_id,
+                    self.search_service.get_place_checkpoints(str(place_id)),
+                )
+                return destination_id or place["checkpoint_id"], place["place_name"], None
 
         query = payload.get("destination_query")
         if query:
             results = self.search_service.search(str(query), limit=1)
             if results:
                 place = results[0]
+                destination_id = self._best_destination_checkpoint(
+                    graph,
+                    start_id,
+                    self.search_service.get_place_checkpoints(str(place["place_id"])),
+                )
                 return (
-                    place["checkpoint_id"],
+                    destination_id or place["checkpoint_id"],
                     place["place_name"],
                     f"Destination query matched {place['place_name']}.",
                 )
@@ -257,6 +272,20 @@ class RoutingService:
             )
 
         return None, None, None
+
+    @staticmethod
+    def _best_destination_checkpoint(
+        graph: Graph,
+        start_id: str | None,
+        candidates: list[str],
+    ) -> str | None:
+        valid = [checkpoint_id for checkpoint_id in candidates if graph.contains(checkpoint_id)]
+        if not valid:
+            return None
+        if not start_id or not graph.contains(start_id):
+            return valid[0]
+        start = graph.checkpoints[start_id]
+        return min(valid, key=lambda checkpoint_id: pixel_distance(start, graph.checkpoints[checkpoint_id]))
 
     def validate_route(
         self,
@@ -375,8 +404,8 @@ class RoutingService:
             checkpoints.append(graph.checkpoints[edge.to_checkpoint_id])
         return checkpoints
 
-    @staticmethod
     def _route_response(
+        self,
         route_found: bool,
         algorithm: str,
         route_mode: str,
@@ -403,6 +432,10 @@ class RoutingService:
             "checkpoint_ids": [str(row["checkpoint_id"]) for row in checkpoints],
             "checkpoints": [dict(row) for row in checkpoints],
             "edges": [edge.to_dict() for edge in edges],
+            "panos": [
+                self.pano_service.get_pano_for_checkpoint(str(row["checkpoint_id"]))
+                for row in checkpoints
+            ],
             "instructions": instructions,
             "warnings": warnings,
         }
