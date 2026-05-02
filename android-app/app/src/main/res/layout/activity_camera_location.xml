@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/cameraLocationTitle"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Use Camera to Detect Outdoor Location"
             android:textColor="@color/cv_ink"
-            android:textSize="24sp"
+            android:textSize="27sp"
             android:textStyle="bold" />
 
         <TextView
@@ -25,7 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/cv_card"
-            android:padding="14dp"
+            android:elevation="2dp"
+            android:lineSpacingExtra="2dp"
+            android:padding="16dp"
             android:textColor="@color/cv_ink"
             android:textSize="14sp" />
 
@@ -35,8 +37,10 @@
             android:layout_height="220dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/cv_map_panel"
+            android:clipToOutline="true"
+            android:elevation="2dp"
             android:contentDescription="Captured outdoor image"
-            android:padding="8dp"
+            android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_pano_placeholder" />
 
@@ -46,6 +50,7 @@
             android:layout_height="52dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/cv_button_primary"
+            android:elevation="2dp"
             android:text="Capture Outdoor Image"
             android:textColor="@color/cv_white" />
 
@@ -62,8 +67,9 @@
             android:layout_height="48dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/cv_button_secondary"
+            android:elevation="1dp"
             android:text="Select On Map"
-            android:textColor="@color/cv_green_dark" />
+            android:textColor="@color/cv_blue_dark" />
 
         <Button
             android:id="@+id/fallbackSearchLocationButton"
@@ -71,7 +77,8 @@
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/cv_button_secondary"
+            android:elevation="1dp"
             android:text="Search Outdoor Location"
-            android:textColor="@color/cv_green_dark" />
+            android:textColor="@color/cv_blue_dark" />
     </LinearLayout>
 </ScrollView>

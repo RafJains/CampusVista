@@ -3,6 +3,7 @@ package com.example.campusvista.network;
 import android.content.Context;
 
 import com.example.campusvista.network.BackendDtos.CheckpointDto;
+import com.example.campusvista.network.BackendDtos.HealthDto;
 import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendDtos.PanoDto;
 import com.example.campusvista.network.BackendDtos.PlaceDto;
@@ -43,8 +44,10 @@ public final class BackendClient {
     private BackendClient(Context context) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(2, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .callTimeout(12, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .build();
         Gson gson = new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder()
@@ -53,6 +56,10 @@ public final class BackendClient {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         api = retrofit.create(CampusVistaApi.class);
+    }
+
+    public void checkHealth(BackendCallback<HealthDto> callback) {
+        enqueue(api.health(), callback);
     }
 
     public void searchPlaces(
@@ -132,6 +139,9 @@ public final class BackendClient {
     }
 
     public interface CampusVistaApi {
+        @GET("health")
+        Call<HealthDto> health();
+
         @GET("places/search")
         Call<List<PlaceDto>> searchPlaces(
                 @Query("q") String query,

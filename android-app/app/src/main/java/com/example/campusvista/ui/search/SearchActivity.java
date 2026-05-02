@@ -61,7 +61,8 @@ public final class SearchActivity extends Activity {
 
     private void runSearch() {
         String query = searchInput.getText().toString().trim();
-        emptyState.setText("Searching Python backend...");
+        emptyState.setText("Searching campus places...");
+        ViewFactory.setVisible(emptyState, true);
         BackendClient.getInstance(this).searchPlaces(
                 query,
                 initialType,
@@ -76,7 +77,7 @@ public final class SearchActivity extends Activity {
                     public void onFallback(Throwable throwable) {
                         bindResults(
                                 localSearch(query),
-                                "Python backend unavailable. Showing offline fallback results."
+                                "Showing saved campus results."
                         );
                     }
                 }
@@ -106,6 +107,7 @@ public final class SearchActivity extends Activity {
         } else {
             emptyState.setText(note == null ? "" : note);
         }
+        ViewFactory.setVisible(emptyState, emptyState.getText().length() > 0);
 
         for (Place place : places) {
             Button button = ViewFactory.listButton(

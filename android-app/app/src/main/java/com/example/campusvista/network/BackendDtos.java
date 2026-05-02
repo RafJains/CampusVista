@@ -20,10 +20,22 @@ public final class BackendDtos {
         public double xCoord;
         @SerializedName("y_coord")
         public double yCoord;
+        @SerializedName("raw_map_x")
+        public Double rawMapX;
+        @SerializedName("raw_map_y")
+        public Double rawMapY;
         public Double latitude;
         public Double longitude;
         public String description;
         public String orientation;
+    }
+
+    public static final class HealthDto {
+        public String status;
+        public String service;
+        public String database;
+        @SerializedName("database_path")
+        public String databasePath;
     }
 
     public static final class PlaceDto {
@@ -120,9 +132,6 @@ public final class BackendDtos {
         }
 
         public static String toBackendRouteMode(RouteMode routeMode) {
-            if (routeMode == RouteMode.AVOID_CROWDED_PATH) {
-                return "avoid_crowded";
-            }
             return "shortest";
         }
     }
@@ -149,6 +158,7 @@ public final class BackendDtos {
         public List<String> checkpointIds;
         public List<CheckpointDto> checkpoints;
         public List<EdgeDto> edges;
+        public List<PanoDto> panos;
         public List<String> instructions;
         public List<String> warnings;
     }

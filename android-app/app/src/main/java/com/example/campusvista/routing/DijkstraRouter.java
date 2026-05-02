@@ -35,9 +35,7 @@ public final class DijkstraRouter {
             return RouteResult.noRoute(startCheckpointId, destinationCheckpointId, routeMode);
         }
 
-        Map<String, Double> penaltyByCheckpoint = routeMode == RouteMode.AVOID_CROWDED_PATH
-                ? crowdCostCalculator.getCurrentPenaltyByCheckpoint()
-                : Collections.<String, Double>emptyMap();
+        Map<String, Double> penaltyByCheckpoint = Collections.emptyMap();
 
         PriorityQueue<NodeRecord> openSet = new PriorityQueue<>();
         Map<String, Double> bestCost = new HashMap<>();
@@ -111,7 +109,8 @@ public final class DijkstraRouter {
                 edges,
                 totalDistance,
                 totalCost,
-                instructions
+                instructions,
+                crowdCostCalculator.getCurrentWarningsForCheckpoints(checkpoints)
         );
     }
 

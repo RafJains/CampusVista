@@ -20,32 +20,37 @@ public final class ViewFactory {
         view.setTextColor(context.getResources().getColor(R.color.cv_ink));
         view.setTextSize(15f);
         view.setBackgroundResource(R.drawable.cv_card);
-        view.setPadding(dp(context, 14), dp(context, 12), dp(context, 14), dp(context, 12));
-        view.setLayoutParams(blockParams(context, 8));
+        view.setElevation(dp(context, 1));
+        view.setLineSpacing(dp(context, 2), 1.0f);
+        view.setPadding(dp(context, 16), dp(context, 14), dp(context, 16), dp(context, 14));
+        view.setLayoutParams(blockParams(context, 10));
         return view;
     }
 
     public static Button listButton(Context context, String text) {
         Button button = new Button(context);
         button.setText(text);
-        button.setTextColor(context.getResources().getColor(R.color.cv_green_dark));
+        button.setTextColor(context.getResources().getColor(R.color.cv_blue_dark));
         button.setTextSize(14f);
         button.setAllCaps(false);
         button.setBackgroundResource(R.drawable.cv_button_secondary);
-        button.setLayoutParams(blockParams(context, 8));
+        button.setMinHeight(dp(context, 48));
+        button.setElevation(dp(context, 1));
+        button.setLayoutParams(blockParams(context, 10));
         return button;
     }
 
     public static Button chipButton(Context context, String text) {
         Button button = new Button(context);
         button.setText(text);
-        button.setTextColor(context.getResources().getColor(R.color.cv_green_dark));
+        button.setTextColor(context.getResources().getColor(R.color.cv_blue_dark));
         button.setTextSize(13f);
         button.setAllCaps(false);
         button.setBackgroundResource(R.drawable.cv_button_secondary);
+        button.setElevation(dp(context, 1));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                dp(context, 44)
+                dp(context, 42)
         );
         params.setMargins(0, 0, dp(context, 8), 0);
         button.setLayoutParams(params);

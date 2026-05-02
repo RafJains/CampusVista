@@ -6,6 +6,8 @@ public final class Checkpoint {
     private final String checkpointType;
     private final double xCoord;
     private final double yCoord;
+    private final Double rawMapX;
+    private final Double rawMapY;
     private final Double latitude;
     private final Double longitude;
     private final String description;
@@ -17,6 +19,8 @@ public final class Checkpoint {
             String checkpointType,
             double xCoord,
             double yCoord,
+            Double rawMapX,
+            Double rawMapY,
             Double latitude,
             Double longitude,
             String description,
@@ -27,6 +31,8 @@ public final class Checkpoint {
         this.checkpointType = checkpointType;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
+        this.rawMapX = rawMapX;
+        this.rawMapY = rawMapY;
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
@@ -51,6 +57,22 @@ public final class Checkpoint {
 
     public double getYCoord() {
         return yCoord;
+    }
+
+    public double getMapX() {
+        return rawMapX == null ? xCoord : rawMapX;
+    }
+
+    public double getMapY() {
+        return rawMapY == null ? yCoord : rawMapY;
+    }
+
+    public Double getRawMapX() {
+        return rawMapX;
+    }
+
+    public Double getRawMapY() {
+        return rawMapY;
     }
 
     public Double getLatitude() {

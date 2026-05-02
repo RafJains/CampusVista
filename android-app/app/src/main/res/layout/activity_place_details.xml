@@ -8,22 +8,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/placeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/cv_ink"
-            android:textSize="26sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/placeType"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="@color/cv_green_dark"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cv_map_badge"
+            android:paddingBottom="8dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/cv_blue_dark"
             android:textSize="14sp" />
 
         <TextView
@@ -32,7 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:background="@drawable/cv_card"
-            android:padding="14dp"
+            android:elevation="2dp"
+            android:lineSpacingExtra="3dp"
+            android:padding="18dp"
             android:textColor="@color/cv_ink"
             android:textSize="15sp" />
 
@@ -41,6 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:background="@drawable/cv_card"
+            android:padding="14dp"
             android:textColor="@color/cv_muted"
             android:textSize="14sp" />
 
@@ -50,6 +59,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="22dp"
             android:background="@drawable/cv_button_primary"
+            android:elevation="2dp"
             android:text="Route Here"
             android:textColor="@color/cv_white" />
 
@@ -59,8 +69,9 @@
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/cv_button_secondary"
+            android:elevation="1dp"
             android:text="Outdoor Pano"
-            android:textColor="@color/cv_green_dark" />
+            android:textColor="@color/cv_blue_dark" />
 
         <Button
             android:id="@+id/setCurrentButton"
@@ -68,7 +79,8 @@
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/cv_button_secondary"
+            android:elevation="1dp"
             android:text="Set As Current Location"
-            android:textColor="@color/cv_green_dark" />
+            android:textColor="@color/cv_blue_dark" />
     </LinearLayout>
 </ScrollView>
