@@ -1,3 +1,5 @@
+<<<<<<< ours
+<<<<<<< ours
 ﻿# CampusVista Architecture
 
 CampusVista is moving from an Android-heavy offline app to a Python-heavy client/server MVP.
@@ -78,3 +80,59 @@ The Android app now calls the backend first for:
 - recognition placeholder flow
 
 If the backend is down, Android falls back to the existing local repositories and Java routing code.
+=======
+=======
+>>>>>>> theirs
+# CampusVista Architecture (Final)
+
+## Runtime Architecture: Offline-first
+All runtime features execute locally on Android:
+- Routing
+- Search
+- Map rendering
+- Route preview and guidance
+- SQLite data reads
+- Crowd penalty calculation
+- Outdoor recognition inference
+- Outdoor panorama viewing
+
+No runtime dependency on internet, Python, FastAPI, or server APIs.
+
+## Android Runtime Responsibilities
+- UI and activity flow
+- 2D map rendering and marker overlays
+- Start location selection (map/search/camera)
+- Local SQLite access via repositories
+- A* primary routing and Dijkstra fallback
+- Dynamic crowd-cost evaluation from static rules + device clock
+- Instruction generation from route geometry and metadata
+- TFLite inference and confidence handling
+- Route and recognition fallback UX
+
+## Python Tooling Responsibilities (Non-runtime)
+- Raw data cleaning and normalization
+- Validation (IDs, connectivity, map scale, crowd rules, file naming, labels)
+- Processed JSON/CSV generation
+- `campus_seed.db` generation
+- Pano preparation/compression checks
+- Recognition dataset preparation + model training + `.tflite` export
+
+Python is tooling only and is never part of Android runtime.
+
+## Graph + Cost Model
+- Static graph (checkpoints + edges) is built once and cached.
+- Crowd penalties are evaluated dynamically per route request.
+- Cost formulas:
+  - Shortest mode: `distance_meters`
+  - Avoid-crowded mode: `distance_meters + crowdPenalty(to_checkpoint_id)`
+
+## Heuristic & Map Config
+A* heuristic is `pixel_distance × meters_per_pixel`.
+- Python source of truth: `python-tools/config.json`
+- Android runtime source: `android-app/app/src/main/assets/config/map_config.json`
+
+Both must match after generation.
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
