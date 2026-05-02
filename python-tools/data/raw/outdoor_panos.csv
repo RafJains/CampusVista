@@ -1,4 +1,60 @@
 pano_id,checkpoint_id,image_file,thumbnail_file,orientation,description
-PANO_OUT_CP001,OUT_CP001,OUT_CP001.jpg,,north,Main gate outdoor panorama placeholder
-PANO_OUT_CP004,OUT_CP004,OUT_CP004.jpg,,north,Library front outdoor panorama placeholder
-PANO_OUT_CP006,OUT_CP006,OUT_CP006.jpg,,north,Academic block entrance panorama placeholder
+PANO_OUT_CP001,OUT_CP001,OUT_CP001.jpg,,south_west,Outdoor panorama for Campus Entry Gate 1
+PANO_OUT_CP002,OUT_CP002,OUT_CP002.jpg,,south_west,Outdoor panorama for Junction 3_5
+PANO_OUT_CP003,OUT_CP003,OUT_CP003.jpg,,south_west,Outdoor panorama for Reception Entry
+PANO_OUT_CP004,OUT_CP004,OUT_CP004.jpg,,south_west,Outdoor panorama for Admission Cell Entry
+PANO_OUT_CP005,OUT_CP005,OUT_CP005.jpg,,south_west,Outdoor panorama for ABB-3 Entry_1
+PANO_OUT_CP006,OUT_CP006,OUT_CP006.jpg,,south_west,Outdoor panorama for Cafe Entry_1
+PANO_OUT_CP007,OUT_CP007,OUT_CP007.jpg,,south_west,Outdoor panorama for Portico_1
+PANO_OUT_CP008,OUT_CP008,OUT_CP008.jpg,,south_west,Outdoor panorama for Parking _1
+PANO_OUT_CP009,OUT_CP009,OUT_CP009.jpg,,south_west,Outdoor panorama for Parking_2
+PANO_OUT_CP010,OUT_CP010,OUT_CP010.jpg,,south_west,Outdoor panorama for Campus Corner South_West
+PANO_OUT_CP011,OUT_CP011,OUT_CP011.jpg,,south_west,Outdoor panorama for ABB 2 Entry_1
+PANO_OUT_CP012,OUT_CP012,OUT_CP012.jpg,,south_west,Outdoor panorama for Junction 11_13
+PANO_OUT_CP013,OUT_CP013,OUT_CP013.jpg,,south_west,Outdoor panorama for Narrow Passage_1
+PANO_OUT_CP014,OUT_CP014,OUT_CP014.jpg,,south_west,Outdoor panorama for Girls Hostel Entry Back_1
+PANO_OUT_CP015,OUT_CP015,OUT_CP015.jpg,,south_west,Outdoor panorama for Junction 14_16
+PANO_OUT_CP016,OUT_CP016,OUT_CP016.jpg,,south_west,Outdoor panorama for Laundry Entry
+PANO_OUT_CP017,OUT_CP017,OUT_CP017.jpg,,south_west,Outdoor panorama for Narrow Passage_2
+PANO_OUT_CP018,OUT_CP018,OUT_CP018.jpg,,south_west,Outdoor panorama for Narrow Passage_3
+PANO_OUT_CP019,OUT_CP019,OUT_CP019.jpg,,south_west,Outdoor panorama for Girls Hostel Entry Back_2
+PANO_OUT_CP020,OUT_CP020,OUT_CP020.jpg,,south_west,Outdoor panorama for Junction 20_22
+PANO_OUT_CP022,OUT_CP022,OUT_CP022.jpg,,south_west,Outdoor panorama for Main Passage Entry
+PANO_OUT_CP023,OUT_CP023,OUT_CP023.jpg,,south_west,Outdoor panorama for Campus Corner North_East
+PANO_OUT_CP024,OUT_CP024,OUT_CP024.jpg,,south_west,Outdoor panorama for Girls Hostel Entry_3
+PANO_OUT_CP025,OUT_CP025,OUT_CP025.jpg,,south_west,Outdoor panorama for Narrow Passage_4
+PANO_OUT_CP026,OUT_CP026,OUT_CP026.jpg,,south_west,Outdoor panorama for Junction 25_27
+PANO_OUT_CP027,OUT_CP027,OUT_CP027.jpg,,south_west,Outdoor panorama for Narrow Passage_5
+PANO_OUT_CP028,OUT_CP028,OUT_CP028.jpg,,south_west,Outdoor panorama for Junction 27_29
+PANO_OUT_CP029,OUT_CP029,OUT_CP029.jpg,,south_west,Outdoor panorama for Junction 30_MainPassage
+PANO_OUT_CP030,OUT_CP030,OUT_CP030.jpg,,south_west,Outdoor panorama for ABB 1 Entry_1
+PANO_OUT_CP031,OUT_CP031,OUT_CP031.jpg,,south_west,Outdoor panorama for ABB 1 Entry_2
+PANO_OUT_CP032,OUT_CP032,OUT_CP032.jpg,,south_west,Outdoor panorama for ABB 1 Entry_3
+PANO_OUT_CP033,OUT_CP033,OUT_CP033.jpg,,south_west,Outdoor panorama for Junction 32_35
+PANO_OUT_CP034,OUT_CP034,OUT_CP034.jpg,,south_west,Outdoor panorama for Campus Entry Gate 2
+PANO_OUT_CP038,OUT_CP038,OUT_CP038.jpg,,south_west,Outdoor panorama for Junction 39_46
+PANO_OUT_CP039,OUT_CP039,OUT_CP039.jpg,,south_west,Outdoor panorama for ABB 3 Entry_2
+PANO_OUT_CP040,OUT_CP040,OUT_CP040.jpg,,south_west,Outdoor panorama for Cafe Entry_2
+PANO_OUT_CP041,OUT_CP041,OUT_CP041.jpg,,south_west,Outdoor panorama for ABB 3 Entry_3
+PANO_OUT_CP042,OUT_CP042,OUT_CP042.jpg,,south_west,Outdoor panorama for Junction 41_43
+PANO_OUT_CP044,OUT_CP044,OUT_CP044.jpg,,south_west,Outdoor panorama for Portico_2
+PANO_OUT_CP045,OUT_CP045,OUT_CP045.jpg,,south_west,Outdoor panorama for Sports Complex Entry_2
+PANO_OUT_CP046,OUT_CP046,OUT_CP046.jpg,,south_west,Outdoor panorama for Junction 38_52
+PANO_OUT_CP047,OUT_CP047,OUT_CP047.jpg,,south_west,Outdoor panorama for OAT Front
+PANO_OUT_CP048,OUT_CP048,OUT_CP048.jpg,,south_west,Outdoor panorama for Lawn
+PANO_OUT_CP050,OUT_CP050,OUT_CP050.jpg,,south_west,Outdoor panorama for Sports Complex_1
+PANO_OUT_CP052,OUT_CP052,OUT_CP052.jpg,,south_west,Outdoor panorama for ABB 1 Entry_4
+PANO_OUT_CP053,OUT_CP053,OUT_CP053.jpg,,south_west,Outdoor panorama for ABB 1 Entry_5
+PANO_OUT_CP054,OUT_CP054,OUT_CP054.jpg,,south_west,Outdoor panorama for ABB 1 Entry_6
+PANO_OUT_CP055,OUT_CP055,OUT_CP055.jpg,,south_west,Outdoor panorama for ABB 1 Entry_7
+PANO_OUT_CP056,OUT_CP056,OUT_CP056.jpg,,south_west,Outdoor panorama for Sports Complex Entry_3
+PANO_OUT_CP057,OUT_CP057,OUT_CP057.jpg,,south_west,Outdoor panorama for Junction 56_58
+PANO_OUT_CP059,OUT_CP059,OUT_CP059.jpg,,south_west,Outdoor panorama for Junction 9_60
+PANO_OUT_CP061,OUT_CP061,OUT_CP061.jpg,,south_west,Outdoor panorama for ABB 2 Entry_2
+PANO_OUT_CP062,OUT_CP062,OUT_CP062.jpg,,south_west,Outdoor panorama for Narrow Passage_6
+PANO_OUT_CP063,OUT_CP063,OUT_CP063.jpg,,south_west,Outdoor panorama for Entrance to Girls' Hostel
+PANO_OUT_CP064,OUT_CP064,OUT_CP064.jpg,,south_west,Outdoor panorama for Junction 63_65
+PANO_OUT_CP065,OUT_CP065,OUT_CP065.jpg,,south_west,Outdoor panorama for Annapurna (Mess)
+PANO_OUT_CP066,OUT_CP066,OUT_CP066.jpg,,south_west,Outdoor panorama for Narrow Passage_7
+PANO_OUT_CP067,OUT_CP067,OUT_CP067.jpg,,south_west,Outdoor panorama for A to Z
+PANO_OUT_CP068,OUT_CP068,OUT_CP068.jpg,,south_west,Outdoor panorama for Narrow Passage_8

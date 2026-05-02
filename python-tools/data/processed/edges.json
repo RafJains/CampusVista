@@ -1,0 +1,882 @@
+[
+  {
+    "distance_meters": "19.893879088",
+    "edge_id": "E_OUT_CP001_CP002",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP001",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP002"
+  },
+  {
+    "distance_meters": "17.22910266",
+    "edge_id": "E_OUT_CP002_CP003",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP002",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP003"
+  },
+  {
+    "distance_meters": "31.608250161",
+    "edge_id": "E_OUT_CP002_CP005",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP002",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP005"
+  },
+  {
+    "distance_meters": "9.863805254",
+    "edge_id": "E_OUT_CP003_CP004",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP003",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP004"
+  },
+  {
+    "distance_meters": "25.127682625",
+    "edge_id": "E_OUT_CP005_CP006",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP005",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP006"
+  },
+  {
+    "distance_meters": "42.516379244",
+    "edge_id": "E_OUT_CP005_CP039",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP005",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP039"
+  },
+  {
+    "distance_meters": "58.377310034",
+    "edge_id": "E_OUT_CP006_CP007",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP006",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP007"
+  },
+  {
+    "distance_meters": "27.539269889",
+    "edge_id": "E_OUT_CP007_CP008",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP007",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP008"
+  },
+  {
+    "distance_meters": "42.324174826",
+    "edge_id": "E_OUT_CP007_CP043",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP007",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP043"
+  },
+  {
+    "distance_meters": "19.76290499",
+    "edge_id": "E_OUT_CP008_CP009",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP008",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP009"
+  },
+  {
+    "distance_meters": "43.771731823",
+    "edge_id": "E_OUT_CP008_CP044",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP008",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP044"
+  },
+  {
+    "distance_meters": "67.470404555",
+    "edge_id": "E_OUT_CP009_CP010",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP009",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP010"
+  },
+  {
+    "distance_meters": "18.536176632",
+    "edge_id": "E_OUT_CP009_CP059",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP009",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP059"
+  },
+  {
+    "distance_meters": "18.147837183",
+    "edge_id": "E_OUT_CP010_CP011",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP010",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP011"
+  },
+  {
+    "distance_meters": "32.557128894",
+    "edge_id": "E_OUT_CP011_CP012",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP011",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP012"
+  },
+  {
+    "distance_meters": "43.442819717",
+    "edge_id": "E_OUT_CP012_CP013",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP012",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP013"
+  },
+  {
+    "distance_meters": "22.772455226",
+    "edge_id": "E_OUT_CP013_CP014",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP013",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP014"
+  },
+  {
+    "distance_meters": "23.034392483",
+    "edge_id": "E_OUT_CP014_CP015",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP014",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP015"
+  },
+  {
+    "distance_meters": "43.628474664",
+    "edge_id": "E_OUT_CP015_CP016",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP015",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP016"
+  },
+  {
+    "distance_meters": "37.975728859",
+    "edge_id": "E_OUT_CP016_CP017",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP016",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP017"
+  },
+  {
+    "distance_meters": "46.413332447",
+    "edge_id": "E_OUT_CP017_CP018",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP017",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP018"
+  },
+  {
+    "distance_meters": "21.708299718",
+    "edge_id": "E_OUT_CP018_CP019",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP018",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP019"
+  },
+  {
+    "distance_meters": "30.04770651",
+    "edge_id": "E_OUT_CP018_CP072",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP018",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP072"
+  },
+  {
+    "distance_meters": "23.496244436",
+    "edge_id": "E_OUT_CP019_CP020",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP019",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP020"
+  },
+  {
+    "distance_meters": "10.851971093",
+    "edge_id": "E_OUT_CP020_CP021",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP020",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP021"
+  },
+  {
+    "distance_meters": "57.983335971",
+    "edge_id": "E_OUT_CP020_CP022",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP020",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP022"
+  },
+  {
+    "distance_meters": "60.058341676",
+    "edge_id": "E_OUT_CP022_CP023",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP022",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP023"
+  },
+  {
+    "distance_meters": "22.974948917",
+    "edge_id": "E_OUT_CP023_CP024",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP023",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP024"
+  },
+  {
+    "distance_meters": "21.351734478",
+    "edge_id": "E_OUT_CP024_CP025",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP024",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP025"
+  },
+  {
+    "distance_meters": "25.362848051",
+    "edge_id": "E_OUT_CP025_CP026",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP025",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP026"
+  },
+  {
+    "distance_meters": "19.982030077",
+    "edge_id": "E_OUT_CP026_CP027",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP026",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP027"
+  },
+  {
+    "distance_meters": "35.425526108",
+    "edge_id": "E_OUT_CP027_CP028",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP027",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP028"
+  },
+  {
+    "distance_meters": "42.120873502",
+    "edge_id": "E_OUT_CP028_CP029",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP028",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP029"
+  },
+  {
+    "distance_meters": "31.763964547",
+    "edge_id": "E_OUT_CP029_CP030",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP029",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP030"
+  },
+  {
+    "distance_meters": "52.531743519",
+    "edge_id": "E_OUT_CP029_CP055",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP029",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP055"
+  },
+  {
+    "distance_meters": "52.31980893",
+    "edge_id": "E_OUT_CP030_CP054",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP030",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP054"
+  },
+  {
+    "distance_meters": "27.594516666",
+    "edge_id": "E_OUT_CP030_CP031",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP030",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP031"
+  },
+  {
+    "distance_meters": "26.728906395",
+    "edge_id": "E_OUT_CP031_CP032",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP031",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP032"
+  },
+  {
+    "distance_meters": "52.026396278",
+    "edge_id": "E_OUT_CP032_CP052",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP032",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP052"
+  },
+  {
+    "distance_meters": "27.307169763",
+    "edge_id": "E_OUT_CP032_CP033",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP032",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP033"
+  },
+  {
+    "distance_meters": "12.112053275",
+    "edge_id": "E_OUT_CP033_CP034",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP033",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP034"
+  },
+  {
+    "distance_meters": "26.493056853",
+    "edge_id": "E_OUT_CP033_CP035",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP033",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP035"
+  },
+  {
+    "distance_meters": "24.43098348",
+    "edge_id": "E_OUT_CP035_CP036",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP035",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP036"
+  },
+  {
+    "distance_meters": "52.761974157",
+    "edge_id": "E_OUT_CP036_CP037",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP036",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP037"
+  },
+  {
+    "distance_meters": "25.718667059",
+    "edge_id": "E_OUT_CP036_CP052",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP036",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP052"
+  },
+  {
+    "distance_meters": "25.31586239",
+    "edge_id": "E_OUT_CP037_CP038",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP037",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP038"
+  },
+  {
+    "distance_meters": "18.830628923",
+    "edge_id": "E_OUT_CP037_CP004",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP037",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP004"
+  },
+  {
+    "distance_meters": "44.547313536",
+    "edge_id": "E_OUT_CP037_CP002",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP037",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP002"
+  },
+  {
+    "distance_meters": "14.663225862",
+    "edge_id": "E_OUT_CP038_CP039",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP038",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP039"
+  },
+  {
+    "distance_meters": "26.256392377",
+    "edge_id": "E_OUT_CP038_CP046",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP038",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP046"
+  },
+  {
+    "distance_meters": "22.9867863",
+    "edge_id": "E_OUT_CP038_CP004",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP038",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP004"
+  },
+  {
+    "distance_meters": "25.395601687",
+    "edge_id": "E_OUT_CP039_CP040",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP039",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP040"
+  },
+  {
+    "distance_meters": "27.414623884",
+    "edge_id": "E_OUT_CP039_CP047",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP039",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP047"
+  },
+  {
+    "distance_meters": "28.408783537",
+    "edge_id": "E_OUT_CP040_CP041",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP040",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP041"
+  },
+  {
+    "distance_meters": "27.129949695",
+    "edge_id": "E_OUT_CP040_CP048",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP040",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP048"
+  },
+  {
+    "distance_meters": "12.870401051",
+    "edge_id": "E_OUT_CP041_CP042",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP041",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP042"
+  },
+  {
+    "distance_meters": "26.722329918",
+    "edge_id": "E_OUT_CP042_CP049",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP042",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP049"
+  },
+  {
+    "distance_meters": "16.97103101",
+    "edge_id": "E_OUT_CP042_CP043",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP042",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP043"
+  },
+  {
+    "distance_meters": "22.119257243",
+    "edge_id": "E_OUT_CP043_CP050",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP043",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP050"
+  },
+  {
+    "distance_meters": "21.022114715",
+    "edge_id": "E_OUT_CP044_CP051",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP044",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP051"
+  },
+  {
+    "distance_meters": "19.012044528",
+    "edge_id": "E_OUT_CP043_CP044",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP043",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP044"
+  },
+  {
+    "distance_meters": "22.730447775",
+    "edge_id": "E_OUT_CP044_CP050",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP044",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP050"
+  },
+  {
+    "distance_meters": "21.088027416",
+    "edge_id": "E_OUT_CP044_CP045",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP044",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP045"
+  },
+  {
+    "distance_meters": "24.669990509",
+    "edge_id": "E_OUT_CP045_CP051",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP045",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP051"
+  },
+  {
+    "distance_meters": "45.884348525",
+    "edge_id": "E_OUT_CP045_CP058",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP045",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP058"
+  },
+  {
+    "distance_meters": "18.359080466",
+    "edge_id": "E_OUT_CP051_CP050",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP051",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP050"
+  },
+  {
+    "distance_meters": "24.926626381",
+    "edge_id": "E_OUT_CP050_CP049",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP050",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP049"
+  },
+  {
+    "distance_meters": "35.333844999",
+    "edge_id": "E_OUT_CP049_CP048",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP049",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP048"
+  },
+  {
+    "distance_meters": "25.900561761",
+    "edge_id": "E_OUT_CP049_CP055",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP049",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP055"
+  },
+  {
+    "distance_meters": "24.926626381",
+    "edge_id": "E_OUT_CP049_CP050",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP049",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP050"
+  },
+  {
+    "distance_meters": "26.722329918",
+    "edge_id": "E_OUT_CP049_CP042",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP049",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP042"
+  },
+  {
+    "distance_meters": "25.141773891",
+    "edge_id": "E_OUT_CP048_CP047",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP048",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP047"
+  },
+  {
+    "distance_meters": "27.444831323",
+    "edge_id": "E_OUT_CP048_CP054",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP048",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP054"
+  },
+  {
+    "distance_meters": "21.044109302",
+    "edge_id": "E_OUT_CP047_CP046",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP047",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP046"
+  },
+  {
+    "distance_meters": "27.627072793",
+    "edge_id": "E_OUT_CP047_CP053",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP047",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP053"
+  },
+  {
+    "distance_meters": "26.827376474",
+    "edge_id": "E_OUT_CP050_CP056",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP050",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP056"
+  },
+  {
+    "distance_meters": "20.785852338",
+    "edge_id": "E_OUT_CP058_CP057",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP058",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP057"
+  },
+  {
+    "distance_meters": "28.804750927",
+    "edge_id": "E_OUT_CP058_CP051",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP058",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP051"
+  },
+  {
+    "distance_meters": "19.566195537",
+    "edge_id": "E_OUT_CP057_CP056",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP057",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP056"
+  },
+  {
+    "distance_meters": "16.046754208",
+    "edge_id": "E_OUT_CP056_CP055",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP056",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP055"
+  },
+  {
+    "distance_meters": "27.612716439",
+    "edge_id": "E_OUT_CP055_CP054",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP055",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP054"
+  },
+  {
+    "distance_meters": "27.266641612",
+    "edge_id": "E_OUT_CP054_CP053",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP054",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP053"
+  },
+  {
+    "distance_meters": "26.640415947",
+    "edge_id": "E_OUT_CP053_CP052",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP053",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP052"
+  },
+  {
+    "distance_meters": "26.640415947",
+    "edge_id": "E_OUT_CP052_CP053",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP052",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP053"
+  },
+  {
+    "distance_meters": "26.760376051",
+    "edge_id": "E_OUT_CP052_CP046",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP052",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP046"
+  },
+  {
+    "distance_meters": "24.085834301",
+    "edge_id": "E_OUT_CP059_CP060",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP059",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP060"
+  },
+  {
+    "distance_meters": "7.872603369",
+    "edge_id": "E_OUT_CP060_CP045",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP060",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP045"
+  },
+  {
+    "distance_meters": "10.804970342",
+    "edge_id": "E_OUT_CP060_CP061",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP060",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP061"
+  },
+  {
+    "distance_meters": "41.247564373",
+    "edge_id": "E_OUT_CP061_CP062",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP061",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP062"
+  },
+  {
+    "distance_meters": "11.78056211",
+    "edge_id": "E_OUT_CP062_CP058",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP062",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP058"
+  },
+  {
+    "distance_meters": "23.343032221",
+    "edge_id": "E_OUT_CP062_CP063",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP062",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP063"
+  },
+  {
+    "distance_meters": "29.464442202",
+    "edge_id": "E_OUT_CP063_CP064",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP063",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP064"
+  },
+  {
+    "distance_meters": "48.500210732",
+    "edge_id": "E_OUT_CP064_CP065",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP064",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP065"
+  },
+  {
+    "distance_meters": "26.65770918",
+    "edge_id": "E_OUT_CP065_CP066",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP065",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP066"
+  },
+  {
+    "distance_meters": "25.184308159",
+    "edge_id": "E_OUT_CP066_CP067",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP066",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP067"
+  },
+  {
+    "distance_meters": "58.737882764",
+    "edge_id": "E_OUT_CP064_CP029",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP064",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP029"
+  },
+  {
+    "distance_meters": "20.76872052",
+    "edge_id": "E_OUT_CP067_CP068",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP067",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP068"
+  },
+  {
+    "distance_meters": "22.944979352",
+    "edge_id": "E_OUT_CP068_CP069",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP068",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP069"
+  },
+  {
+    "distance_meters": "23.044507778",
+    "edge_id": "E_OUT_CP069_CP022",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP069",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP022"
+  },
+  {
+    "distance_meters": "29.419683885",
+    "edge_id": "E_OUT_CP068_CP072",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP068",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP072"
+  },
+  {
+    "distance_meters": "30.666563326",
+    "edge_id": "E_OUT_CP066_CP071",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP066",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP071"
+  },
+  {
+    "distance_meters": "30.065672555",
+    "edge_id": "E_OUT_CP071_CP017",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP071",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP017"
+  },
+  {
+    "distance_meters": "33.578712507",
+    "edge_id": "E_OUT_CP062_CP070",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP062",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP070"
+  },
+  {
+    "distance_meters": "31.278147092",
+    "edge_id": "E_OUT_CP070_CP013",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP070",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP013"
+  },
+  {
+    "distance_meters": "27.183927446",
+    "edge_id": "E_OUT_CP073_CP066",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP073",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP066"
+  },
+  {
+    "distance_meters": "32.034802852",
+    "edge_id": "E_OUT_CP073_CP027",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP073",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP027"
+  },
+  {
+    "distance_meters": "31.330647068",
+    "edge_id": "E_OUT_CP074_CP025",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP074",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP025"
+  },
+  {
+    "distance_meters": "28.503192609",
+    "edge_id": "E_OUT_CP074_CP068",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP074",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP068"
+  },
+  {
+    "distance_meters": "22.219348126",
+    "edge_id": "E_OUT_CP075_CP007",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP075",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP007"
+  },
+  {
+    "distance_meters": "20.106780156",
+    "edge_id": "E_OUT_CP075_CP043",
+    "edge_type": "outdoor_walk",
+    "from_checkpoint_id": "OUT_CP075",
+    "is_bidirectional": "1",
+    "to_checkpoint_id": "OUT_CP043"
+  }
+]

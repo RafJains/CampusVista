@@ -25,6 +25,22 @@ class SearchService:
             self.db_path,
         )
 
+    def get_place_checkpoints(self, place_id: str) -> list[str]:
+        rows = db.fetch_all(
+            """
+            SELECT checkpoint_id
+            FROM place_checkpoints
+            WHERE place_id = ?
+            ORDER BY is_primary DESC, checkpoint_id
+            """,
+            (place_id,),
+            self.db_path,
+        )
+        if rows:
+            return [str(row["checkpoint_id"]) for row in rows]
+        place = self.get_place(place_id)
+        return [str(place["checkpoint_id"])] if place else []
+
     def search(
         self,
         query: str,

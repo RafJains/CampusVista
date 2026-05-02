@@ -1,0 +1,474 @@
+[
+  {
+    "checkpoint_id": "OUT_CP001",
+    "description": "Outdoor panorama for Campus Entry Gate 1",
+    "image_file": "OUT_CP001.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP001",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP002",
+    "description": "Outdoor panorama for Junction 3_5",
+    "image_file": "OUT_CP002.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP002",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "description": "Outdoor panorama for Reception Entry",
+    "image_file": "OUT_CP003.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP003",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP004",
+    "description": "Outdoor panorama for Admission Cell Entry",
+    "image_file": "OUT_CP004.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP004",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "description": "Outdoor panorama for ABB-3 Entry_1",
+    "image_file": "OUT_CP005.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP005",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP006",
+    "description": "Outdoor panorama for Cafe Entry_1",
+    "image_file": "OUT_CP006.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP006",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "description": "Outdoor panorama for Portico_1",
+    "image_file": "OUT_CP007.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP007",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "description": "Outdoor panorama for Parking _1",
+    "image_file": "OUT_CP008.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP008",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP009",
+    "description": "Outdoor panorama for Parking_2",
+    "image_file": "OUT_CP009.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP009",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP010",
+    "description": "Outdoor panorama for Campus Corner South_West",
+    "image_file": "OUT_CP010.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP010",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "description": "Outdoor panorama for ABB 2 Entry_1",
+    "image_file": "OUT_CP011.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP011",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP012",
+    "description": "Outdoor panorama for Junction 11_13",
+    "image_file": "OUT_CP012.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP012",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP013",
+    "description": "Outdoor panorama for Narrow Passage_1",
+    "image_file": "OUT_CP013.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP013",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP014",
+    "description": "Outdoor panorama for Girls Hostel Entry Back_1",
+    "image_file": "OUT_CP014.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP014",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP015",
+    "description": "Outdoor panorama for Junction 14_16",
+    "image_file": "OUT_CP015.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP015",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "description": "Outdoor panorama for Laundry Entry",
+    "image_file": "OUT_CP016.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP016",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP017",
+    "description": "Outdoor panorama for Narrow Passage_2",
+    "image_file": "OUT_CP017.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP017",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP018",
+    "description": "Outdoor panorama for Narrow Passage_3",
+    "image_file": "OUT_CP018.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP018",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP019",
+    "description": "Outdoor panorama for Girls Hostel Entry Back_2",
+    "image_file": "OUT_CP019.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP019",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "description": "Outdoor panorama for Junction 20_22",
+    "image_file": "OUT_CP020.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP020",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP022",
+    "description": "Outdoor panorama for Main Passage Entry",
+    "image_file": "OUT_CP022.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP022",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP023",
+    "description": "Outdoor panorama for Campus Corner North_East",
+    "image_file": "OUT_CP023.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP023",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP024",
+    "description": "Outdoor panorama for Girls Hostel Entry_3",
+    "image_file": "OUT_CP024.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP024",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP025",
+    "description": "Outdoor panorama for Narrow Passage_4",
+    "image_file": "OUT_CP025.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP025",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP026",
+    "description": "Outdoor panorama for Junction 25_27",
+    "image_file": "OUT_CP026.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP026",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP027",
+    "description": "Outdoor panorama for Narrow Passage_5",
+    "image_file": "OUT_CP027.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP027",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP028",
+    "description": "Outdoor panorama for Junction 27_29",
+    "image_file": "OUT_CP028.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP028",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP029",
+    "description": "Outdoor panorama for Junction 30_MainPassage",
+    "image_file": "OUT_CP029.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP029",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP030",
+    "description": "Outdoor panorama for ABB 1 Entry_1",
+    "image_file": "OUT_CP030.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP030",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP031",
+    "description": "Outdoor panorama for ABB 1 Entry_2",
+    "image_file": "OUT_CP031.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP031",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "description": "Outdoor panorama for ABB 1 Entry_3",
+    "image_file": "OUT_CP032.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP032",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "description": "Outdoor panorama for Junction 32_35",
+    "image_file": "OUT_CP033.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP033",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP034",
+    "description": "Outdoor panorama for Campus Entry Gate 2",
+    "image_file": "OUT_CP034.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP034",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP038",
+    "description": "Outdoor panorama for Junction 39_46",
+    "image_file": "OUT_CP038.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP038",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP039",
+    "description": "Outdoor panorama for ABB 3 Entry_2",
+    "image_file": "OUT_CP039.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP039",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "description": "Outdoor panorama for Cafe Entry_2",
+    "image_file": "OUT_CP040.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP040",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP041",
+    "description": "Outdoor panorama for ABB 3 Entry_3",
+    "image_file": "OUT_CP041.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP041",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP042",
+    "description": "Outdoor panorama for Junction 41_43",
+    "image_file": "OUT_CP042.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP042",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP044",
+    "description": "Outdoor panorama for Portico_2",
+    "image_file": "OUT_CP044.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP044",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP045",
+    "description": "Outdoor panorama for Sports Complex Entry_2",
+    "image_file": "OUT_CP045.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP045",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "description": "Outdoor panorama for Junction 38_52",
+    "image_file": "OUT_CP046.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP046",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "description": "Outdoor panorama for OAT Front",
+    "image_file": "OUT_CP047.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP047",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "description": "Outdoor panorama for Lawn",
+    "image_file": "OUT_CP048.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP048",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "description": "Outdoor panorama for Sports Complex_1",
+    "image_file": "OUT_CP050.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP050",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "description": "Outdoor panorama for ABB 1 Entry_4",
+    "image_file": "OUT_CP052.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP052",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP053",
+    "description": "Outdoor panorama for ABB 1 Entry_5",
+    "image_file": "OUT_CP053.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP053",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP054",
+    "description": "Outdoor panorama for ABB 1 Entry_6",
+    "image_file": "OUT_CP054.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP054",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP055",
+    "description": "Outdoor panorama for ABB 1 Entry_7",
+    "image_file": "OUT_CP055.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP055",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "description": "Outdoor panorama for Sports Complex Entry_3",
+    "image_file": "OUT_CP056.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP056",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP057",
+    "description": "Outdoor panorama for Junction 56_58",
+    "image_file": "OUT_CP057.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP057",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP059",
+    "description": "Outdoor panorama for Junction 9_60",
+    "image_file": "OUT_CP059.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP059",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "description": "Outdoor panorama for ABB 2 Entry_2",
+    "image_file": "OUT_CP061.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP061",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "description": "Outdoor panorama for Narrow Passage_6",
+    "image_file": "OUT_CP062.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP062",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "description": "Outdoor panorama for Entrance to Girls' Hostel",
+    "image_file": "OUT_CP063.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP063",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "description": "Outdoor panorama for Junction 63_65",
+    "image_file": "OUT_CP064.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP064",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "description": "Outdoor panorama for Annapurna (Mess)",
+    "image_file": "OUT_CP065.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP065",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP066",
+    "description": "Outdoor panorama for Narrow Passage_7",
+    "image_file": "OUT_CP066.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP066",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "description": "Outdoor panorama for A to Z",
+    "image_file": "OUT_CP067.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP067",
+    "thumbnail_file": ""
+  },
+  {
+    "checkpoint_id": "OUT_CP068",
+    "description": "Outdoor panorama for Narrow Passage_8",
+    "image_file": "OUT_CP068.jpg",
+    "orientation": "south_west",
+    "pano_id": "PANO_OUT_CP068",
+    "thumbnail_file": ""
+  }
+]
