@@ -1,8 +1,203 @@
 alias_id,place_id,alias_text,alias_type
-AL_MAIN_GATE_1,PL_MAIN_GATE,main entrance,common_name
-AL_ADMIN_1,PL_ADMIN_BLOCK,admin office,common_name
-AL_LIBRARY_1,PL_LIBRARY,lib,nickname
-AL_LIBRARY_2,PL_LIBRARY,libary,alternate_spelling
-AL_CANTEEN_1,PL_CANTEEN,cafeteria,common_name
-AL_ACAD_1,PL_ACADEMIC_BLOCK,academic block,common_name
-AL_PARKING_1,PL_PARKING,parking lot,common_name
+ALIAS_PL_001_001,PL_001,gate 1,common_name
+ALIAS_PL_001_002,PL_001,gate,common_name
+ALIAS_PL_001_003,PL_001,g1,abbreviation
+ALIAS_PL_001_004,PL_001,campus entry gate 1,common_name
+ALIAS_PL_002_001,PL_002,cafeteria,common_name
+ALIAS_PL_002_002,PL_002,food hall,common_name
+ALIAS_PL_002_003,PL_002,cafe,common_name
+ALIAS_PL_002_004,PL_002,canteen,common_name
+ALIAS_PL_002_005,PL_002,food,common_name
+ALIAS_PL_002_006,PL_002,cafe entry 2,common_name
+ALIAS_PL_002_007,PL_002,facility entry,common_name
+ALIAS_PL_003_001,PL_003,open air theater,common_name
+ALIAS_PL_003_002,PL_003,stage,common_name
+ALIAS_PL_003_003,PL_003,oat,abbreviation
+ALIAS_PL_003_004,PL_003,open air theatre,alternate_spelling
+ALIAS_PL_003_005,PL_003,oat front,common_name
+ALIAS_PL_004_001,PL_004,ground,common_name
+ALIAS_PL_004_002,PL_004,play area,common_name
+ALIAS_PL_004_003,PL_004,lawn,common_name
+ALIAS_PL_005_001,PL_005,basketball court,common_name
+ALIAS_PL_005_002,PL_005,play area,common_name
+ALIAS_PL_005_003,PL_005,bc,abbreviation
+ALIAS_PL_005_004,PL_005,sports complex 1,common_name
+ALIAS_PL_005_005,PL_005,sports complex,common_name
+ALIAS_PL_006_001,PL_006,badminton court,common_name
+ALIAS_PL_006_002,PL_006,play area,common_name
+ALIAS_PL_006_003,PL_006,bc,abbreviation
+ALIAS_PL_006_004,PL_006,sports complex entry 3,common_name
+ALIAS_PL_006_005,PL_006,sports complex,common_name
+ALIAS_PL_007_001,PL_007,auditorium,common_name
+ALIAS_PL_007_002,PL_007,stage,common_name
+ALIAS_PL_007_003,PL_007,abb 2 entry 2,common_name
+ALIAS_PL_007_004,PL_007,facility entry,common_name
+ALIAS_PL_008_001,PL_008,portico,common_name
+ALIAS_PL_008_002,PL_008,meeting,common_name
+ALIAS_PL_008_003,PL_008,portico 1,common_name
+ALIAS_PL_008_004,PL_008,facility entry,common_name
+ALIAS_PL_009_001,PL_009,mandir,common_name
+ALIAS_PL_009_002,PL_009,worship,common_name
+ALIAS_PL_009_003,PL_009,junction 63 65,common_name
+ALIAS_PL_009_004,PL_009,junction,common_name
+ALIAS_PL_010_001,PL_010,gate 2,common_name
+ALIAS_PL_010_002,PL_010,gate,common_name
+ALIAS_PL_010_003,PL_010,g2,abbreviation
+ALIAS_PL_010_004,PL_010,junction 32 35,common_name
+ALIAS_PL_010_005,PL_010,junction,common_name
+ALIAS_PL_010_006,PL_010,campus entry gate 2,common_name
+ALIAS_PL_011_001,PL_011,gate 3,common_name
+ALIAS_PL_011_002,PL_011,gate,common_name
+ALIAS_PL_011_003,PL_011,g3,abbreviation
+ALIAS_PL_011_004,PL_011,junction 20 22,common_name
+ALIAS_PL_011_005,PL_011,junction,common_name
+ALIAS_PL_012_001,PL_012,annapurna mess,common_name
+ALIAS_PL_012_002,PL_012,food hall,common_name
+ALIAS_PL_012_003,PL_012,am,abbreviation
+ALIAS_PL_012_004,PL_012,mess,common_name
+ALIAS_PL_012_005,PL_012,facility entry,common_name
+ALIAS_PL_013_001,PL_013,a2z,common_name
+ALIAS_PL_013_002,PL_013,food hall,common_name
+ALIAS_PL_013_003,PL_013,a to z,alternate_spelling
+ALIAS_PL_013_004,PL_013,retail store,common_name
+ALIAS_PL_014_001,PL_014,parking,common_name
+ALIAS_PL_014_002,PL_014,parking 1,common_name
+ALIAS_PL_015_001,PL_015,abb 1 front,common_name
+ALIAS_PL_015_002,PL_015,building,common_name
+ALIAS_PL_015_003,PL_015,a1f,abbreviation
+ALIAS_PL_015_004,PL_015,front,common_name
+ALIAS_PL_015_005,PL_015,abb,common_name
+ALIAS_PL_015_006,PL_015,1 front,common_name
+ALIAS_PL_015_007,PL_015,academic block,common_name
+ALIAS_PL_015_008,PL_015,abb 1,abbreviation
+ALIAS_PL_015_009,PL_015,abb1,abbreviation
+ALIAS_PL_015_010,PL_015,abb 1 entry 4,common_name
+ALIAS_PL_015_011,PL_015,facility entry,common_name
+ALIAS_PL_015_012,PL_015,abb 1 entry 5,common_name
+ALIAS_PL_015_013,PL_015,abb 1 entry 6,common_name
+ALIAS_PL_015_014,PL_015,abb 1 entry 7,common_name
+ALIAS_PL_016_001,PL_016,abb 1 back,common_name
+ALIAS_PL_016_002,PL_016,building,common_name
+ALIAS_PL_016_003,PL_016,a1b,abbreviation
+ALIAS_PL_016_004,PL_016,back,common_name
+ALIAS_PL_016_005,PL_016,abb,common_name
+ALIAS_PL_016_006,PL_016,1 back,common_name
+ALIAS_PL_016_007,PL_016,academic block,common_name
+ALIAS_PL_016_008,PL_016,abb 1,abbreviation
+ALIAS_PL_016_009,PL_016,abb1,abbreviation
+ALIAS_PL_016_010,PL_016,abb 1 entry 3,common_name
+ALIAS_PL_016_011,PL_016,facility entry,common_name
+ALIAS_PL_016_012,PL_016,abb 1 entry 2,common_name
+ALIAS_PL_016_013,PL_016,abb 1 entry 1,common_name
+ALIAS_PL_016_014,PL_016,junction 30 mainpassage,common_name
+ALIAS_PL_016_015,PL_016,junction,common_name
+ALIAS_PL_017_001,PL_017,jaypee business school front,common_name
+ALIAS_PL_017_002,PL_017,building,common_name
+ALIAS_PL_017_003,PL_017,jbsf,abbreviation
+ALIAS_PL_017_004,PL_017,front,common_name
+ALIAS_PL_017_005,PL_017,jbs,abbreviation
+ALIAS_PL_017_006,PL_017,business school,common_name
+ALIAS_PL_017_007,PL_017,narrow passage 6,common_name
+ALIAS_PL_017_008,PL_017,narrow passage,common_name
+ALIAS_PL_017_009,PL_017,junction 9 60,common_name
+ALIAS_PL_017_010,PL_017,junction,common_name
+ALIAS_PL_017_011,PL_017,abb 2 entry 2,common_name
+ALIAS_PL_017_012,PL_017,facility entry,common_name
+ALIAS_PL_018_001,PL_018,jaypee business school back,common_name
+ALIAS_PL_018_002,PL_018,building,common_name
+ALIAS_PL_018_003,PL_018,jbsb,abbreviation
+ALIAS_PL_018_004,PL_018,back,common_name
+ALIAS_PL_018_005,PL_018,jbs,abbreviation
+ALIAS_PL_018_006,PL_018,business school,common_name
+ALIAS_PL_018_007,PL_018,abb 2 entry 1,common_name
+ALIAS_PL_018_008,PL_018,facility entry,common_name
+ALIAS_PL_018_009,PL_018,junction 11 13,common_name
+ALIAS_PL_018_010,PL_018,junction,common_name
+ALIAS_PL_018_011,PL_018,narrow passage 1,common_name
+ALIAS_PL_018_012,PL_018,passage,common_name
+ALIAS_PL_019_001,PL_019,abb 3 front,common_name
+ALIAS_PL_019_002,PL_019,building,common_name
+ALIAS_PL_019_003,PL_019,a3f,abbreviation
+ALIAS_PL_019_004,PL_019,front,common_name
+ALIAS_PL_019_005,PL_019,abb,common_name
+ALIAS_PL_019_006,PL_019,3 front,common_name
+ALIAS_PL_019_007,PL_019,academic block,common_name
+ALIAS_PL_019_008,PL_019,abb 3,abbreviation
+ALIAS_PL_019_009,PL_019,abb3,abbreviation
+ALIAS_PL_019_010,PL_019,reception entry,common_name
+ALIAS_PL_019_011,PL_019,facility entry,common_name
+ALIAS_PL_019_012,PL_019,abb 3 entry 2,common_name
+ALIAS_PL_019_013,PL_019,cafe entry 2,common_name
+ALIAS_PL_019_014,PL_019,abb 3 entry 3,common_name
+ALIAS_PL_019_015,PL_019,junction 41 43,common_name
+ALIAS_PL_019_016,PL_019,junction,common_name
+ALIAS_PL_020_001,PL_020,abb 3 back,common_name
+ALIAS_PL_020_002,PL_020,building,common_name
+ALIAS_PL_020_003,PL_020,a3b,abbreviation
+ALIAS_PL_020_004,PL_020,back,common_name
+ALIAS_PL_020_005,PL_020,abb,common_name
+ALIAS_PL_020_006,PL_020,3 back,common_name
+ALIAS_PL_020_007,PL_020,academic block,common_name
+ALIAS_PL_020_008,PL_020,abb 3,abbreviation
+ALIAS_PL_020_009,PL_020,abb3,abbreviation
+ALIAS_PL_020_010,PL_020,abb 3 entry 1,common_name
+ALIAS_PL_020_011,PL_020,facility entry,common_name
+ALIAS_PL_024_001,PL_024,parking,common_name
+ALIAS_PL_024_002,PL_024,parking 1,common_name
+ALIAS_PL_024_003,PL_024,junction 42 55,common_name
+ALIAS_PL_024_004,PL_024,junction,common_name
+ALIAS_PL_025_001,PL_025,workshop,common_name
+ALIAS_PL_025_002,PL_025,lab,common_name
+ALIAS_PL_025_003,PL_025,junction 38 52,common_name
+ALIAS_PL_025_004,PL_025,junction,common_name
+ALIAS_PL_026_001,PL_026,lrc,common_name
+ALIAS_PL_026_002,PL_026,library,common_name
+ALIAS_PL_026_003,PL_026,cafe entry 2,common_name
+ALIAS_PL_026_004,PL_026,facility entry,common_name
+ALIAS_PL_027_001,PL_027,laundry,common_name
+ALIAS_PL_027_002,PL_027,laundry entry,common_name
+ALIAS_PL_027_003,PL_027,facility entry,common_name
+ALIAS_PL_028_001,PL_028,tv room,common_name
+ALIAS_PL_028_002,PL_028,entertainment,common_name
+ALIAS_PL_028_003,PL_028,tr,abbreviation
+ALIAS_PL_028_004,PL_028,a to z,common_name
+ALIAS_PL_028_005,PL_028,retail store,common_name
+ALIAS_PL_029_001,PL_029,music,common_name
+ALIAS_PL_029_002,PL_029,entertainment,common_name
+ALIAS_PL_029_003,PL_029,a to z,common_name
+ALIAS_PL_029_004,PL_029,retail store,common_name
+ALIAS_PL_030_001,PL_030,girls gym,common_name
+ALIAS_PL_030_002,PL_030,fitness,common_name
+ALIAS_PL_030_003,PL_030,gg,abbreviation
+ALIAS_PL_030_004,PL_030,a to z,common_name
+ALIAS_PL_030_005,PL_030,retail store,common_name
+ALIAS_PL_031_001,PL_031,sarojini bhawan,common_name
+ALIAS_PL_031_002,PL_031,hostel,common_name
+ALIAS_PL_031_003,PL_031,sb,abbreviation
+ALIAS_PL_031_004,PL_031,entrance to girls hostel,common_name
+ALIAS_PL_031_005,PL_031,hostel entry,common_name
+ALIAS_PL_032_001,PL_032,maulana azad bhawan h4,common_name
+ALIAS_PL_032_002,PL_032,maulana azad bhawanh4,common_name
+ALIAS_PL_032_003,PL_032,hostel,common_name
+ALIAS_PL_032_004,PL_032,mabh,abbreviation
+ALIAS_PL_032_005,PL_032,maulana azad bhawan,common_name
+ALIAS_PL_032_006,PL_032,h4,common_name
+ALIAS_PL_032_007,PL_032,junction 68 70,common_name
+ALIAS_PL_032_008,PL_032,junction,common_name
+ALIAS_PL_033_001,PL_033,g b pant bhawan h5,common_name
+ALIAS_PL_033_002,PL_033,gb pant bhawanh5,common_name
+ALIAS_PL_033_003,PL_033,hostel,common_name
+ALIAS_PL_033_004,PL_033,gbpbh,abbreviation
+ALIAS_PL_033_005,PL_033,g b pant bhawan,common_name
+ALIAS_PL_033_006,PL_033,h5,common_name
+ALIAS_PL_033_007,PL_033,gb pant,abbreviation
+ALIAS_PL_033_008,PL_033,junction 68 70,common_name
+ALIAS_PL_033_009,PL_033,junction,common_name
+ALIAS_PL_034_001,PL_034,rajendra prasad bhawan h3,common_name
+ALIAS_PL_034_002,PL_034,rajendra prasad bhawanh3,common_name
+ALIAS_PL_034_003,PL_034,hostel,common_name
+ALIAS_PL_034_004,PL_034,rpbh,abbreviation
+ALIAS_PL_034_005,PL_034,rajendra prasad bhawan,common_name
+ALIAS_PL_034_006,PL_034,h3,common_name
+ALIAS_PL_034_007,PL_034,a to z,common_name
+ALIAS_PL_034_008,PL_034,retail store,common_name

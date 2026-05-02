@@ -1,0 +1,152 @@
+[
+  {
+    "checkpoint_id": "OUT_CP040",
+    "crowd_level": "high",
+    "crowd_rule_id": "MESS_LUNCH_OUT_CP040_01",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "14:00",
+    "penalty_cost": "15",
+    "start_time": "12:00"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "crowd_level": "high",
+    "crowd_rule_id": "MESS_LUNCH_OUT_CP065_02",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "14:00",
+    "penalty_cost": "15",
+    "start_time": "12:00"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "crowd_level": "high",
+    "crowd_rule_id": "MESS_LUNCH_OUT_CP067_03",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "14:00",
+    "penalty_cost": "15",
+    "start_time": "12:00"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP001_01",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP002",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP002_02",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP034",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP034_03",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP033_04",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP021",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP021_05",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "crowd_level": "medium",
+    "crowd_rule_id": "MOR_ENTRY_OUT_CP020_06",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "09:15",
+    "penalty_cost": "10",
+    "start_time": "08:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP001_01",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP002",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP002_02",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP034",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP034_03",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP033_04",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP021",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP021_05",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "crowd_level": "low",
+    "crowd_rule_id": "EVE_EXIT_OUT_CP020_06",
+    "day_type": "weekday",
+    "description": "",
+    "end_time": "17:15",
+    "penalty_cost": "5",
+    "start_time": "16:45"
+  }
+]

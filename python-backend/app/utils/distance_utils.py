@@ -26,7 +26,12 @@ def coordinate_distance_pixels(
     y: float,
     checkpoint: Mapping[str, Any],
 ) -> float:
-    return math.hypot(float(checkpoint["x_coord"]) - x, float(checkpoint["y_coord"]) - y)
+    checkpoint_x = checkpoint.get("raw_map_x")
+    checkpoint_y = checkpoint.get("raw_map_y")
+    if checkpoint_x is None or checkpoint_y is None:
+        checkpoint_x = checkpoint["x_coord"]
+        checkpoint_y = checkpoint["y_coord"]
+    return math.hypot(float(checkpoint_x) - x, float(checkpoint_y) - y)
 
 
 def estimate_walk_time_label(distance_meters: float) -> str:

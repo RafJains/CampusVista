@@ -1,0 +1,1412 @@
+[
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "place_name",
+    "text": "Gate 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "keywords",
+    "text": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "place_name",
+    "text": "Cafeteria"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "keywords",
+    "text": "cafe"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "place_name",
+    "text": "Open Air Theater"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "place_id": "PL_004",
+    "source": "place_name",
+    "text": "Ground"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "place_name",
+    "text": "Basketball Court"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "place_name",
+    "text": "Badminton Court"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "place_id": "PL_007",
+    "source": "place_name",
+    "text": "Auditorium"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "place_id": "PL_008",
+    "source": "place_name",
+    "text": "Portico"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "place_id": "PL_009",
+    "source": "place_name",
+    "text": "Mandir"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "place_name",
+    "text": "Gate 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "place_name",
+    "text": "Gate 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "place_name",
+    "text": "Annapurna Mess"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_013",
+    "source": "place_name",
+    "text": "A2Z"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_014",
+    "source": "place_name",
+    "text": "Parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "place_name",
+    "text": "ABB-1 (front)"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "place_name",
+    "text": "ABB-1 (back)"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "place_name",
+    "text": "Jaypee Business School (front)"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "place_name",
+    "text": "Jaypee Business School (back)"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "place_name",
+    "text": "ABB-3 (front)"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "place_name",
+    "text": "ABB-3 (back)"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_024",
+    "source": "place_name",
+    "text": "Parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "place_id": "PL_025",
+    "source": "place_name",
+    "text": "Workshop"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_026",
+    "source": "place_name",
+    "text": "LRC"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "place_id": "PL_027",
+    "source": "place_name",
+    "text": "Laundry"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "place_name",
+    "text": "TV ROOM"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_029",
+    "source": "place_name",
+    "text": "MUSIC"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "place_name",
+    "text": "GIRLS GYM"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "place_name",
+    "text": "Sarojini Bhawan"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "place_name",
+    "text": "Maulana Azad Bhawan,H4"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "place_name",
+    "text": "G.B. Pant Bhawan,H5"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "place_name",
+    "text": "Rajendra Prasad Bhawan,H3"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "alias",
+    "text": "gate 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "alias",
+    "text": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "alias",
+    "text": "g1"
+  },
+  {
+    "checkpoint_id": "OUT_CP001",
+    "place_id": "PL_001",
+    "source": "alias",
+    "text": "campus entry gate 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "cafeteria"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "food hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "cafe"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "canteen"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "food"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "cafe entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_002",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "alias",
+    "text": "open air theater"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "alias",
+    "text": "stage"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "alias",
+    "text": "oat"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "alias",
+    "text": "open air theatre"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "place_id": "PL_003",
+    "source": "alias",
+    "text": "oat front"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "place_id": "PL_004",
+    "source": "alias",
+    "text": "ground"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "place_id": "PL_004",
+    "source": "alias",
+    "text": "play area"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "place_id": "PL_004",
+    "source": "alias",
+    "text": "lawn"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "alias",
+    "text": "basketball court"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "alias",
+    "text": "play area"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "alias",
+    "text": "bc"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "alias",
+    "text": "sports complex 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "place_id": "PL_005",
+    "source": "alias",
+    "text": "sports complex"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "alias",
+    "text": "badminton court"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "alias",
+    "text": "play area"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "alias",
+    "text": "bc"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "alias",
+    "text": "sports complex entry 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "place_id": "PL_006",
+    "source": "alias",
+    "text": "sports complex"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "place_id": "PL_007",
+    "source": "alias",
+    "text": "auditorium"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "place_id": "PL_007",
+    "source": "alias",
+    "text": "stage"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "place_id": "PL_007",
+    "source": "alias",
+    "text": "abb 2 entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "place_id": "PL_007",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "place_id": "PL_008",
+    "source": "alias",
+    "text": "portico"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "place_id": "PL_008",
+    "source": "alias",
+    "text": "meeting"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "place_id": "PL_008",
+    "source": "alias",
+    "text": "portico 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "place_id": "PL_008",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "place_id": "PL_009",
+    "source": "alias",
+    "text": "mandir"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "place_id": "PL_009",
+    "source": "alias",
+    "text": "worship"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "place_id": "PL_009",
+    "source": "alias",
+    "text": "junction 63 65"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "place_id": "PL_009",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "gate 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "g2"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "junction 32 35"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "place_id": "PL_010",
+    "source": "alias",
+    "text": "campus entry gate 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "alias",
+    "text": "gate 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "alias",
+    "text": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "alias",
+    "text": "g3"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "alias",
+    "text": "junction 20 22"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "place_id": "PL_011",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "alias",
+    "text": "annapurna mess"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "alias",
+    "text": "food hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "alias",
+    "text": "am"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "alias",
+    "text": "mess"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "place_id": "PL_012",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_013",
+    "source": "alias",
+    "text": "a2z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_013",
+    "source": "alias",
+    "text": "food hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_013",
+    "source": "alias",
+    "text": "a to z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_013",
+    "source": "alias",
+    "text": "retail store"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_014",
+    "source": "alias",
+    "text": "parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_014",
+    "source": "alias",
+    "text": "parking 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1 front"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "a1f"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "front"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "1 front"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "academic block"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb1"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1 entry 4"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1 entry 5"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1 entry 6"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "place_id": "PL_015",
+    "source": "alias",
+    "text": "abb 1 entry 7"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb 1 back"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "a1b"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "back"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "1 back"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "academic block"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb1"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb 1 entry 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb 1 entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "abb 1 entry 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "junction 30 mainpassage"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "place_id": "PL_016",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "jaypee business school front"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "jbsf"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "front"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "jbs"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "business school"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "narrow passage 6"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "narrow passage"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "junction 9 60"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "abb 2 entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "place_id": "PL_017",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "jaypee business school back"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "jbsb"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "back"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "jbs"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "business school"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "abb 2 entry 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "junction 11 13"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "narrow passage 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "place_id": "PL_018",
+    "source": "alias",
+    "text": "passage"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb 3 front"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "a3f"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "front"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "3 front"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "academic block"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb3"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "reception entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb 3 entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "cafe entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "abb 3 entry 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "junction 41 43"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "place_id": "PL_019",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "abb 3 back"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "a3b"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "back"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "abb"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "3 back"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "academic block"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "abb 3"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "abb3"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "abb 3 entry 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "place_id": "PL_020",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_024",
+    "source": "alias",
+    "text": "parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_024",
+    "source": "alias",
+    "text": "parking 1"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_024",
+    "source": "alias",
+    "text": "junction 42 55"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "place_id": "PL_024",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "place_id": "PL_025",
+    "source": "alias",
+    "text": "workshop"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "place_id": "PL_025",
+    "source": "alias",
+    "text": "lab"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "place_id": "PL_025",
+    "source": "alias",
+    "text": "junction 38 52"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "place_id": "PL_025",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_026",
+    "source": "alias",
+    "text": "lrc"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_026",
+    "source": "alias",
+    "text": "library"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_026",
+    "source": "alias",
+    "text": "cafe entry 2"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "place_id": "PL_026",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "place_id": "PL_027",
+    "source": "alias",
+    "text": "laundry"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "place_id": "PL_027",
+    "source": "alias",
+    "text": "laundry entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "place_id": "PL_027",
+    "source": "alias",
+    "text": "facility entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "alias",
+    "text": "tv room"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "alias",
+    "text": "entertainment"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "alias",
+    "text": "tr"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "alias",
+    "text": "a to z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_028",
+    "source": "alias",
+    "text": "retail store"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_029",
+    "source": "alias",
+    "text": "music"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_029",
+    "source": "alias",
+    "text": "entertainment"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_029",
+    "source": "alias",
+    "text": "a to z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_029",
+    "source": "alias",
+    "text": "retail store"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "alias",
+    "text": "girls gym"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "alias",
+    "text": "fitness"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "alias",
+    "text": "gg"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "alias",
+    "text": "a to z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_030",
+    "source": "alias",
+    "text": "retail store"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "alias",
+    "text": "sarojini bhawan"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "alias",
+    "text": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "alias",
+    "text": "sb"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "alias",
+    "text": "entrance to girls hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "place_id": "PL_031",
+    "source": "alias",
+    "text": "hostel entry"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "maulana azad bhawan h4"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "maulana azad bhawanh4"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "mabh"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "maulana azad bhawan"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "h4"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "junction 68 70"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_032",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "g b pant bhawan h5"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "gb pant bhawanh5"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "gbpbh"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "g b pant bhawan"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "h5"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "gb pant"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "junction 68 70"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "place_id": "PL_033",
+    "source": "alias",
+    "text": "junction"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "rajendra prasad bhawan h3"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "rajendra prasad bhawanh3"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "rpbh"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "rajendra prasad bhawan"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "h3"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "a to z"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "place_id": "PL_034",
+    "source": "alias",
+    "text": "retail store"
+  }
+]

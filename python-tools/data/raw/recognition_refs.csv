@@ -1,4 +1,2 @@
 recognition_id,checkpoint_id,label_name,model_label_index,reference_image_file,confidence_threshold
-REC_OUT_CP001,OUT_CP001,main_gate,0,OUT_CP001.jpg,0.70
-REC_OUT_CP004,OUT_CP004,library_entrance,1,OUT_CP004.jpg,0.70
-REC_OUT_CP006,OUT_CP006,academic_block_entry,2,OUT_CP006.jpg,0.70
+REC_OUT_CP001,OUT_CP001,main_gate,0,OUT_CP001.jpg,0.7

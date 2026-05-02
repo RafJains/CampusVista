@@ -1,5 +1,16 @@
 crowd_rule_id,checkpoint_id,day_type,start_time,end_time,crowd_level,penalty_cost,description
-CR_CP004_WEEKDAY_MORNING,OUT_CP004,weekday,09:00,11:00,medium,15,Library front gets busy before classes
-CR_CP005_WEEKDAY_LUNCH,OUT_CP005,weekday,12:00,14:00,high,30,Canteen front lunch rush
-CR_CP006_WEEKDAY_AFTERNOON,OUT_CP006,weekday,15:00,17:00,high,25,Academic block transition rush
-CR_CP009_WEEKEND_EVENING,OUT_CP009,weekend,17:00,19:00,low,5,Light hostel-side evening crowd
+MESS_LUNCH_OUT_CP040_01,OUT_CP040,weekday,12:00,14:00,high,15,
+MESS_LUNCH_OUT_CP065_02,OUT_CP065,weekday,12:00,14:00,high,15,
+MESS_LUNCH_OUT_CP067_03,OUT_CP067,weekday,12:00,14:00,high,15,
+MOR_ENTRY_OUT_CP001_01,OUT_CP001,weekday,08:45,09:15,medium,10,
+MOR_ENTRY_OUT_CP002_02,OUT_CP002,weekday,08:45,09:15,medium,10,
+MOR_ENTRY_OUT_CP034_03,OUT_CP034,weekday,08:45,09:15,medium,10,
+MOR_ENTRY_OUT_CP033_04,OUT_CP033,weekday,08:45,09:15,medium,10,
+MOR_ENTRY_OUT_CP021_05,OUT_CP021,weekday,08:45,09:15,medium,10,
+MOR_ENTRY_OUT_CP020_06,OUT_CP020,weekday,08:45,09:15,medium,10,
+EVE_EXIT_OUT_CP001_01,OUT_CP001,weekday,16:45,17:15,low,5,
+EVE_EXIT_OUT_CP002_02,OUT_CP002,weekday,16:45,17:15,low,5,
+EVE_EXIT_OUT_CP034_03,OUT_CP034,weekday,16:45,17:15,low,5,
+EVE_EXIT_OUT_CP033_04,OUT_CP033,weekday,16:45,17:15,low,5,
+EVE_EXIT_OUT_CP021_05,OUT_CP021,weekday,16:45,17:15,low,5,
+EVE_EXIT_OUT_CP020_06,OUT_CP020,weekday,16:45,17:15,low,5,

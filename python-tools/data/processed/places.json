@@ -1,0 +1,281 @@
+[
+  {
+    "checkpoint_id": "OUT_CP001",
+    "checkpoint_ids": "OUT_CP001",
+    "description": "",
+    "keywords": "gate",
+    "place_id": "PL_001",
+    "place_name": "Gate 1",
+    "place_type": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "checkpoint_ids": "OUT_CP040",
+    "description": "",
+    "keywords": "cafe",
+    "place_id": "PL_002",
+    "place_name": "Cafeteria",
+    "place_type": "food_hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP047",
+    "checkpoint_ids": "OUT_CP047",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_003",
+    "place_name": "Open Air Theater",
+    "place_type": "stage"
+  },
+  {
+    "checkpoint_id": "OUT_CP048",
+    "checkpoint_ids": "OUT_CP048",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_004",
+    "place_name": "Ground",
+    "place_type": "play_area"
+  },
+  {
+    "checkpoint_id": "OUT_CP050",
+    "checkpoint_ids": "OUT_CP050",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_005",
+    "place_name": "Basketball Court",
+    "place_type": "play_area"
+  },
+  {
+    "checkpoint_id": "OUT_CP056",
+    "checkpoint_ids": "OUT_CP056",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_006",
+    "place_name": "Badminton Court",
+    "place_type": "play_area"
+  },
+  {
+    "checkpoint_id": "OUT_CP061",
+    "checkpoint_ids": "OUT_CP061",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_007",
+    "place_name": "Auditorium",
+    "place_type": "stage"
+  },
+  {
+    "checkpoint_id": "OUT_CP007",
+    "checkpoint_ids": "OUT_CP007",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_008",
+    "place_name": "Portico",
+    "place_type": "meeting"
+  },
+  {
+    "checkpoint_id": "OUT_CP064",
+    "checkpoint_ids": "OUT_CP064",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_009",
+    "place_name": "Mandir",
+    "place_type": "worship"
+  },
+  {
+    "checkpoint_id": "OUT_CP033",
+    "checkpoint_ids": "OUT_CP033,OUT_CP034",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_010",
+    "place_name": "Gate 2",
+    "place_type": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP020",
+    "checkpoint_ids": "OUT_CP020",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_011",
+    "place_name": "Gate 3",
+    "place_type": "gate"
+  },
+  {
+    "checkpoint_id": "OUT_CP065",
+    "checkpoint_ids": "OUT_CP065",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_012",
+    "place_name": "Annapurna Mess",
+    "place_type": "food_hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "checkpoint_ids": "OUT_CP067",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_013",
+    "place_name": "A2Z",
+    "place_type": "food_hall"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "checkpoint_ids": "OUT_CP008",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_014",
+    "place_name": "Parking",
+    "place_type": "parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP052",
+    "checkpoint_ids": "OUT_CP052,OUT_CP053,OUT_CP054,OUT_CP055",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_015",
+    "place_name": "ABB-1 (front)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP032",
+    "checkpoint_ids": "OUT_CP032,OUT_CP031,OUT_CP030,OUT_CP029",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_016",
+    "place_name": "ABB-1 (back)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP062",
+    "checkpoint_ids": "OUT_CP062,OUT_CP059,OUT_CP061",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_017",
+    "place_name": "Jaypee Business School (front)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP011",
+    "checkpoint_ids": "OUT_CP011,OUT_CP012,OUT_CP013",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_018",
+    "place_name": "Jaypee Business School (back)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP003",
+    "checkpoint_ids": "OUT_CP003,OUT_CP039,OUT_CP040,OUT_CP041,OUT_CP042",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_019",
+    "place_name": "ABB-3 (front)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP005",
+    "checkpoint_ids": "OUT_CP005",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_020",
+    "place_name": "ABB-3 (back)",
+    "place_type": "building"
+  },
+  {
+    "checkpoint_id": "OUT_CP008",
+    "checkpoint_ids": "OUT_CP008,OUT_CP049",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_024",
+    "place_name": "Parking",
+    "place_type": "parking"
+  },
+  {
+    "checkpoint_id": "OUT_CP046",
+    "checkpoint_ids": "OUT_CP046",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_025",
+    "place_name": "Workshop",
+    "place_type": "lab"
+  },
+  {
+    "checkpoint_id": "OUT_CP040",
+    "checkpoint_ids": "OUT_CP040",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_026",
+    "place_name": "LRC",
+    "place_type": "library"
+  },
+  {
+    "checkpoint_id": "OUT_CP016",
+    "checkpoint_ids": "OUT_CP016",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_027",
+    "place_name": "Laundry",
+    "place_type": "laundry"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "checkpoint_ids": "OUT_CP067",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_028",
+    "place_name": "TV ROOM",
+    "place_type": "entertainment"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "checkpoint_ids": "OUT_CP067",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_029",
+    "place_name": "MUSIC",
+    "place_type": "entertainment"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "checkpoint_ids": "OUT_CP067",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_030",
+    "place_name": "GIRLS GYM",
+    "place_type": "fitness"
+  },
+  {
+    "checkpoint_id": "OUT_CP063",
+    "checkpoint_ids": "OUT_CP063",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_031",
+    "place_name": "Sarojini Bhawan",
+    "place_type": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "checkpoint_ids": "OUT_CP069",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_032",
+    "place_name": "Maulana Azad Bhawan,H4",
+    "place_type": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP069",
+    "checkpoint_ids": "OUT_CP069",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_033",
+    "place_name": "G.B. Pant Bhawan,H5",
+    "place_type": "hostel"
+  },
+  {
+    "checkpoint_id": "OUT_CP067",
+    "checkpoint_ids": "OUT_CP067",
+    "description": "",
+    "keywords": "",
+    "place_id": "PL_034",
+    "place_name": "Rajendra Prasad Bhawan,H3",
+    "place_type": "hostel"
+  }
+]
