@@ -18,11 +18,8 @@ public final class SeedDbCopier {
     private static final String[] REQUIRED_NON_EMPTY_TABLES = {
             "checkpoints",
             "places",
-            "edges",
-            "crowd_rules",
-            "outdoor_panos",
-            "recognition_refs",
-            "search_aliases"
+            "place_checkpoints",
+            "edges"
     };
 
     private SeedDbCopier() {

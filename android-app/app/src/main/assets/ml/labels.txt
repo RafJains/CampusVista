@@ -1,3 +1,2 @@
 main_gate
-library_entrance
-academic_block_entry
+library_front

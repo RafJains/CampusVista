@@ -44,7 +44,7 @@ public final class OutdoorPanoActivity extends Activity {
                     @Override
                     public void onSuccess(PanoDto value) {
                         OutdoorPano pano = BackendMapper.toPano(value);
-                        bindPano(pano, "Python backend");
+                        bindPano(pano, "Live panorama data");
                     }
 
                     @Override
@@ -61,7 +61,7 @@ public final class OutdoorPanoActivity extends Activity {
                             finish();
                             return;
                         }
-                        bindPano(pano, "offline fallback");
+                        bindPano(pano, "Saved panorama data");
                     }
                 }
         );
@@ -82,7 +82,7 @@ public final class OutdoorPanoActivity extends Activity {
                 (pano.getDescription() == null
                         ? "Outdoor visual orientation point."
                         : pano.getDescription())
-                        + "\nMetadata: " + source
+                        + "\n" + source + "."
         );
 
         ImageView imageView = findViewById(R.id.panoImage);

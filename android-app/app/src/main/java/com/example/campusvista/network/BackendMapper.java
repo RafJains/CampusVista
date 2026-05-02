@@ -30,6 +30,8 @@ public final class BackendMapper {
                 dto.checkpointType,
                 dto.xCoord,
                 dto.yCoord,
+                dto.rawMapX,
+                dto.rawMapY,
                 dto.latitude,
                 dto.longitude,
                 dto.description,
@@ -119,7 +121,8 @@ public final class BackendMapper {
                 edges,
                 response.totalDistance,
                 response.totalCost,
-                instructions
+                instructions,
+                response.warnings
         );
     }
 
@@ -142,9 +145,6 @@ public final class BackendMapper {
     }
 
     private static RouteMode parseRouteMode(String value, RouteMode fallbackMode) {
-        if ("avoid_crowded".equals(value) || "avoid_crowded_path".equals(value)) {
-            return RouteMode.AVOID_CROWDED_PATH;
-        }
         if ("shortest".equals(value)) {
             return RouteMode.SHORTEST_PATH;
         }

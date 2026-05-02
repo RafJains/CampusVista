@@ -4,12 +4,12 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
     <path
-        android:fillColor="@color/cv_green"
+        android:fillColor="@color/cv_blue"
         android:pathData="M6,6H42V42H6Z" />
     <path
         android:fillColor="#FFFFFF"
         android:pathData="M14,33L22,12h5l8,21h-5l-1.6,-4.6h-8.1L18.8,33H14zM21.8,24.3h5.3L24.5,16.7z" />
     <path
-        android:fillColor="#DDF2E9"
+        android:fillColor="@color/cv_soft_green"
         android:pathData="M12,37h24v2H12z" />
 </vector>

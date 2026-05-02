@@ -36,8 +36,6 @@ public final class RouteOptionsActivity extends Activity {
 
         findViewById(R.id.shortestPathButton).setOnClickListener(view ->
                 openPreview(RouteMode.SHORTEST_PATH));
-        findViewById(R.id.avoidCrowdedButton).setOnClickListener(view ->
-                openPreview(RouteMode.AVOID_CROWDED_PATH));
         findViewById(R.id.changeStartButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SetLocationActivity.class)));
     }
@@ -83,7 +81,6 @@ public final class RouteOptionsActivity extends Activity {
 
         boolean hasStart = current != null;
         findViewById(R.id.shortestPathButton).setEnabled(hasStart);
-        findViewById(R.id.avoidCrowdedButton).setEnabled(hasStart);
     }
 
     private void openPreview(RouteMode routeMode) {
