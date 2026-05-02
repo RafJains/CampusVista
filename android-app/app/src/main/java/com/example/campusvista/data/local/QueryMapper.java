@@ -23,6 +23,8 @@ public final class QueryMapper {
                 getString(cursor, "checkpoint_type"),
                 getDouble(cursor, "x_coord"),
                 getDouble(cursor, "y_coord"),
+                getNullableDoubleIfPresent(cursor, "raw_map_x"),
+                getNullableDoubleIfPresent(cursor, "raw_map_y"),
                 getNullableDouble(cursor, "latitude"),
                 getNullableDouble(cursor, "longitude"),
                 getNullableString(cursor, "description"),
@@ -226,5 +228,13 @@ public final class QueryMapper {
     private static Double getNullableDouble(Cursor cursor, String columnName) {
         int columnIndex = cursor.getColumnIndexOrThrow(columnName);
         return cursor.isNull(columnIndex) ? null : cursor.getDouble(columnIndex);
+    }
+
+    private static Double getNullableDoubleIfPresent(Cursor cursor, String columnName) {
+        int columnIndex = cursor.getColumnIndex(columnName);
+        if (columnIndex < 0 || cursor.isNull(columnIndex)) {
+            return null;
+        }
+        return cursor.getDouble(columnIndex);
     }
 }

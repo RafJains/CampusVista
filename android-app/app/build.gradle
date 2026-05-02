@@ -2,9 +2,19 @@ plugins {
     id "com.android.application"
 }
 
+def campusVistaBackendUrl = (project.findProperty("campusVistaBackendUrl")
+        ?: "http://10.0.2.2:8000/").toString()
+def escapedCampusVistaBackendUrl = campusVistaBackendUrl
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+
 android {
     namespace "com.example.campusvista"
     compileSdk 35
+
+    buildFeatures {
+        buildConfig true
+    }
 
     defaultConfig {
         applicationId "com.example.campusvista"
@@ -12,6 +22,7 @@ android {
         targetSdk 35
         versionCode 1
         versionName "0.1.0"
+        buildConfigField "String", "DEFAULT_BACKEND_URL", "\"${escapedCampusVistaBackendUrl}\""
     }
 
     compileOptions {

@@ -34,6 +34,8 @@ public final class DBHelper extends SQLiteOpenHelper {
                 "checkpoint_type TEXT NOT NULL, " +
                 "x_coord REAL NOT NULL, " +
                 "y_coord REAL NOT NULL, " +
+                "raw_map_x REAL, " +
+                "raw_map_y REAL, " +
                 "latitude REAL, " +
                 "longitude REAL, " +
                 "description TEXT, " +
@@ -45,6 +47,14 @@ public final class DBHelper extends SQLiteOpenHelper {
                 "checkpoint_id TEXT NOT NULL, " +
                 "description TEXT, " +
                 "keywords TEXT, " +
+                "FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS place_checkpoints (" +
+                "place_id TEXT NOT NULL, " +
+                "checkpoint_id TEXT NOT NULL, " +
+                "entrance_name TEXT, " +
+                "is_primary INTEGER NOT NULL DEFAULT 0, " +
+                "PRIMARY KEY (place_id, checkpoint_id), " +
+                "FOREIGN KEY (place_id) REFERENCES places(place_id), " +
                 "FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id))");
         db.execSQL("CREATE TABLE IF NOT EXISTS edges (" +
                 "edge_id TEXT PRIMARY KEY, " +
@@ -91,6 +101,10 @@ public final class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_edges_to ON edges(to_checkpoint_id)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_places_type ON places(place_type)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_places_checkpoint ON places(checkpoint_id)");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_place_checkpoints_place " +
+                "ON place_checkpoints(place_id)");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_place_checkpoints_checkpoint " +
+                "ON place_checkpoints(checkpoint_id)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_crowd_checkpoint_time " +
                 "ON crowd_rules(checkpoint_id, day_type, start_time, end_time)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_panos_checkpoint ON outdoor_panos(checkpoint_id)");
@@ -106,6 +120,7 @@ public final class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS outdoor_panos");
         db.execSQL("DROP TABLE IF EXISTS crowd_rules");
         db.execSQL("DROP TABLE IF EXISTS edges");
+        db.execSQL("DROP TABLE IF EXISTS place_checkpoints");
         db.execSQL("DROP TABLE IF EXISTS places");
         db.execSQL("DROP TABLE IF EXISTS checkpoints");
         onCreate(db);

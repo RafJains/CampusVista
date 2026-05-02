@@ -59,24 +59,28 @@ public final class SetLocationActivity extends Activity {
                 : "Current location: " + current.getCheckpointName());
 
         checkpointList.removeAllViews();
-        checkpointList.addView(ViewFactory.sectionLine(this, "Loading checkpoints from Python backend..."));
+        checkpointList.addView(ViewFactory.sectionLine(this, "Loading campus checkpoints..."));
         BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<CheckpointDto>>() {
             @Override
             public void onSuccess(List<CheckpointDto> value) {
-                bindCheckpointButtons(BackendMapper.toCheckpoints(value));
+                bindCheckpointButtons(BackendMapper.toCheckpoints(value), null);
             }
 
             @Override
             public void onFallback(Throwable throwable) {
-                selectedLocationLabel.setText(selectedLocationLabel.getText()
-                        + "\nPython backend unavailable. Showing offline checkpoint list.");
-                bindCheckpointButtons(app.getCheckpointRepository().getAllCheckpoints());
+                bindCheckpointButtons(
+                        app.getCheckpointRepository().getAllCheckpoints(),
+                        "Showing saved campus checkpoints."
+                );
             }
         });
     }
 
-    private void bindCheckpointButtons(List<Checkpoint> checkpoints) {
+    private void bindCheckpointButtons(List<Checkpoint> checkpoints, String note) {
         checkpointList.removeAllViews();
+        if (note != null && !note.trim().isEmpty()) {
+            checkpointList.addView(ViewFactory.sectionLine(this, note));
+        }
         for (Checkpoint checkpoint : checkpoints) {
             Button button = ViewFactory.listButton(
                     this,
@@ -90,8 +94,8 @@ public final class SetLocationActivity extends Activity {
 
     private void setLocationViaNearestCheckpoint(Checkpoint selectedCheckpoint) {
         BackendClient.getInstance(this).getNearestCheckpoint(
-                selectedCheckpoint.getXCoord(),
-                selectedCheckpoint.getYCoord(),
+                selectedCheckpoint.getMapX(),
+                selectedCheckpoint.getMapY(),
                 new BackendCallback<NearestCheckpointDto>() {
                     @Override
                     public void onSuccess(NearestCheckpointDto value) {

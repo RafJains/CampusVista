@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/cv_surface"
     android:orientation="vertical"
-    android:padding="18dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/routeOptionsTitle"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Route Options"
         android:textColor="@color/cv_ink"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <TextView
@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:background="@drawable/cv_card"
-        android:padding="14dp"
+        android:elevation="2dp"
+        android:padding="16dp"
         android:textColor="@color/cv_ink"
         android:textSize="15sp" />
 
@@ -31,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/cv_card"
-        android:padding="14dp"
+        android:elevation="2dp"
+        android:padding="16dp"
         android:textColor="@color/cv_ink"
         android:textSize="15sp" />
 
@@ -41,17 +43,9 @@
         android:layout_height="54dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/cv_button_primary"
-        android:text="Shortest Path"
+        android:elevation="2dp"
+        android:text="Generate Route"
         android:textColor="@color/cv_white" />
-
-    <Button
-        android:id="@+id/avoidCrowdedButton"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/cv_button_secondary"
-        android:text="Avoid Crowded Path"
-        android:textColor="@color/cv_green_dark" />
 
     <Button
         android:id="@+id/changeStartButton"
@@ -59,6 +53,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="18dp"
         android:background="@drawable/cv_button_secondary"
+        android:elevation="1dp"
         android:text="Change Start"
-        android:textColor="@color/cv_green_dark" />
+        android:textColor="@color/cv_blue_dark" />
 </LinearLayout>

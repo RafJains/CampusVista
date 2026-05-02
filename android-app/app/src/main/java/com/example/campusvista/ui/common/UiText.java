@@ -30,9 +30,6 @@ public final class UiText {
     }
 
     public static String routeModeLabel(RouteMode routeMode) {
-        if (routeMode == RouteMode.AVOID_CROWDED_PATH) {
-            return "Avoid Crowded Path";
-        }
         return "Shortest Path";
     }
 }

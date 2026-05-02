@@ -1,6 +1,7 @@
 package com.example.campusvista.ui.route;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -33,6 +34,7 @@ public final class RoutePreviewActivity extends Activity {
     private RouteMode routeMode;
     private RouteResult routeResult;
     private LinearLayout routeStepsList;
+    private boolean warningsShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public final class RoutePreviewActivity extends Activity {
         }
 
         ((TextView) findViewById(R.id.previewMeta)).setText(
-                "Calculating route with Python backend..."
+                "Calculating route..."
         );
         routeStepsList.removeAllViews();
         RouteRequestDto request = RouteRequestDto.forCheckpoints(
@@ -78,13 +80,13 @@ public final class RoutePreviewActivity extends Activity {
                     @Override
                     public void onSuccess(RouteResponseDto value) {
                         routeResult = BackendMapper.toRouteResult(value, routeMode);
-                        bindRouteOrUnavailable(startId, "Python backend (" + value.algorithm + ")");
+                        bindRouteOrUnavailable(startId, "Live campus routing");
                     }
 
                     @Override
                     public void onFallback(Throwable throwable) {
                         routeResult = computeLocalRoute(startId);
-                        bindRouteOrUnavailable(startId, "Offline fallback");
+                        bindRouteOrUnavailable(startId, "Saved campus routing");
                     }
                 }
         );
@@ -121,13 +123,12 @@ public final class RoutePreviewActivity extends Activity {
                         + "\nDestination: " + destinationName
                         + "\nCheckpoint: " + checkpointName(destination, destinationCheckpointId)
                         + "\nMode: " + UiText.routeModeLabel(routeMode)
-                        + "\nSource: " + sourceLabel
+                        + "\nRouting: " + sourceLabel
                         + "\nDistance: " + String.format(
                                 Locale.US,
                                 "%.0f m",
                                 routeResult.getTotalDistanceMeters()
                         )
-                        + "\nCost: " + String.format(Locale.US, "%.0f", routeResult.getTotalCost())
         );
 
         routeStepsList.removeAllViews();
@@ -136,6 +137,7 @@ public final class RoutePreviewActivity extends Activity {
             routeStepsList.addView(ViewFactory.numberedStep(this, i + 1, instructions.get(i)));
         }
         ViewFactory.setVisible(findViewById(R.id.startNavigationButton), true);
+        showCrowdWarningsIfNeeded();
     }
 
     private void bindUnavailable() {
@@ -162,13 +164,34 @@ public final class RoutePreviewActivity extends Activity {
     }
 
     private static RouteMode parseRouteMode(String value) {
-        if (RouteMode.AVOID_CROWDED_PATH.name().equals(value)) {
-            return RouteMode.AVOID_CROWDED_PATH;
-        }
         return RouteMode.SHORTEST_PATH;
     }
 
     private static String checkpointName(Checkpoint checkpoint, String fallbackId) {
         return checkpoint == null ? fallbackId : checkpoint.getCheckpointName();
+    }
+
+    private void showCrowdWarningsIfNeeded() {
+        if (warningsShown || routeResult == null || routeResult.getWarnings().isEmpty()) {
+            return;
+        }
+        StringBuilder message = new StringBuilder();
+        for (String warning : routeResult.getWarnings()) {
+            if (warning != null && warning.toLowerCase(Locale.US).contains("may be")) {
+                if (message.length() > 0) {
+                    message.append("\n\n");
+                }
+                message.append(warning);
+            }
+        }
+        if (message.length() == 0) {
+            return;
+        }
+        warningsShown = true;
+        new AlertDialog.Builder(this)
+                .setTitle("Crowd Notice")
+                .setMessage(message.toString())
+                .setPositiveButton("OK", null)
+                .show();
     }
 }
