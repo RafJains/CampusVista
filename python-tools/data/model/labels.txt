@@ -1,2 +1,0 @@
-main_gate
-library_front

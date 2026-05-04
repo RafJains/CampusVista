@@ -163,37 +163,4 @@ public final class BackendDtos {
         public List<String> warnings;
     }
 
-    public static final class RecognitionRequestDto {
-        @SerializedName("image_base64")
-        public String imageBase64;
-        @SerializedName("label_name")
-        public String labelName;
-        @SerializedName("model_label_index")
-        public Integer modelLabelIndex;
-        public Double confidence;
-    }
-
-    public static final class RecognitionCandidateDto {
-        @SerializedName("checkpoint_id")
-        public String checkpointId;
-        @SerializedName("label_name")
-        public String labelName;
-        @SerializedName("model_label_index")
-        public int modelLabelIndex;
-        @SerializedName("confidence_threshold")
-        public double confidenceThreshold;
-        public Double confidence;
-    }
-
-    public static final class RecognitionResponseDto {
-        public boolean available;
-        public String status;
-        public String message;
-        @SerializedName("checkpoint_id")
-        public String checkpointId;
-        public Double confidence;
-        public List<RecognitionCandidateDto> candidates;
-        @SerializedName("fallback_options")
-        public List<String> fallbackOptions;
-    }
 }

@@ -8,36 +8,24 @@ import java.util.List;
 
 public final class RouteResult {
     private final boolean routeFound;
-    private final String startCheckpointId;
     private final String destinationCheckpointId;
-    private final RouteMode routeMode;
     private final List<Checkpoint> checkpointPath;
-    private final List<Graph.DirectedEdge> edgePath;
     private final double totalDistanceMeters;
-    private final double totalCost;
     private final List<String> instructions;
     private final List<String> warnings;
 
     private RouteResult(
             boolean routeFound,
-            String startCheckpointId,
             String destinationCheckpointId,
-            RouteMode routeMode,
             List<Checkpoint> checkpointPath,
-            List<Graph.DirectedEdge> edgePath,
             double totalDistanceMeters,
-            double totalCost,
             List<String> instructions,
             List<String> warnings
     ) {
         this.routeFound = routeFound;
-        this.startCheckpointId = startCheckpointId;
         this.destinationCheckpointId = destinationCheckpointId;
-        this.routeMode = routeMode;
         this.checkpointPath = immutableCopy(checkpointPath);
-        this.edgePath = immutableCopy(edgePath);
         this.totalDistanceMeters = totalDistanceMeters;
-        this.totalCost = totalCost;
         this.instructions = immutableCopy(instructions);
         this.warnings = immutableCopy(warnings);
     }
@@ -55,38 +43,11 @@ public final class RouteResult {
     ) {
         return new RouteResult(
                 true,
-                startCheckpointId,
                 destinationCheckpointId,
-                routeMode,
                 checkpointPath,
-                edgePath,
                 totalDistanceMeters,
-                totalCost,
                 instructions,
                 warnings
-        );
-    }
-
-    public static RouteResult success(
-            String startCheckpointId,
-            String destinationCheckpointId,
-            RouteMode routeMode,
-            List<Checkpoint> checkpointPath,
-            List<Graph.DirectedEdge> edgePath,
-            double totalDistanceMeters,
-            double totalCost,
-            List<String> instructions
-    ) {
-        return success(
-                startCheckpointId,
-                destinationCheckpointId,
-                routeMode,
-                checkpointPath,
-                edgePath,
-                totalDistanceMeters,
-                totalCost,
-                instructions,
-                Collections.<String>emptyList()
         );
     }
 
@@ -97,13 +58,9 @@ public final class RouteResult {
     ) {
         return new RouteResult(
                 false,
-                startCheckpointId,
                 destinationCheckpointId,
-                routeMode,
                 Collections.<Checkpoint>emptyList(),
-                Collections.<Graph.DirectedEdge>emptyList(),
                 0.0,
-                Double.POSITIVE_INFINITY,
                 Collections.<String>emptyList(),
                 Collections.<String>emptyList()
         );
@@ -113,32 +70,16 @@ public final class RouteResult {
         return routeFound;
     }
 
-    public String getStartCheckpointId() {
-        return startCheckpointId;
-    }
-
     public String getDestinationCheckpointId() {
         return destinationCheckpointId;
-    }
-
-    public RouteMode getRouteMode() {
-        return routeMode;
     }
 
     public List<Checkpoint> getCheckpointPath() {
         return checkpointPath;
     }
 
-    public List<Graph.DirectedEdge> getEdgePath() {
-        return edgePath;
-    }
-
     public double getTotalDistanceMeters() {
         return totalDistanceMeters;
-    }
-
-    public double getTotalCost() {
-        return totalCost;
     }
 
     public List<String> getInstructions() {

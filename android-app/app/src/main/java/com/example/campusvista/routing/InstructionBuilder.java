@@ -34,13 +34,11 @@ public final class InstructionBuilder {
             Checkpoint previous = i == 0 ? null : checkpointPath.get(i - 1);
             Checkpoint current = checkpointPath.get(i);
             Checkpoint next = checkpointPath.get(i + 1);
-            Graph.DirectedEdge edge = edgePath.get(i);
-
             if (previous == null) {
                 instructions.add("Start walking toward " + next.getCheckpointName() + ".");
             } else {
                 String direction = directionText(previous, current, next);
-                instructions.add(direction + " toward " + wordingTarget(next, edge) + ".");
+                instructions.add(direction + " toward " + wordingTarget(next) + ".");
             }
         }
         instructions.add(arrivalInstruction(destinationName));
@@ -74,7 +72,7 @@ public final class InstructionBuilder {
         return "Turn left";
     }
 
-    private static String wordingTarget(Checkpoint next, Graph.DirectedEdge edge) {
+    private static String wordingTarget(Checkpoint next) {
         String type = normalize(next.getCheckpointType());
         String name = next.getCheckpointName();
 
@@ -95,44 +93,7 @@ public final class InstructionBuilder {
             return name;
         }
 
-        String edgeType = edge == null ? null : normalize(edge.getEdgeType());
-        if ("outdoor_walk".equals(edgeType) || "entry_transition".equals(edgeType)) {
-            return name;
-        }
         return name;
-    }
-
-    public String instructionForCheckpointType(Checkpoint next, Graph.DirectedEdge edge) {
-        String type = normalize(next.getCheckpointType());
-        String name = next.getCheckpointName();
-
-        if ("gate".equals(type)) {
-            return "Head toward " + name + ".";
-        }
-        if ("building_entry".equals(type)) {
-            if (name.toLowerCase(Locale.US).contains("entrance")) {
-                return "Head toward " + name + ".";
-            }
-            return "Head toward " + name + " entrance.";
-        }
-        if ("landmark".equals(type) || "junction".equals(type)) {
-            return "Continue toward " + name + ".";
-        }
-        if ("facility_entry".equals(type) || "parking".equals(type)) {
-            return "Head toward " + name + ".";
-        }
-        if ("outdoor_path".equals(type)) {
-            return "Walk toward " + name + ".";
-        }
-
-        String edgeType = edge == null ? null : normalize(edge.getEdgeType());
-        if ("outdoor_walk".equals(edgeType)) {
-            return "Walk toward " + name + ".";
-        }
-        if ("entry_transition".equals(edgeType)) {
-            return "Head toward " + name + ".";
-        }
-        return "Continue toward " + name + ".";
     }
 
     private static String arrivalInstruction(String destinationName) {

@@ -1,6 +1,4 @@
-<<<<<<< ours
-<<<<<<< ours
-﻿# Database Schema
+# Database Schema
 
 Python reads the MVP SQLite database at:
 
@@ -76,16 +74,6 @@ Panorama metadata by checkpoint.
 - `orientation`
 - `description`
 
-### recognition_refs
-
-Recognition label metadata for future ML integration.
-
-- `recognition_id`
-- `checkpoint_id`
-- `label_name`
-- `model_label_index`
-- `confidence_threshold`
-
 ### search_aliases
 
 Alternate search strings for places.
@@ -94,47 +82,3 @@ Alternate search strings for places.
 - `place_id`
 - `alias_text`
 - `alias_type`
-=======
-=======
->>>>>>> theirs
-# CampusVista Database Schema (Final MVP)
-
-## Production Tables (SQLite)
-1. `checkpoints`
-2. `places`
-3. `edges`
-4. `crowd_rules`
-5. `outdoor_panos`
-6. `recognition_refs`
-7. `search_aliases`
-
-## Out of Scope Tables (MVP)
-Do not add: `buildings`, `floors`, `rooms`, `guide_steps`.
-
-## Key Schema Decisions
-- `reference_image_file` is excluded from production Android DB.
-- Recognition reference images remain in Python raw/training data only.
-- Image fields in DB store **filename only** (e.g., `OUT_CP001.jpg`), never full asset paths.
-
-## Required Indexes
-- `idx_edges_from` on `edges(from_checkpoint_id)`
-- `idx_edges_to` on `edges(to_checkpoint_id)`
-- `idx_places_type` on `places(place_type)`
-- `idx_places_checkpoint` on `places(checkpoint_id)`
-- `idx_crowd_checkpoint_time` on `crowd_rules(checkpoint_id, day_type, start_time, end_time)`
-- `idx_panos_checkpoint` on `outdoor_panos(checkpoint_id)`
-- `idx_recognition_label` on `recognition_refs(model_label_index)`
-- `idx_alias_text` on `search_aliases(alias_text)`
-
-## Foreign Key Enforcement
-SQLite foreign key enforcement must be enabled in `DBHelper.onConfigure()`.
-
-## DB Versioning Rules
-- DB name: `campus_seed.db`
-- Seed copy happens at app startup through `SeedDbCopier`
-- Use versioned copy logic via `copied_db_version`
-- If version mismatch: replace DB, verify file integrity, then persist new version
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs

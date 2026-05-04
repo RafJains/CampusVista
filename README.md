@@ -6,7 +6,7 @@ CampusVista is a campus navigation MVP with a Python-heavy architecture:
 Android app -> FastAPI backend -> SQLite / JSON / assets
 ```
 
-Android is the Java/XML frontend. It handles splash, map display, search UI, location selection, route screens, panorama display, camera capture, and API calls. The Python FastAPI backend is the primary intelligence layer for database access, search, fuzzy matching, graph routing, nearest-checkpoint snapping, instruction generation, map metadata, panorama metadata, crowd warnings, and the recognition-ready placeholder flow.
+Android is the Java/XML frontend. It handles splash, map display, search UI, location selection, route screens, panorama display, and API calls. The Python FastAPI backend is the primary intelligence layer for database access, search, fuzzy matching, graph routing, nearest-checkpoint snapping, instruction generation, map metadata, panorama metadata, and crowd warnings.
 
 The older Android SQLite/repository/routing code remains in the app only as a minimal fallback for demos when the backend is unavailable.
 
@@ -37,7 +37,7 @@ This is not a standalone offline Android app unless the Python backend is also r
 
 ## MVP Features
 
-- Python FastAPI API for checkpoints, places, routing, panos, and recognition placeholders
+- Python FastAPI API for checkpoints, places, routing, and panos
 - SQLite-backed campus seed data
 - Excel-driven real-data import from `campus_data.xlsx`
 - PDF map extraction with numbered checkpoint coordinate extraction
@@ -59,8 +59,6 @@ This is not a standalone offline Android app unless the Python backend is also r
 - `GET /places/search?q=cafeteria`
 - `GET /places/{place_id}`
 - `GET /panos/{checkpoint_id}`
-- `GET /recognition/refs`
-- `POST /recognize`
 - `POST /route`
 
 Example route request:
@@ -103,8 +101,7 @@ CampusVista/
 |   |   |-- network/        # Retrofit client, backend DTOs, backend mappers
 |   |   |-- ui/             # MVP screens
 |   |   |-- data/           # local fallback repositories
-|   |   |-- routing/        # local fallback routing
-|   |   `-- recognition/    # camera/recognition fallback scaffolding
+|   |   `-- routing/        # local fallback routing
 |   `-- app/src/main/res/
 |-- python-backend/
 |   |-- app/
@@ -112,7 +109,7 @@ CampusVista/
 |   |   |-- db.py
 |   |   |-- models.py
 |   |   |-- routes/api.py   # all MVP API endpoints
-|   |   |-- services/       # search, routing, crowd, panos, recognition
+|   |   |-- services/       # search, routing, crowd, panos
 |   |   `-- utils/
 |   |-- data/
 |   |-- tests/
@@ -176,29 +173,12 @@ adb install -r app\build\outputs\apk\debug\app-debug.apk
 
 Start the backend before opening the app. On the Android emulator, Retrofit will reach the laptop backend through `http://10.0.2.2:8000/`.
 
-<<<<<<< ours
 For a physical phone, install an APK built with `-PcampusVistaBackendUrl=http://<laptop-ip>:8000/`.
-=======
-* Indoor navigation
-* Room-level search
-* Floor maps
-* Indoor 360 panoramas
-* GPS-assisted positioning
-* Real-time crowd estimation
-* Admin dashboard
-* Backend-based sync
-<<<<<<< ours
-=======
-
->>>>>>> theirs
-
->>>>>>> theirs
 
 ## Demo Checklist
 
 Before the demo:
 
-<<<<<<< ours
 - Start the FastAPI backend and confirm `/health`.
 - Confirm search works with `cafeteria`.
 - Confirm route generation from `OUT_CP001` to `PL_002`.
@@ -206,7 +186,6 @@ Before the demo:
 - Launch the Android emulator before presenting.
 - Open CampusVista and verify the splash screen reaches the home map.
 
-<<<<<<< ours
 Suggested live flow:
 
 - Show the Python backend terminal running.
@@ -218,7 +197,6 @@ Suggested live flow:
 - Show the crowd notice if the selected route is active during a crowd-rule time window.
 - Start outdoor navigation.
 - Open the panorama view for a checkpoint with pano data.
-- Show the camera recognition fallback and explain it is ML-ready placeholder behavior.
 
 ## Demo Failure Notes
 
@@ -228,7 +206,6 @@ Suggested live flow:
 - Port already in use: stop the other process or run FastAPI on another port and update Android before rebuilding.
 - Missing Python packages: activate `.venv` and run `pip install -r requirements.txt`.
 - Missing seed data: verify `python-backend/data/campus_seed.db` exists.
-- Recognition expectations: the current recognition API is a placeholder/fallback flow, not a trained production ML model.
 
 ## Build And Test
 
@@ -241,12 +218,6 @@ gradlew.bat :app:assembleDebug
 
 ## MVP Boundaries
 
-Included now: outdoor navigation, map-based location selection, search, route preview/options, outdoor nav, panorama lookup/display, and recognition-ready fallback screens.
+Included now: outdoor navigation, map-based location selection, search, route preview/options, outdoor nav, and panorama lookup/display.
 
-Not included yet: production ML recognition, indoor navigation, live crowd feeds, GPS turn-by-turn, admin tools, and packaged on-device Python.
-=======
-CampusVista Team
->>>>>>> theirs
-=======
-CampusVista Team
->>>>>>> theirs
+Not included yet: indoor navigation, live crowd feeds, GPS turn-by-turn, admin tools, and packaged on-device Python.

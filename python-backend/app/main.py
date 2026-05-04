@@ -13,7 +13,7 @@ app = FastAPI(
     version="0.1.0",
     description=(
         "Python-heavy CampusVista backend for search, routing, crowd costs, "
-        "instructions, pano metadata, and recognition-ready APIs."
+        "instructions, and pano metadata."
     ),
 )
 

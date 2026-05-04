@@ -10,35 +10,49 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <LinearLayout
+            android:id="@+id/homeBrandRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/homeBrandName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/app_name"
+                android:textColor="@color/cv_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/homeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:letterSpacing="0"
-            android:text="@string/app_name"
+            android:text="Campus Map"
             android:textColor="@color/cv_ink"
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/currentLocationLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/cv_card"
-            android:elevation="2dp"
-            android:padding="14dp"
-            android:textColor="@color/cv_muted"
-            android:textSize="14sp" />
-
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="260dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/cv_map_panel"
             android:clipToOutline="true"
             android:elevation="2dp"
-            android:padding="12dp">
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/campusMapImage"
@@ -48,50 +62,50 @@
                 android:contentDescription="@string/campus_map_content_description"
                 android:scaleType="fitCenter" />
 
-            <TextView
-                android:id="@+id/mapSummary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|start"
-                android:layout_margin="4dp"
-                android:background="@drawable/cv_map_badge"
-                android:elevation="2dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="10dp"
-                android:textColor="@color/cv_ink"
-                android:textSize="12sp" />
         </FrameLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/startLocationField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:orientation="horizontal">
+            android:background="@drawable/cv_input"
+            android:clickable="true"
+            android:elevation="1dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="62dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/openSearchButton"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/cv_button_primary"
-                android:elevation="2dp"
-                android:text="Search"
-                android:textColor="@color/cv_white" />
+        <TextView
+            android:id="@+id/endLocationField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cv_input"
+            android:clickable="true"
+            android:elevation="1dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="62dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/setLocationButton"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/cv_button_secondary"
-                android:elevation="1dp"
-                android:text="Set Location"
-                android:textColor="@color/cv_blue_dark" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/startNavigationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cv_button_primary"
+            android:elevation="2dp"
+            android:minHeight="52dp"
+            android:text="Start navigation"
+            android:textColor="@color/cv_white" />
 
         <TextView
             android:id="@+id/categoriesTitle"
@@ -121,7 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="Outdoor Places"
+            android:text="Recommended"
             android:textColor="@color/cv_ink"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -133,21 +147,5 @@
             android:layout_marginTop="8dp"
             android:orientation="vertical" />
 
-        <TextView
-            android:id="@+id/checkpointsTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="Checkpoints"
-            android:textColor="@color/cv_ink"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/checkpointList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical" />
     </LinearLayout>
 </ScrollView>

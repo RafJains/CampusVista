@@ -3,8 +3,9 @@
     <color name="cv_blue_dark">#1557B0</color>
     <color name="cv_green">#0F9D73</color>
     <color name="cv_green_dark">#087A5B</color>
+    <color name="cv_navy">#12303E</color>
     <color name="cv_ink">#14212B</color>
-    <color name="cv_surface">#F4F8FB</color>
+    <color name="cv_surface">#F7F9FA</color>
     <color name="cv_surface_alt">#EAF3FF</color>
     <color name="cv_white">#FFFFFF</color>
     <color name="cv_border">#DCE7EE</color>

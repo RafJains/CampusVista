@@ -39,9 +39,6 @@ class CrowdService:
             rules.setdefault(checkpoint_id, []).append(dict(row))
         return rules
 
-    def get_penalty_by_checkpoint(self, now: datetime | None = None) -> dict[str, float]:
-        return {}
-
     def warnings_for_checkpoints(
         self,
         checkpoint_ids: list[str],
@@ -68,12 +65,7 @@ class CrowdService:
                 )
         return warnings
 
-    def calculate_edge_cost(
-        self,
-        edge: DirectedEdge,
-        route_mode: str,
-        penalty_by_checkpoint: dict[str, float],
-    ) -> float:
+    def calculate_edge_cost(self, edge: DirectedEdge) -> float:
         return edge.distance_meters
 
     @staticmethod

@@ -17,10 +17,8 @@
         <activity android:name=".ui.navigation.OutdoorNavActivity" />
         <activity android:name=".ui.pano.OutdoorPanoActivity" />
         <activity android:name=".ui.route.RoutePreviewActivity" />
-        <activity android:name=".ui.route.RouteOptionsActivity" />
         <activity android:name=".ui.place.PlaceDetailsActivity" />
         <activity android:name=".ui.search.SearchActivity" />
-        <activity android:name=".ui.location.CameraLocationActivity" />
         <activity android:name=".ui.location.SetLocationActivity" />
         <activity android:name=".ui.home.HomeMapActivity" />
         <activity

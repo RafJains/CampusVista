@@ -1,7 +1,5 @@
 package com.example.campusvista.ui.common;
 
-import com.example.campusvista.routing.RouteMode;
-
 import java.util.Locale;
 
 public final class UiText {
@@ -27,9 +25,5 @@ public final class UiText {
             }
         }
         return builder.toString();
-    }
-
-    public static String routeModeLabel(RouteMode routeMode) {
-        return "Shortest Path";
     }
 }

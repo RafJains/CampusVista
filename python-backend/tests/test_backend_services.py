@@ -9,7 +9,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app.services.pano_service import PanoService  # noqa: E402
-from app.services.recognition_service import RecognitionService  # noqa: E402
 from app.services.routing_service import RoutingService  # noqa: E402
 from app.services.search_service import SearchService  # noqa: E402
 
@@ -67,19 +66,6 @@ class BackendServiceTests(unittest.TestCase):
         pano = PanoService(DB_PATH).get_pano_for_checkpoint("OUT_CP004")
         self.assertIsNotNone(pano)
         self.assertEqual("OUT_CP004.jpg", pano["image_file"])
-
-    def test_recognition_placeholder_maps_supplied_label(self) -> None:
-        service = RecognitionService(DB_PATH)
-        response = service.recognize(
-            {
-                "model_label_index": 0,
-                "confidence": 0.82,
-            }
-        )
-
-        self.assertTrue(response["available"])
-        self.assertEqual("accepted", response["status"])
-        self.assertEqual("OUT_CP001", response["checkpoint_id"])
 
 
 if __name__ == "__main__":

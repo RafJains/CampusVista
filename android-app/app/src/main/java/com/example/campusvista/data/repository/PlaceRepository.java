@@ -40,14 +40,6 @@ public final class PlaceRepository {
         ));
     }
 
-    public List<Place> getPlacesByCheckpoint(String checkpointId) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toPlaces(database.rawQuery(
-                "SELECT * FROM places WHERE checkpoint_id = ? ORDER BY place_name",
-                new String[]{checkpointId}
-        ));
-    }
-
     public List<Place> getPlacesByType(String placeType) {
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         return QueryMapper.toPlaces(database.rawQuery(

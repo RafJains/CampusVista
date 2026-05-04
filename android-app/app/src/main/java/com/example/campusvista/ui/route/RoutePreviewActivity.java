@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,11 +19,8 @@ import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
-import com.example.campusvista.ui.common.UiText;
-import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.navigation.OutdoorNavActivity;
 
-import java.util.List;
 import java.util.Locale;
 
 public final class RoutePreviewActivity extends Activity {
@@ -33,7 +29,6 @@ public final class RoutePreviewActivity extends Activity {
     private String destinationPlaceId;
     private RouteMode routeMode;
     private RouteResult routeResult;
-    private LinearLayout routeStepsList;
     private boolean warningsShown;
 
     @Override
@@ -41,14 +36,14 @@ public final class RoutePreviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_preview);
 
-        routeStepsList = findViewById(R.id.routeStepsList);
         destinationPlaceId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
         destinationCheckpointId = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID);
         destinationName = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_NAME);
-        routeMode = parseRouteMode(getIntent().getStringExtra(NavExtras.EXTRA_ROUTE_MODE));
+        routeMode = RouteMode.SHORTEST_PATH;
 
-        findViewById(R.id.startNavigationButton).setOnClickListener(view -> openNavigation());
-        findViewById(R.id.changeRouteButton).setOnClickListener(view -> finish());
+        findViewById(R.id.navigationStepsButton).setOnClickListener(view -> openNavigation(false));
+        findViewById(R.id.panoModeButton).setOnClickListener(view -> openNavigation(true));
+        setRouteActionsEnabled(false);
 
         computeAndBindRoute();
     }
@@ -61,10 +56,7 @@ public final class RoutePreviewActivity extends Activity {
             return;
         }
 
-        ((TextView) findViewById(R.id.previewMeta)).setText(
-                "Calculating route..."
-        );
-        routeStepsList.removeAllViews();
+        ((TextView) findViewById(R.id.previewStatus)).setText("Calculating route...");
         RouteRequestDto request = RouteRequestDto.forCheckpoints(
                 startId,
                 destinationCheckpointId,
@@ -80,13 +72,13 @@ public final class RoutePreviewActivity extends Activity {
                     @Override
                     public void onSuccess(RouteResponseDto value) {
                         routeResult = BackendMapper.toRouteResult(value, routeMode);
-                        bindRouteOrUnavailable(startId, "Live campus routing");
+                        bindRouteOrUnavailable(startId);
                     }
 
                     @Override
                     public void onFallback(Throwable throwable) {
                         routeResult = computeLocalRoute(startId);
-                        bindRouteOrUnavailable(startId, "Saved campus routing");
+                        bindRouteOrUnavailable(startId);
                     }
                 }
         );
@@ -102,7 +94,7 @@ public final class RoutePreviewActivity extends Activity {
         );
     }
 
-    private void bindRouteOrUnavailable(String startId, String sourceLabel) {
+    private void bindRouteOrUnavailable(String startId) {
         if (!routeResult.isRouteFound()) {
             bindUnavailable();
             return;
@@ -118,40 +110,37 @@ public final class RoutePreviewActivity extends Activity {
                     .get(routeResult.getCheckpointPath().size() - 1);
         }
 
-        ((TextView) findViewById(R.id.previewMeta)).setText(
-                "Start: " + checkpointName(start, startId)
-                        + "\nDestination: " + destinationName
-                        + "\nCheckpoint: " + checkpointName(destination, destinationCheckpointId)
-                        + "\nMode: " + UiText.routeModeLabel(routeMode)
-                        + "\nRouting: " + sourceLabel
-                        + "\nDistance: " + String.format(
-                                Locale.US,
-                                "%.0f m",
-                                routeResult.getTotalDistanceMeters()
-                        )
+        bindMetrics(
+                checkpointName(start, startId),
+                destinationName == null ? checkpointName(destination, destinationCheckpointId) : destinationName,
+                routeResult.getTotalDistanceMeters()
         );
-
-        routeStepsList.removeAllViews();
-        List<String> instructions = routeResult.getInstructions();
-        for (int i = 0; i < instructions.size(); i++) {
-            routeStepsList.addView(ViewFactory.numberedStep(this, i + 1, instructions.get(i)));
-        }
-        ViewFactory.setVisible(findViewById(R.id.startNavigationButton), true);
+        ((TextView) findViewById(R.id.previewStatus)).setText("");
+        setRouteActionsEnabled(true);
         showCrowdWarningsIfNeeded();
     }
 
     private void bindUnavailable() {
-        ((TextView) findViewById(R.id.previewMeta)).setText(
-                "No outdoor route found between these points."
+        ((TextView) findViewById(R.id.previewStatus)).setText(
+                "No route found. Choose a different start or end."
         );
-        routeStepsList.removeAllViews();
-        routeStepsList.addView(ViewFactory.cardText(this, "Choose another start point.", null));
-        routeStepsList.addView(ViewFactory.cardText(this, "Choose another destination.", null));
-        routeStepsList.addView(ViewFactory.cardText(this, "Return to map.", null));
-        ViewFactory.setVisible(findViewById(R.id.startNavigationButton), false);
+        setRouteActionsEnabled(false);
     }
 
-    private void openNavigation() {
+    private void bindMetrics(String startName, String endName, double distanceMeters) {
+        ((TextView) findViewById(R.id.previewStart)).setText("Start\n" + startName);
+        ((TextView) findViewById(R.id.previewEnd)).setText("End\n" + endName);
+        ((TextView) findViewById(R.id.previewDistance)).setText(
+                "Distance\n" + String.format(Locale.US, "%.0f m", distanceMeters)
+        );
+    }
+
+    private void setRouteActionsEnabled(boolean enabled) {
+        findViewById(R.id.navigationStepsButton).setEnabled(enabled);
+        findViewById(R.id.panoModeButton).setEnabled(enabled);
+    }
+
+    private void openNavigation(boolean startInPano) {
         if (routeResult == null || !routeResult.isRouteFound()) {
             return;
         }
@@ -159,12 +148,8 @@ public final class RoutePreviewActivity extends Activity {
         intent.putExtra(NavExtras.EXTRA_PLACE_ID, destinationPlaceId);
         intent.putExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID, destinationCheckpointId);
         intent.putExtra(NavExtras.EXTRA_DESTINATION_NAME, destinationName);
-        intent.putExtra(NavExtras.EXTRA_ROUTE_MODE, routeMode.name());
+        intent.putExtra(NavExtras.EXTRA_START_IN_PANO, startInPano);
         startActivity(intent);
-    }
-
-    private static RouteMode parseRouteMode(String value) {
-        return RouteMode.SHORTEST_PATH;
     }
 
     private static String checkpointName(Checkpoint checkpoint, String fallbackId) {
@@ -189,7 +174,7 @@ public final class RoutePreviewActivity extends Activity {
         }
         warningsShown = true;
         new AlertDialog.Builder(this)
-                .setTitle("Crowd Notice")
+                .setTitle("Busy Area")
                 .setMessage(message.toString())
                 .setPositiveButton("OK", null)
                 .show();

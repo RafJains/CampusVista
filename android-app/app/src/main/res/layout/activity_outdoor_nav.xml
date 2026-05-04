@@ -2,41 +2,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/cv_surface"
     android:orientation="vertical"
     android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/navBrandName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/app_name"
+            android:textColor="@color/cv_ink"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/navTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Outdoor Navigation"
+        android:layout_marginTop="16dp"
+        android:text="Navigation Steps"
         android:textColor="@color/cv_ink"
-        android:textSize="28sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/navSummary"
+    <LinearLayout
+        android:id="@+id/navMetricRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/cv_card"
-        android:elevation="1dp"
-        android:padding="14dp"
-        android:textColor="@color/cv_muted"
-        android:textSize="14sp" />
+        android:layout_marginTop="14dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/navStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="54dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/navEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="54dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/navDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/navProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/cv_map_badge"
-        android:paddingBottom="8dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="8dp"
-        android:textColor="@color/cv_blue_dark"
+        android:layout_marginTop="14dp"
+        android:textColor="@color/cv_green_dark"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -44,7 +101,7 @@
         android:id="@+id/navInstruction"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:background="@drawable/cv_card"
         android:elevation="2dp"
@@ -52,14 +109,14 @@
         android:lineSpacingExtra="3dp"
         android:padding="22dp"
         android:textColor="@color/cv_ink"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/navPanoPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:background="@drawable/cv_card"
         android:elevation="2dp"
@@ -75,7 +132,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/cv_map_panel"
             android:clipToOutline="true"
-            android:contentDescription="Current checkpoint panorama"
+            android:contentDescription="Current panorama"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -108,7 +165,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/cv_button_secondary"
                 android:text="Previous"
-                android:textColor="@color/cv_blue_dark" />
+                android:textColor="@color/cv_navy" />
 
             <Button
                 android:id="@+id/navPanoNextButton"
@@ -128,35 +185,38 @@
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/cv_button_secondary"
-            android:text="Back to Map"
-            android:textColor="@color/cv_blue_dark" />
+            android:text="Steps"
+            android:textColor="@color/cv_navy" />
     </LinearLayout>
 
     <Button
         android:id="@+id/navPanoButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/cv_button_secondary"
+        android:minHeight="48dp"
         android:text="Pano Mode"
-        android:textColor="@color/cv_blue_dark" />
+        android:textColor="@color/cv_navy" />
 
     <Button
         android:id="@+id/navNextButton"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/cv_button_primary"
         android:elevation="2dp"
+        android:minHeight="52dp"
         android:text="Next"
         android:textColor="@color/cv_white" />
 
     <Button
         android:id="@+id/navCompleteButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/cv_button_secondary"
-        android:text="Complete Route"
-        android:textColor="@color/cv_blue_dark" />
+        android:minHeight="48dp"
+        android:text="Finish"
+        android:textColor="@color/cv_navy" />
 </LinearLayout>

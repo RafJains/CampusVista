@@ -3,7 +3,7 @@ from __future__ import annotations
 import heapq
 import json
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from app import db
 from app.models import RouteRequest
@@ -26,6 +26,10 @@ class RoutingService:
         self.instruction_service = InstructionService()
         self.pano_service = PanoService(db_path)
         self.search_service = SearchService(db_path)
+        self._checkpoints: list[dict[str, Any]] | None = None
+        self._edges: list[dict[str, Any]] | None = None
+        self._map_config: dict[str, Any] | None = None
+        self._graph: Graph | None = None
 
     def compute_route(self, request: RouteRequest | Mapping[str, Any]) -> dict[str, Any]:
         payload = (
@@ -38,11 +42,10 @@ class RoutingService:
         meters_per_pixel = float(config["meters_per_pixel"])
         route_mode = normalize_route_mode(payload.get("route_mode"))
         now = parse_now(payload.get("now_iso"))
-        start_id, start_warning = self.resolve_start(payload, graph, meters_per_pixel)
+        start_id, start_warning = self.resolve_start(payload)
         destination_id, destination_name, destination_warning = self.resolve_destination(
             payload,
             graph,
-            meters_per_pixel,
             start_id,
         )
 
@@ -77,23 +80,24 @@ class RoutingService:
                 warnings=warnings + crowd_warnings,
             )
 
-        penalties: dict[str, float] = {}
-        edge_path, total_cost = self._a_star(
+        edge_path, total_cost = self._shortest_path(
             graph,
             start_id,
             destination_id,
-            route_mode,
-            penalties,
-            meters_per_pixel,
+            lambda checkpoint_id: self._heuristic(
+                graph,
+                checkpoint_id,
+                destination_id,
+                meters_per_pixel,
+            ),
         )
         algorithm = "astar"
         if edge_path is None:
-            edge_path, total_cost = self._dijkstra(
+            edge_path, total_cost = self._shortest_path(
                 graph,
                 start_id,
                 destination_id,
-                route_mode,
-                penalties,
+                lambda checkpoint_id: 0.0,
             )
             algorithm = "dijkstra"
 
@@ -141,16 +145,20 @@ class RoutingService:
         )
 
     def get_checkpoints(self) -> list[dict[str, Any]]:
-        return db.fetch_all(
-            "SELECT * FROM checkpoints ORDER BY checkpoint_id",
-            db_path=self.db_path,
-        )
+        if self._checkpoints is None:
+            self._checkpoints = db.fetch_all(
+                "SELECT * FROM checkpoints ORDER BY checkpoint_id",
+                db_path=self.db_path,
+            )
+        return self._checkpoints
 
     def get_edges(self) -> list[dict[str, Any]]:
-        return db.fetch_all(
-            "SELECT * FROM edges ORDER BY edge_id",
-            db_path=self.db_path,
-        )
+        if self._edges is None:
+            self._edges = db.fetch_all(
+                "SELECT * FROM edges ORDER BY edge_id",
+                db_path=self.db_path,
+            )
+        return self._edges
 
     def get_checkpoint(self, checkpoint_id: str) -> dict[str, Any] | None:
         return db.fetch_one(
@@ -160,18 +168,23 @@ class RoutingService:
         )
 
     def get_map_config(self) -> dict[str, Any]:
-        config_path = db.DEFAULT_MAP_CONFIG_PATH
-        if config_path.exists():
-            return json.loads(config_path.read_text(encoding="utf-8"))
-        return {
-            "campus_map_file": "campus_map.png",
-            "campus_map_width_px": 3000,
-            "campus_map_height_px": 1800,
-            "meters_per_pixel": 0.2,
-        }
+        if self._map_config is None:
+            config_path = db.DEFAULT_MAP_CONFIG_PATH
+            if config_path.exists():
+                self._map_config = json.loads(config_path.read_text(encoding="utf-8"))
+            else:
+                self._map_config = {
+                    "campus_map_file": "campus_map.png",
+                    "campus_map_width_px": 3000,
+                    "campus_map_height_px": 1800,
+                    "meters_per_pixel": 0.2,
+                }
+        return self._map_config
 
     def build_graph(self) -> Graph:
-        return build_graph(self.get_checkpoints(), self.get_edges())
+        if self._graph is None:
+            self._graph = build_graph(self.get_checkpoints(), self.get_edges())
+        return self._graph
 
     def nearest_checkpoint(self, x: float, y: float) -> dict[str, Any]:
         config = self.get_map_config()
@@ -193,8 +206,6 @@ class RoutingService:
     def resolve_start(
         self,
         payload: Mapping[str, Any],
-        graph: Graph,
-        meters_per_pixel: float,
     ) -> tuple[str | None, str | None]:
         checkpoint_id = payload.get("start_checkpoint_id")
         if checkpoint_id:
@@ -216,7 +227,6 @@ class RoutingService:
         self,
         payload: Mapping[str, Any],
         graph: Graph,
-        meters_per_pixel: float,
         start_id: str | None = None,
     ) -> tuple[str | None, str | None, str | None]:
         checkpoint_id = payload.get("destination_checkpoint_id")
@@ -302,17 +312,15 @@ class RoutingService:
                 warnings.append("Route validation warning: edge ends at an unexpected checkpoint.")
         return warnings
 
-    def _a_star(
+    def _shortest_path(
         self,
         graph: Graph,
         start_id: str,
         destination_id: str,
-        route_mode: str,
-        penalties: dict[str, float],
-        meters_per_pixel: float,
+        heuristic_cost: Callable[[str], float],
     ) -> tuple[list[DirectedEdge], float] | tuple[None, float]:
         open_set: list[tuple[float, float, str]] = []
-        heapq.heappush(open_set, (0.0, 0.0, start_id))
+        heapq.heappush(open_set, (heuristic_cost(start_id), 0.0, start_id))
         best_cost = {start_id: 0.0}
         came_from: dict[str, DirectedEdge] = {}
 
@@ -324,47 +332,13 @@ class RoutingService:
                 return self._reconstruct_edges(start_id, destination_id, came_from), current_cost
 
             for edge in graph.outgoing(current_id):
-                edge_cost = self.crowd_service.calculate_edge_cost(edge, route_mode, penalties)
+                edge_cost = self.crowd_service.calculate_edge_cost(edge)
                 next_cost = current_cost + edge_cost
                 if next_cost < best_cost.get(edge.to_checkpoint_id, float("inf")):
                     best_cost[edge.to_checkpoint_id] = next_cost
                     came_from[edge.to_checkpoint_id] = edge
-                    priority = next_cost + self._heuristic(
-                        graph,
-                        edge.to_checkpoint_id,
-                        destination_id,
-                        meters_per_pixel,
-                    )
+                    priority = next_cost + heuristic_cost(edge.to_checkpoint_id)
                     heapq.heappush(open_set, (priority, next_cost, edge.to_checkpoint_id))
-        return None, 0.0
-
-    def _dijkstra(
-        self,
-        graph: Graph,
-        start_id: str,
-        destination_id: str,
-        route_mode: str,
-        penalties: dict[str, float],
-    ) -> tuple[list[DirectedEdge], float] | tuple[None, float]:
-        open_set: list[tuple[float, str]] = []
-        heapq.heappush(open_set, (0.0, start_id))
-        best_cost = {start_id: 0.0}
-        came_from: dict[str, DirectedEdge] = {}
-
-        while open_set:
-            current_cost, current_id = heapq.heappop(open_set)
-            if current_cost > best_cost.get(current_id, float("inf")):
-                continue
-            if current_id == destination_id:
-                return self._reconstruct_edges(start_id, destination_id, came_from), current_cost
-
-            for edge in graph.outgoing(current_id):
-                edge_cost = self.crowd_service.calculate_edge_cost(edge, route_mode, penalties)
-                next_cost = current_cost + edge_cost
-                if next_cost < best_cost.get(edge.to_checkpoint_id, float("inf")):
-                    best_cost[edge.to_checkpoint_id] = next_cost
-                    came_from[edge.to_checkpoint_id] = edge
-                    heapq.heappush(open_set, (next_cost, edge.to_checkpoint_id))
         return None, 0.0
 
     @staticmethod
@@ -432,10 +406,9 @@ class RoutingService:
             "checkpoint_ids": [str(row["checkpoint_id"]) for row in checkpoints],
             "checkpoints": [dict(row) for row in checkpoints],
             "edges": [edge.to_dict() for edge in edges],
-            "panos": [
-                self.pano_service.get_pano_for_checkpoint(str(row["checkpoint_id"]))
-                for row in checkpoints
-            ],
+            "panos": self.pano_service.get_panos_for_checkpoints(
+                [str(row["checkpoint_id"]) for row in checkpoints]
+            ),
             "instructions": instructions,
             "warnings": warnings,
         }

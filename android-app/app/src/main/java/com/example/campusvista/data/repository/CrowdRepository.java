@@ -7,8 +7,6 @@ import com.example.campusvista.data.local.DBHelper;
 import com.example.campusvista.data.local.QueryMapper;
 import com.example.campusvista.data.model.CrowdRule;
 
-import java.util.List;
-
 public final class CrowdRepository {
     private static CrowdRepository instance;
     private final DBHelper dbHelper;
@@ -24,42 +22,6 @@ public final class CrowdRepository {
         this.dbHelper = dbHelper;
     }
 
-    public List<CrowdRule> getAllCrowdRules() {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toCrowdRules(database.rawQuery(
-                "SELECT * FROM crowd_rules ORDER BY checkpoint_id, day_type, start_time",
-                null
-        ));
-    }
-
-    public CrowdRule getCrowdRuleById(String crowdRuleId) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.firstCrowdRuleOrNull(database.rawQuery(
-                "SELECT * FROM crowd_rules WHERE crowd_rule_id = ? LIMIT 1",
-                new String[]{crowdRuleId}
-        ));
-    }
-
-    public List<CrowdRule> getCrowdRulesForCheckpoint(String checkpointId) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toCrowdRules(database.rawQuery(
-                "SELECT * FROM crowd_rules " +
-                        "WHERE checkpoint_id = ? " +
-                        "ORDER BY day_type, start_time",
-                new String[]{checkpointId}
-        ));
-    }
-
-    public List<CrowdRule> getActiveCrowdRules(String dayType, String currentTime) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toCrowdRules(database.rawQuery(
-                "SELECT * FROM crowd_rules " +
-                        "WHERE day_type = ? AND start_time <= ? AND end_time > ? " +
-                        "ORDER BY checkpoint_id",
-                new String[]{dayType, currentTime, currentTime}
-        ));
-    }
-
     public CrowdRule getActiveCrowdRuleForCheckpoint(
             String checkpointId,
             String dayType,
@@ -67,7 +29,7 @@ public final class CrowdRepository {
     ) {
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         return QueryMapper.firstCrowdRuleOrNull(database.rawQuery(
-                "SELECT * FROM crowd_rules " +
+                "SELECT start_time, end_time, crowd_level FROM crowd_rules " +
                         "WHERE checkpoint_id = ? " +
                         "AND day_type = ? " +
                         "AND start_time <= ? " +

@@ -5,12 +5,12 @@
     android:background="@color/cv_surface"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="32dp">
+        android:padding="32dp">
 
     <ImageView
         android:id="@+id/splashMark"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:contentDescription="@string/app_name"
         android:elevation="3dp"
         android:src="@drawable/ic_launcher" />
@@ -23,7 +23,7 @@
         android:letterSpacing="0"
         android:text="@string/app_name"
         android:textColor="@color/cv_ink"
-        android:textSize="38sp"
+        android:textSize="34sp"
         android:textStyle="bold" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:lineSpacingExtra="2dp"
-        android:text="@string/app_tagline"
+        android:text="Campus navigation"
         android:textColor="@color/cv_muted"
         android:textSize="16sp" />
 
@@ -47,6 +47,6 @@
         android:gravity="center"
         android:padding="14dp"
         android:text="@string/startup_ready"
-        android:textColor="@color/cv_blue_dark"
+        android:textColor="@color/cv_navy"
         android:textSize="14sp" />
 </LinearLayout>

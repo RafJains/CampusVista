@@ -20,12 +20,6 @@ public final class LocationStore {
         return getPrefs(context).getString(KEY_CURRENT_CHECKPOINT_ID, null);
     }
 
-    public static void clearCurrentCheckpoint(Context context) {
-        getPrefs(context).edit()
-                .remove(KEY_CURRENT_CHECKPOINT_ID)
-                .apply();
-    }
-
     private static SharedPreferences getPrefs(Context context) {
         return context.getApplicationContext()
                 .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

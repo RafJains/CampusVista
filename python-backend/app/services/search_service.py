@@ -11,12 +11,16 @@ from app.utils.distance_utils import normalize_text
 class SearchService:
     def __init__(self, db_path: Path | str | None = None) -> None:
         self.db_path = db_path
+        self._places: list[dict[str, Any]] | None = None
+        self._aliases: dict[str, list[str]] | None = None
 
     def get_places(self) -> list[dict[str, Any]]:
-        return db.fetch_all(
-            "SELECT * FROM places ORDER BY place_name",
-            db_path=self.db_path,
-        )
+        if self._places is None:
+            self._places = db.fetch_all(
+                "SELECT * FROM places ORDER BY place_name",
+                db_path=self.db_path,
+            )
+        return self._places
 
     def get_place(self, place_id: str) -> dict[str, Any] | None:
         return db.fetch_one(
@@ -88,6 +92,8 @@ class SearchService:
         )[:limit]
 
     def _aliases_by_place(self) -> dict[str, list[str]]:
+        if self._aliases is not None:
+            return self._aliases
         rows = db.fetch_all(
             "SELECT place_id, alias_text FROM search_aliases",
             db_path=self.db_path,
@@ -95,7 +101,8 @@ class SearchService:
         aliases: dict[str, list[str]] = {}
         for row in rows:
             aliases.setdefault(str(row["place_id"]), []).append(str(row["alias_text"]))
-        return aliases
+        self._aliases = aliases
+        return self._aliases
 
     def _empty_query_results(
         self,

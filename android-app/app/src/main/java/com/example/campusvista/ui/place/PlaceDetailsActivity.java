@@ -22,7 +22,7 @@ import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.location.SetLocationActivity;
 import com.example.campusvista.ui.pano.OutdoorPanoActivity;
-import com.example.campusvista.ui.route.RouteOptionsActivity;
+import com.example.campusvista.ui.route.RoutePreviewActivity;
 
 public final class PlaceDetailsActivity extends Activity {
     private Place place;
@@ -149,7 +149,7 @@ public final class PlaceDetailsActivity extends Activity {
                 return;
             }
             LocationStore.setCurrentCheckpointId(this, place.getCheckpointId());
-            Toast.makeText(this, "Current location set.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Start set.", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.routeHereButton).setOnClickListener(view -> {
@@ -157,11 +157,11 @@ public final class PlaceDetailsActivity extends Activity {
                 return;
             }
             if (LocationStore.getCurrentCheckpointId(this) == null) {
-                Toast.makeText(this, "Set current location first.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Choose a start first.", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, SetLocationActivity.class));
                 return;
             }
-            Intent intent = new Intent(this, RouteOptionsActivity.class);
+            Intent intent = new Intent(this, RoutePreviewActivity.class);
             intent.putExtra(NavExtras.EXTRA_PLACE_ID, place.getPlaceId());
             intent.putExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID, place.getCheckpointId());
             intent.putExtra(NavExtras.EXTRA_DESTINATION_NAME, place.getPlaceName());
@@ -175,8 +175,5 @@ public final class PlaceDetailsActivity extends Activity {
         ((TextView) findViewById(R.id.placeDescription)).setText(
                 place.getDescription() == null ? "" : place.getDescription()
         );
-        ((TextView) findViewById(R.id.placeCheckpoint)).setText(checkpoint == null
-                ? "Checkpoint: " + place.getCheckpointId()
-                : "Checkpoint: " + checkpoint.getCheckpointName());
     }
 }

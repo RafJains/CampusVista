@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
-import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
 import com.example.campusvista.network.BackendClient;
 import com.example.campusvista.network.BackendClient.BackendCallback;
@@ -28,12 +27,12 @@ public final class OutdoorPanoActivity extends Activity {
         checkpointId = getIntent().getStringExtra(NavExtras.EXTRA_CHECKPOINT_ID);
         findViewById(R.id.backToMapButton).setOnClickListener(view -> finish());
         if (checkpointId == null) {
-            Toast.makeText(this, "No outdoor pano is available here.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pano is not ready here.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        ((TextView) findViewById(R.id.panoLocationName)).setText("Loading outdoor panorama...");
+        ((TextView) findViewById(R.id.panoLocationName)).setText("Loading panorama...");
         loadPanoFromBackend();
     }
 
@@ -44,7 +43,7 @@ public final class OutdoorPanoActivity extends Activity {
                     @Override
                     public void onSuccess(PanoDto value) {
                         OutdoorPano pano = BackendMapper.toPano(value);
-                        bindPano(pano, "Live panorama data");
+                        bindPano(pano);
                     }
 
                     @Override
@@ -52,45 +51,29 @@ public final class OutdoorPanoActivity extends Activity {
                         OutdoorPano pano = ((CampusVistaApp) getApplication())
                                 .getPanoRepository()
                                 .getOutdoorPanoForCheckpoint(checkpointId);
-                        if (pano == null) {
-                            Toast.makeText(
-                                    OutdoorPanoActivity.this,
-                                    "No outdoor pano is available here.",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            finish();
-                            return;
-                        }
-                        bindPano(pano, "Saved panorama data");
+                        bindPano(pano);
                     }
                 }
         );
     }
 
-    private void bindPano(OutdoorPano pano, String source) {
+    private void bindPano(OutdoorPano pano) {
         CampusVistaApp app = (CampusVistaApp) getApplication();
-        Checkpoint checkpoint = app.getCheckpointRepository().getCheckpointById(checkpointId);
-        String checkpointName = checkpoint == null
-                ? getIntent().getStringExtra(NavExtras.EXTRA_CHECKPOINT_NAME)
-                : checkpoint.getCheckpointName();
-        if (checkpointName == null || checkpointName.trim().isEmpty()) {
-            checkpointName = checkpointId;
-        }
-
-        ((TextView) findViewById(R.id.panoLocationName)).setText(checkpointName);
+        ((TextView) findViewById(R.id.panoLocationName)).setText("Current view");
         ((TextView) findViewById(R.id.panoDescription)).setText(
-                (pano.getDescription() == null
-                        ? "Outdoor visual orientation point."
+                (pano == null
+                        ? "Under work: panorama view is being prepared."
+                        : pano.getDescription() == null
+                        ? "Panorama view."
                         : pano.getDescription())
-                        + "\n" + source + "."
         );
 
         ImageView imageView = findViewById(R.id.panoImage);
         boolean loaded = new OutdoorPanoViewer(this, app.getPanoRepository())
                 .loadPano(imageView, pano, false);
         if (!loaded) {
-            ((TextView) findViewById(R.id.panoDescription)).append(
-                    "\n\nImage asset could not be decoded, so the placeholder is shown."
+            ((TextView) findViewById(R.id.panoDescription)).setText(
+                    "Under work: panorama view is being prepared."
             );
         }
     }
