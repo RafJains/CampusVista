@@ -24,7 +24,6 @@ import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
-import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
 
@@ -40,10 +39,14 @@ public final class OutdoorNavActivity extends Activity {
     private RouteResult routeResult;
     private int instructionIndex;
     private boolean panoMode;
+    private boolean startInPano;
     private boolean warningsShown;
     private final Map<String, OutdoorPano> backendPanosByCheckpoint = new HashMap<>();
 
-    private TextView navSummary;
+    private TextView navTitle;
+    private TextView navStart;
+    private TextView navEnd;
+    private TextView navDistance;
     private TextView navProgress;
     private TextView navInstruction;
     private TextView panoCheckpointName;
@@ -58,7 +61,10 @@ public final class OutdoorNavActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outdoor_nav);
 
-        navSummary = findViewById(R.id.navSummary);
+        navTitle = findViewById(R.id.navTitle);
+        navStart = findViewById(R.id.navStart);
+        navEnd = findViewById(R.id.navEnd);
+        navDistance = findViewById(R.id.navDistance);
         navProgress = findViewById(R.id.navProgress);
         navInstruction = findViewById(R.id.navInstruction);
         panoCheckpointName = findViewById(R.id.navPanoCheckpointName);
@@ -74,7 +80,8 @@ public final class OutdoorNavActivity extends Activity {
         destinationCheckpointId = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID);
         destinationName = getIntent().getStringExtra(NavExtras.EXTRA_DESTINATION_NAME);
         destinationPlaceId = getIntent().getStringExtra(NavExtras.EXTRA_PLACE_ID);
-        routeMode = parseRouteMode(getIntent().getStringExtra(NavExtras.EXTRA_ROUTE_MODE));
+        routeMode = RouteMode.SHORTEST_PATH;
+        startInPano = getIntent().getBooleanExtra(NavExtras.EXTRA_START_IN_PANO, false);
 
         findViewById(R.id.navNextButton).setOnClickListener(view -> moveNext());
         findViewById(R.id.navCompleteButton).setOnClickListener(view -> completeRoute());
@@ -84,7 +91,8 @@ public final class OutdoorNavActivity extends Activity {
         findViewById(R.id.navBackToMapButton).setOnClickListener(view -> setPanoMode(false));
 
         ViewFactory.setVisible(findViewById(R.id.navPanoButton), false);
-        navSummary.setText("Preparing your route...");
+        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), false);
+        navProgress.setText("Preparing route...");
         computeRoute();
     }
 
@@ -138,7 +146,7 @@ public final class OutdoorNavActivity extends Activity {
         if (routeResult == null || !routeResult.isRouteFound()) {
             Toast.makeText(
                     this,
-                    "No outdoor route found between these points.",
+                    "No route found between these points.",
                     Toast.LENGTH_SHORT
             ).show();
             finish();
@@ -146,6 +154,9 @@ public final class OutdoorNavActivity extends Activity {
         }
         ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
         updateStep();
+        if (startInPano) {
+            setPanoMode(true);
+        }
         showCrowdWarningsIfNeeded();
     }
 
@@ -154,21 +165,36 @@ public final class OutdoorNavActivity extends Activity {
             return;
         }
 
+        bindMetrics();
         int total = routeResult.getInstructions().size();
         if (instructionIndex >= total) {
             navProgress.setText("Route complete");
             navInstruction.setText("You have arrived at " + destinationName + ".");
             ViewFactory.setVisible(findViewById(R.id.navNextButton), false);
+            ViewFactory.setVisible(findViewById(R.id.navCompleteButton), true);
             updatePanoStep();
             return;
         }
 
-        navSummary.setText(UiText.routeModeLabel(routeMode)
-                + " - " + Math.round(routeResult.getTotalDistanceMeters()) + " m");
         navProgress.setText("Step " + (instructionIndex + 1) + " of " + total);
         navInstruction.setText(routeResult.getInstructions().get(instructionIndex));
         ViewFactory.setVisible(findViewById(R.id.navNextButton), true);
+        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), false);
         updatePanoStep();
+    }
+
+    private void bindMetrics() {
+        Checkpoint start = null;
+        Checkpoint end = null;
+        if (routeResult != null && !routeResult.getCheckpointPath().isEmpty()) {
+            start = routeResult.getCheckpointPath().get(0);
+            end = routeResult.getCheckpointPath().get(routeResult.getCheckpointPath().size() - 1);
+        }
+        navStart.setText("Start\n" + checkpointName(start, LocationStore.getCurrentCheckpointId(this)));
+        navEnd.setText("End\n" + (destinationName == null
+                ? checkpointName(end, destinationCheckpointId)
+                : destinationName));
+        navDistance.setText("Distance\n" + Math.round(routeResult.getTotalDistanceMeters()) + " m");
     }
 
     private void moveNext() {
@@ -225,11 +251,18 @@ public final class OutdoorNavActivity extends Activity {
 
     private void setPanoMode(boolean enabled) {
         panoMode = enabled;
+        navTitle.setText(enabled ? "Pano Mode" : "Navigation Steps");
+        ViewFactory.setVisible(findViewById(R.id.navMetricRow), !enabled);
+        ViewFactory.setVisible(navProgress, !enabled);
         ViewFactory.setVisible(navInstruction, !enabled);
         ViewFactory.setVisible(findViewById(R.id.navPanoPanel), enabled);
         ViewFactory.setVisible(findViewById(R.id.navPanoButton), !enabled);
-        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), !enabled);
+        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), !enabled && isRouteComplete());
         updatePanoStep();
+    }
+
+    private boolean isRouteComplete() {
+        return routeResult != null && instructionIndex >= routeResult.getInstructions().size();
     }
 
     private void updatePanoStep() {
@@ -239,15 +272,15 @@ public final class OutdoorNavActivity extends Activity {
 
         Checkpoint checkpoint = checkpointForCurrentStep();
         if (checkpoint == null) {
-            panoCheckpointName.setText("Checkpoint unavailable");
-            panoInstruction.setText("");
-            panoImage.setImageResource(R.drawable.ic_pano_placeholder);
+            panoCheckpointName.setText("Current view");
+            panoInstruction.setText("Under work: panorama view is being prepared.");
+            panoViewer.loadPano(panoImage, null, false);
             panoPreviousButton.setEnabled(false);
             return;
         }
 
         int total = routeResult.getInstructions().size();
-        panoCheckpointName.setText(checkpoint.getCheckpointName());
+        panoCheckpointName.setText("Current view");
         if (instructionIndex < total) {
             panoInstruction.setText(routeResult.getInstructions().get(instructionIndex));
         } else {
@@ -255,7 +288,10 @@ public final class OutdoorNavActivity extends Activity {
         }
 
         OutdoorPano pano = panoForCheckpoint(checkpoint.getCheckpointId());
-        panoViewer.loadPano(panoImage, pano, false);
+        boolean loaded = panoViewer.loadPano(panoImage, pano, false);
+        if (!loaded) {
+            panoInstruction.setText("Under work: panorama view is being prepared.");
+        }
         panoPreviousButton.setEnabled(instructionIndex > 0);
         panoNextButton.setText(instructionIndex >= total - 1 ? "Finish" : "Next");
     }
@@ -282,8 +318,8 @@ public final class OutdoorNavActivity extends Activity {
         }
     }
 
-    private static RouteMode parseRouteMode(String value) {
-        return RouteMode.SHORTEST_PATH;
+    private static String checkpointName(Checkpoint checkpoint, String fallbackId) {
+        return checkpoint == null ? fallbackId : checkpoint.getCheckpointName();
     }
 
     private void showCrowdWarningsIfNeeded() {
@@ -304,7 +340,7 @@ public final class OutdoorNavActivity extends Activity {
         }
         warningsShown = true;
         new AlertDialog.Builder(this)
-                .setTitle("Crowd Notice")
+                .setTitle("Busy Area")
                 .setMessage(message.toString())
                 .setPositiveButton("OK", null)
                 .show();

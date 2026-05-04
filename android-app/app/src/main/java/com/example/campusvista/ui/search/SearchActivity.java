@@ -25,7 +25,7 @@ import java.util.List;
 
 public final class SearchActivity extends Activity {
     public static final String EXTRA_INITIAL_TYPE = "com.example.campusvista.INITIAL_TYPE";
-    private static final int RESULT_LIMIT = 25;
+    private static final int RESULT_LIMIT = 200;
 
     private EditText searchInput;
     private TextView emptyState;
@@ -61,7 +61,7 @@ public final class SearchActivity extends Activity {
 
     private void runSearch() {
         String query = searchInput.getText().toString().trim();
-        emptyState.setText("Searching campus places...");
+        emptyState.setText("Searching...");
         ViewFactory.setVisible(emptyState, true);
         BackendClient.getInstance(this).searchPlaces(
                 query,
@@ -77,7 +77,7 @@ public final class SearchActivity extends Activity {
                     public void onFallback(Throwable throwable) {
                         bindResults(
                                 localSearch(query),
-                                "Showing saved campus results."
+                                "Showing available results."
                         );
                     }
                 }
@@ -103,7 +103,7 @@ public final class SearchActivity extends Activity {
     private void bindResults(List<Place> places, String note) {
         resultList.removeAllViews();
         if (places.isEmpty()) {
-            emptyState.setText("No outdoor places found.");
+            emptyState.setText("No places found.");
         } else {
             emptyState.setText(note == null ? "" : note);
         }
@@ -113,8 +113,7 @@ public final class SearchActivity extends Activity {
             Button button = ViewFactory.listButton(
                     this,
                     place.getPlaceName() + "\n"
-                            + UiText.cleanType(place.getPlaceType()) + "  -  "
-                            + place.getCheckpointId()
+                            + UiText.cleanType(place.getPlaceType())
             );
             button.setOnClickListener(view -> {
                 Intent intent = new Intent(this, PlaceDetailsActivity.class);

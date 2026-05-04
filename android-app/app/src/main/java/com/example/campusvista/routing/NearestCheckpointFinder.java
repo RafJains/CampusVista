@@ -25,9 +25,4 @@ public final class NearestCheckpointFinder {
 
         return nearest;
     }
-
-    public String findNearestCheckpointId(double xCoord, double yCoord) {
-        Checkpoint nearest = findNearest(xCoord, yCoord);
-        return nearest == null ? null : nearest.getCheckpointId();
-    }
 }

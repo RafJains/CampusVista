@@ -7,7 +7,6 @@ import com.example.campusvista.data.model.CrowdRule;
 import com.example.campusvista.data.model.Edge;
 import com.example.campusvista.data.model.OutdoorPano;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.data.model.RecognitionRef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +55,9 @@ public final class QueryMapper {
 
     public static CrowdRule toCrowdRule(Cursor cursor) {
         return new CrowdRule(
-                getString(cursor, "crowd_rule_id"),
-                getString(cursor, "checkpoint_id"),
-                getString(cursor, "day_type"),
                 getString(cursor, "start_time"),
                 getString(cursor, "end_time"),
-                getString(cursor, "crowd_level"),
-                getDouble(cursor, "penalty_cost"),
-                getNullableString(cursor, "description")
+                getString(cursor, "crowd_level")
         );
     }
 
@@ -78,131 +72,49 @@ public final class QueryMapper {
         );
     }
 
-    public static RecognitionRef toRecognitionRef(Cursor cursor) {
-        return new RecognitionRef(
-                getString(cursor, "recognition_id"),
-                getString(cursor, "checkpoint_id"),
-                getString(cursor, "label_name"),
-                getInt(cursor, "model_label_index"),
-                getDouble(cursor, "confidence_threshold")
-        );
-    }
-
     public static List<Checkpoint> toCheckpoints(Cursor cursor) {
-        List<Checkpoint> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toCheckpoint(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
+        return toList(cursor, QueryMapper::toCheckpoint);
     }
 
     public static List<Place> toPlaces(Cursor cursor) {
-        List<Place> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toPlace(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
+        return toList(cursor, QueryMapper::toPlace);
     }
 
     public static List<Edge> toEdges(Cursor cursor) {
-        List<Edge> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toEdge(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public static List<CrowdRule> toCrowdRules(Cursor cursor) {
-        List<CrowdRule> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toCrowdRule(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public static List<OutdoorPano> toOutdoorPanos(Cursor cursor) {
-        List<OutdoorPano> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toOutdoorPano(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public static List<RecognitionRef> toRecognitionRefs(Cursor cursor) {
-        List<RecognitionRef> results = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                results.add(toRecognitionRef(cursor));
-            }
-            return results;
-        } finally {
-            cursor.close();
-        }
+        return toList(cursor, QueryMapper::toEdge);
     }
 
     public static Checkpoint firstCheckpointOrNull(Cursor cursor) {
-        try {
-            return cursor.moveToFirst() ? toCheckpoint(cursor) : null;
-        } finally {
-            cursor.close();
-        }
+        return firstOrNull(cursor, QueryMapper::toCheckpoint);
     }
 
     public static Place firstPlaceOrNull(Cursor cursor) {
-        try {
-            return cursor.moveToFirst() ? toPlace(cursor) : null;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public static Edge firstEdgeOrNull(Cursor cursor) {
-        try {
-            return cursor.moveToFirst() ? toEdge(cursor) : null;
-        } finally {
-            cursor.close();
-        }
+        return firstOrNull(cursor, QueryMapper::toPlace);
     }
 
     public static CrowdRule firstCrowdRuleOrNull(Cursor cursor) {
-        try {
-            return cursor.moveToFirst() ? toCrowdRule(cursor) : null;
-        } finally {
-            cursor.close();
-        }
+        return firstOrNull(cursor, QueryMapper::toCrowdRule);
     }
 
     public static OutdoorPano firstOutdoorPanoOrNull(Cursor cursor) {
+        return firstOrNull(cursor, QueryMapper::toOutdoorPano);
+    }
+
+    private static <T> List<T> toList(Cursor cursor, CursorMapper<T> mapper) {
+        List<T> results = new ArrayList<>();
         try {
-            return cursor.moveToFirst() ? toOutdoorPano(cursor) : null;
+            while (cursor.moveToNext()) {
+                results.add(mapper.map(cursor));
+            }
+            return results;
         } finally {
             cursor.close();
         }
     }
 
-    public static RecognitionRef firstRecognitionRefOrNull(Cursor cursor) {
+    private static <T> T firstOrNull(Cursor cursor, CursorMapper<T> mapper) {
         try {
-            return cursor.moveToFirst() ? toRecognitionRef(cursor) : null;
+            return cursor.moveToFirst() ? mapper.map(cursor) : null;
         } finally {
             cursor.close();
         }
@@ -236,5 +148,9 @@ public final class QueryMapper {
             return null;
         }
         return cursor.getDouble(columnIndex);
+    }
+
+    private interface CursorMapper<T> {
+        T map(Cursor cursor);
     }
 }

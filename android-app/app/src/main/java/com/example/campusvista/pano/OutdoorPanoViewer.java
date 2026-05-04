@@ -3,13 +3,17 @@ package com.example.campusvista.pano;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 
-import com.example.campusvista.R;
 import com.example.campusvista.data.model.OutdoorPano;
 import com.example.campusvista.data.repository.PanoRepository;
 
@@ -27,7 +31,7 @@ public final class OutdoorPanoViewer {
 
     public boolean loadPano(ImageView imageView, OutdoorPano pano, boolean preferThumbnail) {
         if (pano == null) {
-            showPlaceholder(imageView);
+            showUnderWorkSignage(imageView);
             return false;
         }
 
@@ -42,11 +46,13 @@ public final class OutdoorPanoViewer {
             return true;
         }
 
-        if (!imagePath.equals(thumbnailPath) && loadAssetBitmap(imageView, thumbnailPath)) {
+        if (imagePath != null
+                && !imagePath.equals(thumbnailPath)
+                && loadAssetBitmap(imageView, thumbnailPath)) {
             return true;
         }
 
-        showPlaceholder(imageView);
+        showUnderWorkSignage(imageView);
         return false;
     }
 
@@ -68,10 +74,67 @@ public final class OutdoorPanoViewer {
         }
     }
 
-    private void showPlaceholder(ImageView imageView) {
+    private void showUnderWorkSignage(ImageView imageView) {
         imageView.setOnTouchListener(null);
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setImageResource(R.drawable.ic_pano_placeholder);
+        imageView.setImageBitmap(createUnderWorkBitmap());
+        imageView.setContentDescription("Under work panorama placeholder");
+    }
+
+    private Bitmap createUnderWorkBitmap() {
+        int width = 1200;
+        int height = 800;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        canvas.drawColor(Color.rgb(247, 249, 250));
+
+        paint.setColor(Color.rgb(18, 48, 62));
+        RectF sign = new RectF(170, 190, 1030, 610);
+        canvas.drawRoundRect(sign, 34, 34, paint);
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(10);
+        paint.setColor(Color.rgb(231, 183, 90));
+        canvas.drawRoundRect(new RectF(205, 225, 995, 575), 24, 24, paint);
+        paint.setStyle(Paint.Style.FILL);
+
+        paint.setColor(Color.rgb(231, 183, 90));
+        canvas.drawRect(315, 610, 365, 760, paint);
+        canvas.drawRect(835, 610, 885, 760, paint);
+
+        drawCenteredText(canvas, paint, "UNDER WORK", 600, 365, 82, Color.WHITE, true);
+        drawCenteredText(
+                canvas,
+                paint,
+                "Panorama view is being prepared",
+                600,
+                460,
+                38,
+                Color.rgb(210, 228, 220),
+                false
+        );
+        return bitmap;
+    }
+
+    private static void drawCenteredText(
+            Canvas canvas,
+            Paint paint,
+            String text,
+            int centerX,
+            int baselineY,
+            int textSize,
+            int color,
+            boolean bold
+    ) {
+        paint.setColor(color);
+        paint.setTextSize(textSize);
+        paint.setFakeBoldText(bold);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+        canvas.drawText(text, centerX - bounds.width() / 2f, baselineY, paint);
+        paint.setFakeBoldText(false);
     }
 
     private void attachPanoramaGestures(ImageView imageView, int bitmapWidth, int bitmapHeight) {

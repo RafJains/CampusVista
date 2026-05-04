@@ -83,13 +83,6 @@ public final class DBHelper extends SQLiteOpenHelper {
                 "orientation TEXT, " +
                 "description TEXT, " +
                 "FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS recognition_refs (" +
-                "recognition_id TEXT PRIMARY KEY, " +
-                "checkpoint_id TEXT NOT NULL, " +
-                "label_name TEXT NOT NULL, " +
-                "model_label_index INTEGER NOT NULL, " +
-                "confidence_threshold REAL DEFAULT 0.70, " +
-                "FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id))");
         db.execSQL("CREATE TABLE IF NOT EXISTS search_aliases (" +
                 "alias_id TEXT PRIMARY KEY, " +
                 "place_id TEXT NOT NULL, " +
@@ -108,15 +101,12 @@ public final class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_crowd_checkpoint_time " +
                 "ON crowd_rules(checkpoint_id, day_type, start_time, end_time)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_panos_checkpoint ON outdoor_panos(checkpoint_id)");
-        db.execSQL("CREATE INDEX IF NOT EXISTS idx_recognition_label " +
-                "ON recognition_refs(model_label_index)");
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_alias_text ON search_aliases(alias_text)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS search_aliases");
-        db.execSQL("DROP TABLE IF EXISTS recognition_refs");
         db.execSQL("DROP TABLE IF EXISTS outdoor_panos");
         db.execSQL("DROP TABLE IF EXISTS crowd_rules");
         db.execSQL("DROP TABLE IF EXISTS edges");

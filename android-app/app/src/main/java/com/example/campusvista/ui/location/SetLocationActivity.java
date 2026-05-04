@@ -17,7 +17,6 @@ import com.example.campusvista.network.BackendDtos.CheckpointDto;
 import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.ui.common.LocationStore;
-import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
 import com.example.campusvista.ui.search.SearchActivity;
@@ -38,8 +37,6 @@ public final class SetLocationActivity extends Activity {
 
         findViewById(R.id.openSearchLocationButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SearchActivity.class)));
-        findViewById(R.id.cameraDetectButton).setOnClickListener(view ->
-                startActivity(new Intent(this, CameraLocationActivity.class)));
     }
 
     @Override
@@ -55,11 +52,11 @@ public final class SetLocationActivity extends Activity {
                 ? null
                 : app.getCheckpointRepository().getCheckpointById(currentId);
         selectedLocationLabel.setText(current == null
-                ? "Current location: Not set"
-                : "Current location: " + current.getCheckpointName());
+                ? "Start: Not set"
+                : "Start: " + current.getCheckpointName());
 
         checkpointList.removeAllViews();
-        checkpointList.addView(ViewFactory.sectionLine(this, "Loading campus checkpoints..."));
+        checkpointList.addView(ViewFactory.sectionLine(this, "Loading campus locations..."));
         BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<CheckpointDto>>() {
             @Override
             public void onSuccess(List<CheckpointDto> value) {
@@ -70,7 +67,7 @@ public final class SetLocationActivity extends Activity {
             public void onFallback(Throwable throwable) {
                 bindCheckpointButtons(
                         app.getCheckpointRepository().getAllCheckpoints(),
-                        "Showing saved campus checkpoints."
+                        "Showing available locations."
                 );
             }
         });
@@ -84,8 +81,7 @@ public final class SetLocationActivity extends Activity {
         for (Checkpoint checkpoint : checkpoints) {
             Button button = ViewFactory.listButton(
                     this,
-                    checkpoint.getCheckpointName() + "  -  "
-                            + UiText.cleanType(checkpoint.getCheckpointType())
+                    checkpoint.getCheckpointName()
             );
             button.setOnClickListener(view -> setLocationViaNearestCheckpoint(checkpoint));
             checkpointList.addView(button);
@@ -115,7 +111,7 @@ public final class SetLocationActivity extends Activity {
         LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
         Toast.makeText(
                 this,
-                "Current location set to " + checkpoint.getCheckpointName(),
+                "Start set: " + checkpoint.getCheckpointName(),
                 Toast.LENGTH_SHORT
         ).show();
         startActivity(new Intent(this, HomeMapActivity.class));

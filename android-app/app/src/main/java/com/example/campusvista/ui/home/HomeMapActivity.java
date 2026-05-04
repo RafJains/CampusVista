@@ -1,6 +1,7 @@
 package com.example.campusvista.ui.home;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,23 +30,25 @@ import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
-import com.example.campusvista.ui.location.SetLocationActivity;
 import com.example.campusvista.ui.place.PlaceDetailsActivity;
+import com.example.campusvista.ui.route.RoutePreviewActivity;
 import com.example.campusvista.ui.search.SearchActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public final class HomeMapActivity extends Activity {
     private static final float MAP_MAX_ZOOM_MULTIPLIER = 5f;
 
     private ImageView campusMapImage;
-    private TextView currentLocationLabel;
-    private TextView mapSummary;
+    private TextView startLocationField;
+    private TextView endLocationField;
     private LinearLayout categoryRow;
     private LinearLayout featuredPlacesList;
-    private LinearLayout checkpointList;
+    private Place selectedDestinationPlace;
     private final Matrix mapMatrix = new Matrix();
     private ScaleGestureDetector mapScaleDetector;
     private GestureDetector mapGestureDetector;
@@ -66,17 +69,15 @@ public final class HomeMapActivity extends Activity {
         setContentView(R.layout.activity_home_map);
 
         campusMapImage = findViewById(R.id.campusMapImage);
-        currentLocationLabel = findViewById(R.id.currentLocationLabel);
-        mapSummary = findViewById(R.id.mapSummary);
+        startLocationField = findViewById(R.id.startLocationField);
+        endLocationField = findViewById(R.id.endLocationField);
         categoryRow = findViewById(R.id.categoryRow);
         featuredPlacesList = findViewById(R.id.featuredPlacesList);
-        checkpointList = findViewById(R.id.checkpointList);
         configureMapGestures();
 
-        findViewById(R.id.openSearchButton).setOnClickListener(view ->
-                startActivity(new Intent(this, SearchActivity.class)));
-        findViewById(R.id.setLocationButton).setOnClickListener(view ->
-                startActivity(new Intent(this, SetLocationActivity.class)));
+        startLocationField.setOnClickListener(view -> showStartPicker());
+        endLocationField.setOnClickListener(view -> showEndPicker());
+        findViewById(R.id.startNavigationButton).setOnClickListener(view -> startSelectedRoute());
     }
 
     @Override
@@ -88,37 +89,43 @@ public final class HomeMapActivity extends Activity {
     private void bindHomeData() {
         CampusVistaApp app = (CampusVistaApp) getApplication();
         MapConfigRepository.MapConfig config = app.getMapConfig();
-        List<Checkpoint> checkpoints = app.getCheckpointRepository().getAllCheckpoints();
         List<Place> places = app.getPlaceRepository().getAllPlaces();
 
+        loadCampusMap(config);
+        bindSelectionLabels();
+
+        bindCategories(places);
+        bindPlaces(places);
+    }
+
+    private void bindSelectionLabels() {
+        CampusVistaApp app = (CampusVistaApp) getApplication();
         String currentId = LocationStore.getCurrentCheckpointId(this);
         Checkpoint current = currentId == null
                 ? null
                 : app.getCheckpointRepository().getCheckpointById(currentId);
-        currentLocationLabel.setText(current == null
-                ? "Current location: Not set"
-                : "Current location: " + current.getCheckpointName());
-
-        boolean mapLoaded = loadCampusMap(config);
-        mapSummary.setText((mapLoaded ? "Campus map" : "Campus map asset unavailable")
-                + "\n" + config.getCampusMapWidthPx() + " x " + config.getCampusMapHeightPx() + " px"
-                + "\n" + checkpoints.size() + " checkpoints ready");
-
-        bindCategories();
-        bindPlaces(places);
-        bindCheckpoints(checkpoints);
+        startLocationField.setText(current == null
+                ? "Start\nChoose location"
+                : "Start\n" + current.getCheckpointName());
+        endLocationField.setText(selectedDestinationPlace == null
+                ? "End\nChoose destination"
+                : "End\n" + selectedDestinationPlace.getPlaceName());
     }
 
-    private void bindCategories() {
+    private void bindCategories(List<Place> places) {
         categoryRow.removeAllViews();
-        String[] categories = {
-                "gate", "building", "canteen", "library", "parking", "landmark", "facility"
-        };
-        for (String category : categories) {
-            Button chip = ViewFactory.chipButton(this, UiText.cleanType(category));
+        Set<String> placeTypes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (Place place : places) {
+            String placeType = place.getPlaceType();
+            if (placeType != null && !placeType.trim().isEmpty()) {
+                placeTypes.add(placeType.trim());
+            }
+        }
+        for (String placeType : placeTypes) {
+            Button chip = ViewFactory.chipButton(this, UiText.cleanType(placeType));
             chip.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_INITIAL_TYPE, category);
+                intent.putExtra(SearchActivity.EXTRA_INITIAL_TYPE, placeType);
                 startActivity(intent);
             });
             categoryRow.addView(chip);
@@ -132,31 +139,77 @@ public final class HomeMapActivity extends Activity {
             Place place = places.get(i);
             Button button = ViewFactory.listButton(
                     this,
-                    place.getPlaceName() + "  -  " + UiText.cleanType(place.getPlaceType())
+                    place.getPlaceName() + "\n" + UiText.cleanType(place.getPlaceType())
             );
             button.setOnClickListener(view -> openPlace(place.getPlaceId()));
             featuredPlacesList.addView(button);
         }
     }
 
-    private void bindCheckpoints(List<Checkpoint> checkpoints) {
-        checkpointList.removeAllViews();
-        int count = Math.min(checkpoints.size(), 8);
-        for (int i = 0; i < count; i++) {
-            Checkpoint checkpoint = checkpoints.get(i);
-            checkpointList.addView(ViewFactory.cardText(
-                    this,
-                    checkpoint.getCheckpointName(),
-                    UiText.cleanType(checkpoint.getCheckpointType())
-                            + " - x " + Math.round(checkpoint.getXCoord())
-                            + ", y " + Math.round(checkpoint.getYCoord())
-            ));
-        }
-    }
-
     private void openPlace(String placeId) {
         Intent intent = new Intent(this, PlaceDetailsActivity.class);
         intent.putExtra(NavExtras.EXTRA_PLACE_ID, placeId);
+        startActivity(intent);
+    }
+
+    private void showStartPicker() {
+        List<Checkpoint> checkpoints = ((CampusVistaApp) getApplication())
+                .getCheckpointRepository()
+                .getAllCheckpoints();
+        if (checkpoints.isEmpty()) {
+            Toast.makeText(this, "No start locations available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] names = new String[checkpoints.size()];
+        for (int i = 0; i < checkpoints.size(); i++) {
+            names[i] = checkpoints.get(i).getCheckpointName();
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("Choose start")
+                .setItems(names, (dialog, which) ->
+                        setLocationViaNearestCheckpoint(checkpoints.get(which)))
+                .show();
+    }
+
+    private void showEndPicker() {
+        List<Place> places = ((CampusVistaApp) getApplication())
+                .getPlaceRepository()
+                .getAllPlaces();
+        if (places.isEmpty()) {
+            Toast.makeText(this, "No destinations available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] names = new String[places.size()];
+        for (int i = 0; i < places.size(); i++) {
+            names[i] = places.get(i).getPlaceName();
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("Choose end")
+                .setItems(names, (dialog, which) -> {
+                    selectedDestinationPlace = places.get(which);
+                    bindSelectionLabels();
+                })
+                .show();
+    }
+
+    private void startSelectedRoute() {
+        if (LocationStore.getCurrentCheckpointId(this) == null) {
+            Toast.makeText(this, "Choose a start location.", Toast.LENGTH_SHORT).show();
+            showStartPicker();
+            return;
+        }
+        if (selectedDestinationPlace == null) {
+            Toast.makeText(this, "Choose a destination.", Toast.LENGTH_SHORT).show();
+            showEndPicker();
+            return;
+        }
+        Intent intent = new Intent(this, RoutePreviewActivity.class);
+        intent.putExtra(NavExtras.EXTRA_PLACE_ID, selectedDestinationPlace.getPlaceId());
+        intent.putExtra(
+                NavExtras.EXTRA_DESTINATION_CHECKPOINT_ID,
+                selectedDestinationPlace.getCheckpointId()
+        );
+        intent.putExtra(NavExtras.EXTRA_DESTINATION_NAME, selectedDestinationPlace.getPlaceName());
         startActivity(intent);
     }
 
@@ -386,7 +439,7 @@ public final class HomeMapActivity extends Activity {
                     public void onSuccess(NearestCheckpointDto value) {
                         Checkpoint checkpoint = BackendMapper.toCheckpoint(value.checkpoint);
                         if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint, "live campus service");
+                            setCurrentFromMap(checkpoint);
                         }
                     }
 
@@ -396,7 +449,7 @@ public final class HomeMapActivity extends Activity {
                                 .getNearestCheckpointFinder()
                                 .findNearest(mapX, mapY);
                         if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint, "saved campus map");
+                            setCurrentFromMap(checkpoint);
                         }
                     }
                 }
@@ -418,13 +471,32 @@ public final class HomeMapActivity extends Activity {
         return new double[]{mapX, mapY};
     }
 
-    private void setCurrentFromMap(Checkpoint checkpoint, String source) {
+    private void setLocationViaNearestCheckpoint(Checkpoint selectedCheckpoint) {
+        BackendClient.getInstance(this).getNearestCheckpoint(
+                selectedCheckpoint.getMapX(),
+                selectedCheckpoint.getMapY(),
+                new BackendCallback<NearestCheckpointDto>() {
+                    @Override
+                    public void onSuccess(NearestCheckpointDto value) {
+                        Checkpoint nearest = BackendMapper.toCheckpoint(value.checkpoint);
+                        setCurrentFromMap(nearest == null ? selectedCheckpoint : nearest);
+                    }
+
+                    @Override
+                    public void onFallback(Throwable throwable) {
+                        setCurrentFromMap(selectedCheckpoint);
+                    }
+                }
+        );
+    }
+
+    private void setCurrentFromMap(Checkpoint checkpoint) {
         LocationStore.setCurrentCheckpointId(this, checkpoint.getCheckpointId());
         Toast.makeText(
                 this,
-                "Snapped to " + checkpoint.getCheckpointName() + " via " + source,
+                "Start set: " + checkpoint.getCheckpointName(),
                 Toast.LENGTH_SHORT
         ).show();
-        bindHomeData();
+        bindSelectionLabels();
     }
 }

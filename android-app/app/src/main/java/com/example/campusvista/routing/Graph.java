@@ -13,7 +13,6 @@ import java.util.Map;
 public final class Graph {
     private final Map<String, Checkpoint> checkpoints;
     private final Map<String, List<DirectedEdge>> adjacency;
-    private final int directedEdgeCount;
 
     public Graph(
             Map<String, Checkpoint> checkpoints,
@@ -21,7 +20,6 @@ public final class Graph {
     ) {
         Map<String, Checkpoint> checkpointCopy = new LinkedHashMap<>(checkpoints);
         Map<String, List<DirectedEdge>> adjacencyCopy = new HashMap<>();
-        int count = 0;
 
         for (String checkpointId : checkpointCopy.keySet()) {
             List<DirectedEdge> edges = adjacency.get(checkpointId);
@@ -30,12 +28,10 @@ public final class Graph {
             }
             List<DirectedEdge> immutableEdges = Collections.unmodifiableList(new ArrayList<>(edges));
             adjacencyCopy.put(checkpointId, immutableEdges);
-            count += immutableEdges.size();
         }
 
         this.checkpoints = Collections.unmodifiableMap(checkpointCopy);
         this.adjacency = Collections.unmodifiableMap(adjacencyCopy);
-        this.directedEdgeCount = count;
     }
 
     public Checkpoint getCheckpoint(String checkpointId) {
@@ -51,25 +47,8 @@ public final class Graph {
         return edges == null ? Collections.<DirectedEdge>emptyList() : edges;
     }
 
-    public DirectedEdge getEdgeBetween(String fromCheckpointId, String toCheckpointId) {
-        for (DirectedEdge edge : getOutgoingEdges(fromCheckpointId)) {
-            if (edge.getToCheckpointId().equals(toCheckpointId)) {
-                return edge;
-            }
-        }
-        return null;
-    }
-
     public boolean containsCheckpoint(String checkpointId) {
         return checkpoints.containsKey(checkpointId);
-    }
-
-    public int getNodeCount() {
-        return checkpoints.size();
-    }
-
-    public int getDirectedEdgeCount() {
-        return directedEdgeCount;
     }
 
     public static final class DirectedEdge {

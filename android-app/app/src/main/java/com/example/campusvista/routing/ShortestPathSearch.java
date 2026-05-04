@@ -8,41 +8,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.function.ToDoubleFunction;
 
-public final class DijkstraRouter {
-    private final Graph graph;
-    private final CrowdCostCalculator crowdCostCalculator;
-    private final InstructionBuilder instructionBuilder;
-
-    public DijkstraRouter(
-            Graph graph,
-            CrowdCostCalculator crowdCostCalculator,
-            InstructionBuilder instructionBuilder
-    ) {
-        this.graph = graph;
-        this.crowdCostCalculator = crowdCostCalculator;
-        this.instructionBuilder = instructionBuilder;
+final class ShortestPathSearch {
+    private ShortestPathSearch() {
     }
 
-    public RouteResult computeRoute(
+    static Path find(
+            Graph graph,
+            CrowdCostCalculator crowdCostCalculator,
             String startCheckpointId,
             String destinationCheckpointId,
-            RouteMode routeMode,
-            String destinationPlaceName
+            ToDoubleFunction<String> heuristic
     ) {
-        if (!graph.containsCheckpoint(startCheckpointId)
-                || !graph.containsCheckpoint(destinationCheckpointId)) {
-            return RouteResult.noRoute(startCheckpointId, destinationCheckpointId, routeMode);
-        }
-
-        Map<String, Double> penaltyByCheckpoint = Collections.emptyMap();
-
         PriorityQueue<NodeRecord> openSet = new PriorityQueue<>();
         Map<String, Double> bestCost = new HashMap<>();
         Map<String, Graph.DirectedEdge> cameFromEdge = new HashMap<>();
 
         bestCost.put(startCheckpointId, 0.0);
-        openSet.add(new NodeRecord(startCheckpointId, 0.0));
+        openSet.add(new NodeRecord(
+                startCheckpointId,
+                0.0,
+                heuristic.applyAsDouble(startCheckpointId)
+        ));
 
         while (!openSet.isEmpty()) {
             NodeRecord current = openSet.poll();
@@ -52,53 +40,44 @@ public final class DijkstraRouter {
             }
 
             if (current.checkpointId.equals(destinationCheckpointId)) {
-                return buildResult(
-                        startCheckpointId,
-                        destinationCheckpointId,
-                        routeMode,
-                        destinationPlaceName,
-                        cameFromEdge,
+                return new Path(
+                        reconstructEdges(startCheckpointId, destinationCheckpointId, cameFromEdge),
                         current.pathCost
                 );
             }
 
             for (Graph.DirectedEdge edge : graph.getOutgoingEdges(current.checkpointId)) {
-                double edgeCost = crowdCostCalculator.calculateEdgeCost(
-                        edge,
-                        routeMode,
-                        penaltyByCheckpoint
-                );
-                double nextCost = current.pathCost + edgeCost;
+                double nextCost = current.pathCost + crowdCostCalculator.calculateEdgeCost(edge);
                 Double previousBest = bestCost.get(edge.getToCheckpointId());
                 if (previousBest == null || nextCost < previousBest) {
                     bestCost.put(edge.getToCheckpointId(), nextCost);
                     cameFromEdge.put(edge.getToCheckpointId(), edge);
-                    openSet.add(new NodeRecord(edge.getToCheckpointId(), nextCost));
+                    openSet.add(new NodeRecord(
+                            edge.getToCheckpointId(),
+                            nextCost,
+                            nextCost + heuristic.applyAsDouble(edge.getToCheckpointId())
+                    ));
                 }
             }
         }
 
-        return RouteResult.noRoute(startCheckpointId, destinationCheckpointId, routeMode);
+        return null;
     }
 
-    private RouteResult buildResult(
+    static RouteResult toRouteResult(
+            Graph graph,
+            CrowdCostCalculator crowdCostCalculator,
+            InstructionBuilder instructionBuilder,
             String startCheckpointId,
             String destinationCheckpointId,
             RouteMode routeMode,
             String destinationPlaceName,
-            Map<String, Graph.DirectedEdge> cameFromEdge,
-            double totalCost
+            Path path
     ) {
-        List<Graph.DirectedEdge> edges = AStarRouter.reconstructEdges(
-                startCheckpointId,
-                destinationCheckpointId,
-                cameFromEdge
-        );
-        List<Checkpoint> checkpoints = checkpointsFromEdges(startCheckpointId, edges);
-        double totalDistance = totalDistance(edges);
+        List<Checkpoint> checkpoints = checkpointsFromEdges(graph, startCheckpointId, path.edges);
         List<String> instructions = instructionBuilder.buildInstructions(
                 checkpoints,
-                edges,
+                path.edges,
                 destinationPlaceName
         );
         return RouteResult.success(
@@ -106,15 +85,35 @@ public final class DijkstraRouter {
                 destinationCheckpointId,
                 routeMode,
                 checkpoints,
-                edges,
-                totalDistance,
-                totalCost,
+                path.edges,
+                totalDistance(path.edges),
+                path.totalCost,
                 instructions,
                 crowdCostCalculator.getCurrentWarningsForCheckpoints(checkpoints)
         );
     }
 
-    private List<Checkpoint> checkpointsFromEdges(
+    private static List<Graph.DirectedEdge> reconstructEdges(
+            String startCheckpointId,
+            String destinationCheckpointId,
+            Map<String, Graph.DirectedEdge> cameFromEdge
+    ) {
+        List<Graph.DirectedEdge> edges = new ArrayList<>();
+        String currentId = destinationCheckpointId;
+        while (!currentId.equals(startCheckpointId)) {
+            Graph.DirectedEdge edge = cameFromEdge.get(currentId);
+            if (edge == null) {
+                return Collections.emptyList();
+            }
+            edges.add(edge);
+            currentId = edge.getFromCheckpointId();
+        }
+        Collections.reverse(edges);
+        return edges;
+    }
+
+    private static List<Checkpoint> checkpointsFromEdges(
+            Graph graph,
             String startCheckpointId,
             List<Graph.DirectedEdge> edges
     ) {
@@ -140,18 +139,30 @@ public final class DijkstraRouter {
         return total;
     }
 
+    static final class Path {
+        private final List<Graph.DirectedEdge> edges;
+        private final double totalCost;
+
+        private Path(List<Graph.DirectedEdge> edges, double totalCost) {
+            this.edges = edges;
+            this.totalCost = totalCost;
+        }
+    }
+
     private static final class NodeRecord implements Comparable<NodeRecord> {
         private final String checkpointId;
         private final double pathCost;
+        private final double estimatedTotalCost;
 
-        private NodeRecord(String checkpointId, double pathCost) {
+        private NodeRecord(String checkpointId, double pathCost, double estimatedTotalCost) {
             this.checkpointId = checkpointId;
             this.pathCost = pathCost;
+            this.estimatedTotalCost = estimatedTotalCost;
         }
 
         @Override
         public int compareTo(NodeRecord other) {
-            return Double.compare(pathCost, other.pathCost);
+            return Double.compare(estimatedTotalCost, other.estimatedTotalCost);
         }
     }
 }

@@ -14,7 +14,7 @@
             android:id="@+id/setLocationTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Set Current Location"
+            android:text="Choose Start"
             android:textColor="@color/cv_ink"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -33,29 +33,20 @@
         <Button
             android:id="@+id/openSearchLocationButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/cv_button_primary"
             android:elevation="2dp"
-            android:text="Search Outdoor Location"
+            android:minHeight="48dp"
+            android:text="Search Location"
             android:textColor="@color/cv_white" />
-
-        <Button
-            android:id="@+id/cameraDetectButton"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/cv_button_secondary"
-            android:elevation="1dp"
-            android:text="Use Camera to Detect Outdoor Location"
-            android:textColor="@color/cv_blue_dark" />
 
         <TextView
             android:id="@+id/checkpointPickerTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="Select On Map"
+            android:text="Locations"
             android:textColor="@color/cv_ink"
             android:textSize="17sp"
             android:textStyle="bold" />

@@ -39,24 +39,4 @@ public final class CheckpointRepository {
                 new String[]{checkpointId}
         ));
     }
-
-    public List<Checkpoint> getCheckpointsByType(String checkpointType) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toCheckpoints(database.rawQuery(
-                "SELECT * FROM checkpoints WHERE checkpoint_type = ? ORDER BY checkpoint_name",
-                new String[]{checkpointType}
-        ));
-    }
-
-    public List<Checkpoint> searchCheckpoints(String query, int limit) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        String likeQuery = RepositoryUtils.likeArg(query);
-        return QueryMapper.toCheckpoints(database.rawQuery(
-                "SELECT * FROM checkpoints " +
-                        "WHERE LOWER(checkpoint_name) LIKE ? " +
-                        "OR LOWER(description) LIKE ? " +
-                        "ORDER BY checkpoint_name LIMIT ?",
-                new String[]{likeQuery, likeQuery, RepositoryUtils.limitArg(limit)}
-        ));
-    }
 }

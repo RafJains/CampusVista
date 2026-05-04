@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public final class CrowdCostCalculator {
     private static CrowdCostCalculator instance;
@@ -29,23 +28,7 @@ public final class CrowdCostCalculator {
         this.crowdRepository = crowdRepository;
     }
 
-    public Map<String, Double> getCurrentPenaltyByCheckpoint() {
-        return Collections.emptyMap();
-    }
-
-    public Map<String, Double> getPenaltyByCheckpoint(Calendar now) {
-        return Collections.emptyMap();
-    }
-
-    public double getPenaltyForCheckpoint(String checkpointId) {
-        return 0.0;
-    }
-
-    public double calculateEdgeCost(
-            Graph.DirectedEdge edge,
-            RouteMode routeMode,
-            Map<String, Double> penaltyByCheckpoint
-    ) {
+    public double calculateEdgeCost(Graph.DirectedEdge edge) {
         return edge.getDistanceMeters();
     }
 

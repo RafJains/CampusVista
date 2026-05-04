@@ -2,7 +2,7 @@
 
 This backend is now the primary intelligence layer for CampusVista.
 
-Android is the Java/XML frontend. Python owns SQLite access, search, fuzzy search, graph routing, crowd-aware costs, nearest-checkpoint snapping, route validation, instruction generation, panorama metadata, and recognition-ready APIs.
+Android is the Java/XML frontend. Python owns SQLite access, search, fuzzy search, graph routing, crowd-aware costs, nearest-checkpoint snapping, route validation, instruction generation, and panorama metadata.
 
 ## Run
 
@@ -36,8 +36,6 @@ http://<laptop-ip>:8000
 - `GET /places/{place_id}`
 - `GET /panos/{checkpoint_id}`
 - `POST /route`
-- `GET /recognition/refs`
-- `POST /recognize`
 
 Example route request:
 

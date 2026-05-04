@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">CampusVista</string>
-    <string name="app_tagline">Campus navigation powered by Python routing</string>
     <string name="campus_map_content_description">Outdoor campus map</string>
     <string name="startup_ready">Loading campus map...</string>
 </resources>

@@ -7,8 +7,6 @@ import com.example.campusvista.data.local.DBHelper;
 import com.example.campusvista.data.local.QueryMapper;
 import com.example.campusvista.data.model.OutdoorPano;
 
-import java.util.List;
-
 public final class PanoRepository {
     private static final String PANO_ASSET_DIR = "pano/outdoor/";
     private static PanoRepository instance;
@@ -25,22 +23,6 @@ public final class PanoRepository {
         this.dbHelper = dbHelper;
     }
 
-    public List<OutdoorPano> getAllOutdoorPanos() {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.toOutdoorPanos(database.rawQuery(
-                "SELECT * FROM outdoor_panos ORDER BY checkpoint_id",
-                null
-        ));
-    }
-
-    public OutdoorPano getOutdoorPanoById(String panoId) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        return QueryMapper.firstOutdoorPanoOrNull(database.rawQuery(
-                "SELECT * FROM outdoor_panos WHERE pano_id = ? LIMIT 1",
-                new String[]{panoId}
-        ));
-    }
-
     public OutdoorPano getOutdoorPanoForCheckpoint(String checkpointId) {
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         return QueryMapper.firstOutdoorPanoOrNull(database.rawQuery(
@@ -54,7 +36,11 @@ public final class PanoRepository {
     }
 
     public String getImageAssetPath(OutdoorPano pano) {
-        return pano == null ? null : assetPathForFilename(pano.getImageFile());
+        if (pano == null) {
+            return null;
+        }
+        String imageFile = RepositoryUtils.trimToNull(pano.getImageFile());
+        return imageFile == null ? null : assetPathForFilename(imageFile);
     }
 
     public String getThumbnailAssetPath(OutdoorPano pano) {
@@ -63,7 +49,7 @@ public final class PanoRepository {
         }
         String thumbnailFile = RepositoryUtils.trimToNull(pano.getThumbnailFile());
         if (thumbnailFile == null) {
-            return assetPathForFilename(pano.getImageFile());
+            return getImageAssetPath(pano);
         }
         return assetPathForFilename(thumbnailFile);
     }

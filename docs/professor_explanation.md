@@ -15,7 +15,6 @@ In the current MVP, CampusVista supports:
 - Step-by-step route instructions.
 - Crowd warning messages.
 - Outdoor pano viewing for checkpoints that have pano images.
-- Camera/recognition placeholder flow that is ready for a future ML model.
 - Offline fallback logic inside Android if the Python backend is unavailable.
 
 The main idea is:
@@ -64,7 +63,6 @@ The Python FastAPI backend is the primary intelligence layer:
 - Generates route instructions.
 - Looks up pano metadata.
 - Produces crowd warning messages.
-- Provides recognition-ready API endpoints.
 
 ### SQLite Data Layer
 
@@ -76,7 +74,6 @@ The generated SQLite database stores the campus data:
 - Place-to-checkpoint mappings.
 - Outdoor pano metadata.
 - Crowd rules.
-- Recognition reference labels.
 - Search aliases.
 
 ### Android Fallback Layer
@@ -92,10 +89,8 @@ Python handles:
 - Routing logic: A* shortest path, Dijkstra fallback, graph processing, route validation.
 - Search logic: place search, keyword search, alias search, and fuzzy matching.
 - Crowd warning logic: reads active crowd rules and returns warning messages.
-- Data validation: checks checkpoint IDs, edges, pano references, aliases, labels, and map scale.
 - Seed DB generation: converts source campus data into a clean SQLite database.
 - Checkpoint processing: fills coordinates, calculates distances, and maps real data to checkpoint IDs.
-- Recognition preparation: exposes recognition endpoints and maps future model labels to checkpoints.
 
 Python is also useful because the data pipeline uses Excel, CSV, PDF image extraction, ZIP processing, and SQLite generation. These tasks are much faster to build and maintain in Python than inside Android Java.
 
@@ -112,7 +107,6 @@ Android handles:
 - Outdoor pano image display.
 - Map tap, zoom, and pan interaction.
 - Pano swipe/drag and pinch zoom interaction.
-- Camera capture and recognition placeholder flow.
 - Calling the Python backend through Retrofit.
 
 In simple words, Android is the screen and user experience. Python is the brain.
@@ -137,7 +131,6 @@ This is the FastAPI backend. It contains:
 
 - API app startup code.
 - Route definitions.
-- Service classes for search, routing, crowd warnings, panos, and recognition.
 - SQLite database access helpers.
 - Generated backend data such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
 - Backend tests.
@@ -196,15 +189,11 @@ Important behavior:
 
 ### `PlaceDetailsActivity`
 
-`PlaceDetailsActivity` shows information about a selected place, such as its name, type, description, and linked checkpoint. It gives the user a way to start route planning to that place.
-
-### `RouteOptionsActivity`
-
-`RouteOptionsActivity` prepares route generation. The earlier "Avoid Crowded Path" option has been removed. The app now uses shortest-path routing only, while crowd rules are used for warning messages.
+`PlaceDetailsActivity` shows information about a selected place, such as its name, type, and description. It gives the user a way to start navigation to that place.
 
 ### `RoutePreviewActivity`
 
-`RoutePreviewActivity` displays the route returned by the backend before starting navigation. It shows distance, estimated time, checkpoints, instructions, warnings, and route information.
+`RoutePreviewActivity` displays the selected start, end, and distance, then lets the user choose Navigation Steps or Pano Mode.
 
 ### `OutdoorNavActivity`
 
@@ -229,16 +218,11 @@ Important behavior:
 - Falls back to a placeholder when the pano image is missing.
 - Uses `OutdoorPanoViewer` for swipe/drag and pinch zoom behavior.
 
-### `CameraLocationActivity`
 
-`CameraLocationActivity` is the camera/recognition placeholder screen. It represents the future flow where the user can capture an outdoor scene and the system can recognize the checkpoint.
 
 Current MVP behavior:
 
-- Provides the UI structure for recognition.
-- Calls or prepares for the recognition backend API.
 - Handles confidence and fallback options.
-- Allows fallback to map selection or search if recognition is unavailable or low-confidence.
 
 ### `BackendClient`
 
@@ -252,13 +236,11 @@ It is responsible for API calls such as:
 - `GET /checkpoints/nearest`
 - `GET /panos/{checkpoint_id}`
 - `POST /route`
-- `POST /recognize`
 
 It also handles backend failures so Android can switch to fallback behavior.
 
 ### `BackendDtos`
 
-`BackendDtos` contains the Java DTO classes that match the JSON response structures from the Python backend. These classes allow Android to safely read route responses, checkpoint data, place results, pano metadata, and recognition responses.
 
 ### `BackendMapper`
 
@@ -281,7 +263,6 @@ Android includes local repository classes such as:
 - `GraphRepository`
 - `PanoRepository`
 - `CrowdRepository`
-- `RecognitionRepository`
 - `MapConfigRepository`
 
 These read local data from the Android seed database and assets. They are mainly used as fallback if the backend is unavailable.
@@ -292,11 +273,10 @@ Android still contains routing classes such as:
 
 - `Graph`
 - `GraphBuilder`
-- `AStarRouter`
-- `DijkstraRouter`
+- `RoutePlanner`
+- `ShortestPathSearch`
 - `NearestCheckpointFinder`
 - `InstructionBuilder`
-- `RoutePlanner`
 - `RouteResult`
 
 These were originally the main Android-side routing engine. In the final architecture, Python is primary, but these classes remain useful as reference and fallback for demo safety.
@@ -331,8 +311,6 @@ Important endpoints:
 - `GET /places/{place_id}`: returns one place.
 - `GET /panos/{checkpoint_id}`: returns pano metadata.
 - `POST /route`: calculates a route.
-- `GET /recognition/refs`: returns recognition labels and references.
-- `POST /recognize`: recognition-ready placeholder endpoint.
 
 ### `python-backend/app/db.py`
 
@@ -359,8 +337,6 @@ Examples:
 - `MapConfigOut`
 - `RouteRequest`
 - `RouteResponse`
-- `RecognitionRequest`
-- `RecognitionResponse`
 
 These models make the API structured and easy for Android to consume.
 
@@ -426,16 +402,12 @@ It returns:
 
 If a checkpoint has no pano, the Android app shows a placeholder.
 
-### `python-backend/app/services/recognition_service.py`
 
-This service is recognition-ready. It does not yet contain a full ML model, but it provides the structure for future TensorFlow/TFLite integration.
 
 It can:
 
-- Return recognition reference labels.
 - Accept a label or confidence payload.
 - Match the label to a checkpoint if possible.
-- Return low-confidence or fallback options when recognition is not reliable.
 
 ### `python-backend/app/utils/graph_utils.py`
 
@@ -454,7 +426,6 @@ This file contains utility functions for:
 - Pixel distance.
 - Coordinate distance.
 - Text normalization.
-- Estimated walking time labels.
 
 ### `python-backend/tests/`
 
@@ -508,7 +479,6 @@ The `python-tools/scripts/` folder also includes focused validation scripts:
 - `validate_panos.py`
 - `validate_crowd_rules.py`
 - `validate_search_aliases.py`
-- `validate_recognition_labels.py`
 - `validate_map_scale.py`
 - `build_graph.py`
 - `clean_raw_data.py`
@@ -540,8 +510,6 @@ The current source inputs are:
 - `panos`
 - `crowd_rules`
 - `search_aliases`
-- `recognition_refs`
-- `labels`
 
 Minimum required sheets are:
 
@@ -727,16 +695,11 @@ Important fields:
 
 In the current architecture, `penalty_cost` is not used to change the route. It is kept for data completeness and possible future use.
 
-### `recognition_refs`
 
-Stores labels for future recognition.
 
 Important fields:
 
-- `recognition_id`
 - `checkpoint_id`
-- `label_name`
-- `model_label_index`
 - `reference_image_file`
 - `confidence_threshold`
 
@@ -869,7 +832,6 @@ This is intentional.
 
 The reason is demo safety. If the backend server is not started, or the emulator cannot reach the laptop network, the app should still remain usable instead of crashing.
 
-For the full Python-heavy demo, the backend should be started first. When the backend is running, Android should use Python for search, route generation, nearest checkpoint snapping, pano metadata, and recognition placeholder APIs.
 
 ## 16. How to Run the Project
 
@@ -959,7 +921,6 @@ CampusVista is a campus navigation app. It helps users search for places, select
 
 ### Q2. Why did you use Python?
 
-Python is used for the logic-heavy parts of the project. It handles routing, graph building, search, fuzzy matching, crowd warnings, data validation, seed database generation, checkpoint processing, and recognition-ready backend logic. These tasks are easier to maintain in Python than inside Android Java.
 
 ### Q3. Why did you use FastAPI?
 
@@ -967,7 +928,6 @@ FastAPI is lightweight, fast to develop, and gives automatic API documentation a
 
 ### Q4. Why did you use SQLite?
 
-SQLite is simple, portable, and works well for campus data. The campus map graph is not extremely large, so SQLite is enough for storing checkpoints, edges, places, panos, aliases, crowd rules, and recognition references. It also works well for both backend data and Android fallback data.
 
 ### Q5. Why A* routing?
 
@@ -1011,18 +971,14 @@ Each pano row links a `checkpoint_id` to an image filename. During route generat
 
 The app shows a placeholder image and keeps navigation working. Missing panos do not break the route.
 
-### Q14. Is recognition fully implemented?
 
-Recognition is currently placeholder and TFLite-ready. The app and backend have the structure for camera capture, confidence handling, labels, and fallback options, but a real trained model still needs to be added for full recognition.
 
 ### Q15. What is the future scope?
 
-Future work includes a full TFLite recognition model, more pano images, indoor navigation, admin data upload tools, better UI polish, and optional live crowd data.
 
 ## 19. Current Limitations
 
 - Only available pano images are used. Not every checkpoint has a pano yet.
-- Recognition is placeholder/TFLite-ready unless a real model is added.
 - A real phone needs correct network configuration and the laptop IP address.
 - The Python backend must be running for the full Python-heavy demo.
 - Android fallback is useful, but it is not the main intended architecture.
@@ -1034,7 +990,6 @@ Future work includes a full TFLite recognition model, more pano images, indoor n
 
 Planned or possible improvements:
 
-- Full TensorFlow Lite recognition model for outdoor checkpoint detection.
 - More pano images for all checkpoints.
 - True 360 spherical rendering for panos.
 - Indoor navigation inside buildings.

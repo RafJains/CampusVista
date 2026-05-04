@@ -2,60 +2,124 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/cv_surface"
     android:orientation="vertical"
     android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/previewBrandName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/app_name"
+            android:textColor="@color/cv_ink"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/previewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Route Preview"
+        android:layout_marginTop="16dp"
+        android:text="Route"
         android:textColor="@color/cv_ink"
-        android:textSize="28sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/previewMeta"
+    <LinearLayout
+        android:id="@+id/routeMetricRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:background="@drawable/cv_card"
-        android:elevation="2dp"
-        android:padding="16dp"
-        android:textColor="@color/cv_ink"
-        android:textSize="14sp" />
+        android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:id="@+id/routeStepsList"
+        <TextView
+            android:id="@+id/previewStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="58dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/previewEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:minHeight="58dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/previewDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/cv_metric_card"
+            android:gravity="center_vertical"
+            android:minHeight="52dp"
+            android:padding="12dp"
+            android:singleLine="false"
+            android:textColor="@color/cv_ink"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/previewStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/cv_muted"
+        android:textSize="14sp" />
 
     <Button
-        android:id="@+id/startNavigationButton"
+        android:id="@+id/navigationStepsButton"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/cv_button_primary"
-        android:elevation="2dp"
-        android:text="Start Navigation"
-        android:textColor="@color/cv_white" />
-
-    <Button
-        android:id="@+id/changeRouteButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:background="@drawable/cv_button_secondary"
-        android:elevation="1dp"
-        android:text="Change Route"
-        android:textColor="@color/cv_blue_dark" />
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:minHeight="76dp"
+        android:text="Navigation Steps"
+        android:textColor="@color/cv_navy"
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/panoModeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/cv_button_secondary"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:minHeight="76dp"
+        android:text="Pano Mode"
+        android:textColor="@color/cv_navy"
+        android:textSize="17sp" />
+
 </LinearLayout>

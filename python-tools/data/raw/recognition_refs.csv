@@ -1,2 +1,0 @@
-recognition_id,checkpoint_id,label_name,model_label_index,reference_image_file,confidence_threshold
-REC_OUT_CP001,OUT_CP001,main_gate,0,OUT_CP001.jpg,0.7

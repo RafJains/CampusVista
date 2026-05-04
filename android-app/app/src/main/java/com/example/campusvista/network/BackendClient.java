@@ -7,8 +7,6 @@ import com.example.campusvista.network.BackendDtos.HealthDto;
 import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendDtos.PanoDto;
 import com.example.campusvista.network.BackendDtos.PlaceDto;
-import com.example.campusvista.network.BackendDtos.RecognitionRequestDto;
-import com.example.campusvista.network.BackendDtos.RecognitionResponseDto;
 import com.example.campusvista.network.BackendDtos.RouteRequestDto;
 import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.google.gson.Gson;
@@ -105,13 +103,6 @@ public final class BackendClient {
         enqueue(api.buildRoute(request), callback);
     }
 
-    public void recognize(
-            RecognitionRequestDto request,
-            BackendCallback<RecognitionResponseDto> callback
-    ) {
-        enqueue(api.recognize(request), callback);
-    }
-
     private static <T> void enqueue(Call<T> call, BackendCallback<T> callback) {
         call.enqueue(new Callback<T>() {
             @Override
@@ -169,8 +160,5 @@ public final class BackendClient {
 
         @POST("route")
         Call<RouteResponseDto> buildRoute(@Body RouteRequestDto request);
-
-        @POST("recognize")
-        Call<RecognitionResponseDto> recognize(@Body RecognitionRequestDto request);
     }
 }

@@ -7,8 +7,13 @@ build/
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Log/OS Files
+# Log/OS files
+.DS_Store
+Thumbs.db
 *.log
+
+# Generated report scratch assets
+.report_assets/
 
 # Python tooling
 __pycache__/
@@ -16,6 +21,7 @@ __pycache__/
 .venv/
 venv/
 python-tools/data/seed/tmp*/
+python-tools/ml/landmark_recognition/artifacts/
 
 # Android Studio generated files and folders
 captures/
