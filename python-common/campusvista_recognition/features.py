@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from io import BytesIO
-from typing import Iterable
 
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps, UnidentifiedImageError
@@ -105,13 +104,6 @@ def extract_embedding(image: Image.Image) -> np.ndarray:
     if norm > 0:
         feature /= norm
     return feature
-
-
-def embeddings_for_views(views: Iterable[Image.Image]) -> np.ndarray:
-    embeddings = [extract_embedding(view) for view in views]
-    if not embeddings:
-        return np.empty((0, EMBEDDING_DIMENSION), dtype=np.float32)
-    return np.vstack(embeddings).astype(np.float32)
 
 
 def _spatial_color_grid(rgb: np.ndarray) -> np.ndarray:

@@ -17,7 +17,7 @@ public final class ViewFactory {
     public static Button listButton(Context context, String text) {
         Button button = new Button(context);
         button.setText(text);
-        button.setTextColor(context.getResources().getColor(R.color.cv_navy));
+        button.setTextColor(context.getColor(R.color.cv_navy));
         button.setTextSize(14f);
         button.setAllCaps(false);
         button.setSingleLine(false);
@@ -33,7 +33,7 @@ public final class ViewFactory {
     public static Button chipButton(Context context, String text) {
         Button button = new Button(context);
         button.setText(text);
-        button.setTextColor(context.getResources().getColor(R.color.cv_green_dark));
+        button.setTextColor(context.getColor(R.color.cv_green_dark));
         button.setTextSize(13f);
         button.setAllCaps(false);
         button.setSingleLine(false);
@@ -55,7 +55,7 @@ public final class ViewFactory {
     public static TextView sectionLine(Context context, String text) {
         TextView view = new TextView(context);
         view.setText(text);
-        view.setTextColor(context.getResources().getColor(R.color.cv_muted));
+        view.setTextColor(context.getColor(R.color.cv_muted));
         view.setTextSize(14f);
         view.setPadding(0, dp(context, 8), 0, dp(context, 8));
         view.setLayoutParams(blockParams(context, 4));

@@ -12,6 +12,16 @@ The older Android SQLite/repository/routing code remains in the app only as a mi
 
 ## Demo Runtime
 
+Fastest local demo on macOS:
+
+```text
+Double-click: Run CampusVista.command
+```
+
+That launcher starts the OpenCLIP FastAPI backend, opens Android Studio if no
+emulator/device is connected, and auto-installs/launches the app when an
+emulator/device is already running.
+
 For emulator demos, Android calls:
 
 ```text

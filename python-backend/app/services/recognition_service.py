@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -8,12 +9,15 @@ from typing import Any
 import numpy as np
 
 from app import db
-from app.services.recognition_features import (
-    EMBEDDING_DIMENSION,
+PYTHON_COMMON_DIR = Path(__file__).resolve().parents[3] / "python-common"
+if str(PYTHON_COMMON_DIR) not in sys.path:
+    sys.path.insert(0, str(PYTHON_COMMON_DIR))
+
+from campusvista_recognition import (  # noqa: E402
     MODEL_VERSION,
     ImageDecodeError,
     decode_image,
-    embeddings_for_views,
+    encoder_for_model_version,
     query_views,
 )
 
@@ -32,7 +36,16 @@ class RecognitionIndex:
     checkpoint_ids: np.ndarray
     image_files: np.ndarray
     model_version: str
+    embedding_dimension: int
     metadata: dict[str, Any]
+
+    @property
+    def confidence_floor(self) -> float:
+        return float(self.metadata.get("confidence_floor", 0.90))
+
+    @property
+    def confidence_span(self) -> float:
+        return float(self.metadata.get("confidence_span", 0.14))
 
 
 class RecognitionService:
@@ -92,12 +105,13 @@ class RecognitionService:
         if self._is_low_information_image(image):
             return self._empty_response("Image is too blank, dark, or low-detail to recognize.")
 
-        query_embeddings = embeddings_for_views(query_views(image))
+        encoder = encoder_for_model_version(index.model_version)
+        query_embeddings = encoder.embeddings_for_views(query_views(image))
         similarities = query_embeddings @ index.embeddings.T
         best_by_reference = similarities.max(axis=0)
         ranked_reference_indexes = np.argsort(best_by_reference)[::-1][:80]
         scores = self._aggregate_scores(best_by_reference, ranked_reference_indexes, index)
-        matches = self._rank_matches(scores, max(1, min(limit, TOP_MATCH_LIMIT)))
+        matches = self._rank_matches(scores, max(1, min(limit, TOP_MATCH_LIMIT)), index)
         if not matches:
             return self._empty_response("No supported visual reference matched the photo.")
 
@@ -139,6 +153,7 @@ class RecognitionService:
                 checkpoint_ids=np.array([]),
                 image_files=np.array([]),
                 model_version=MODEL_VERSION,
+                embedding_dimension=1,
                 metadata={},
             )
             return self._index
@@ -149,13 +164,16 @@ class RecognitionService:
         checkpoint_ids = payload["checkpoint_ids"].astype(str)
         image_files = payload["image_files"].astype(str)
         model_version = str(payload["model_version"].item())
-        self._validate_index_payload(embeddings, checkpoint_ids, image_files, model_version)
+        encoder = encoder_for_model_version(model_version)
+        self._validate_index_payload(embeddings, checkpoint_ids, image_files, encoder.embedding_dimension)
+        self._validate_metadata(metadata, model_version, encoder.embedding_dimension)
 
         self._index = RecognitionIndex(
             embeddings=embeddings,
             checkpoint_ids=checkpoint_ids,
             image_files=image_files,
             model_version=model_version,
+            embedding_dimension=encoder.embedding_dimension,
             metadata=metadata,
         )
         return self._index
@@ -165,14 +183,24 @@ class RecognitionService:
         embeddings: np.ndarray,
         checkpoint_ids: np.ndarray,
         image_files: np.ndarray,
-        model_version: str,
+        embedding_dimension: int,
     ) -> None:
-        if embeddings.ndim != 2 or embeddings.shape[1] != EMBEDDING_DIMENSION:
+        if embeddings.ndim != 2 or embeddings.shape[1] != embedding_dimension:
             raise ValueError("Recognition index has an unexpected embedding shape.")
         if embeddings.shape[0] != checkpoint_ids.shape[0] or embeddings.shape[0] != image_files.shape[0]:
             raise ValueError("Recognition index labels do not match embedding rows.")
-        if model_version != MODEL_VERSION:
-            raise ValueError("Recognition index model version is not supported.")
+
+    @staticmethod
+    def _validate_metadata(
+        metadata: dict[str, Any],
+        model_version: str,
+        embedding_dimension: int,
+    ) -> None:
+        if metadata.get("model_version", model_version) != model_version:
+            raise ValueError("Recognition metadata model version does not match the index.")
+        metadata_dimension = metadata.get("embedding_dimension", embedding_dimension)
+        if int(metadata_dimension) != embedding_dimension:
+            raise ValueError("Recognition metadata embedding dimension does not match the index.")
 
     def _aggregate_scores(
         self,
@@ -198,6 +226,7 @@ class RecognitionService:
         self,
         scores: dict[str, dict[str, Any]],
         limit: int,
+        index: RecognitionIndex,
     ) -> list[dict[str, Any]]:
         checkpoint_names = self._checkpoint_names()
         ranked: list[tuple[float, str, dict[str, Any]]] = []
@@ -213,7 +242,7 @@ class RecognitionService:
         ranked.sort(reverse=True, key=lambda item: item[0])
         matches: list[dict[str, Any]] = []
         for rank, (score, checkpoint_id, entry) in enumerate(ranked[:limit], start=1):
-            percent = self._confidence_percent(score)
+            percent = self._confidence_percent(score, index.confidence_floor, index.confidence_span)
             image_file = entry["image_file"]
             matches.append(
                 {
@@ -240,8 +269,8 @@ class RecognitionService:
         return self._checkpoint_names_cache
 
     @staticmethod
-    def _confidence_percent(score: float) -> float:
-        percent = (score - 0.90) / 0.14 * 99.0
+    def _confidence_percent(score: float, floor: float, span: float) -> float:
+        percent = (score - floor) / max(span, 1e-6) * 99.0
         return round(max(0.0, min(99.0, percent)), 1)
 
     @staticmethod

@@ -16,15 +16,14 @@ from typing import Any
 
 import numpy as np
 
-sys_path_backend = Path(__file__).resolve().parents[2] / "python-backend"
-if str(sys_path_backend) not in sys.path:
-    sys.path.insert(0, str(sys_path_backend))
+PYTHON_COMMON_DIR = Path(__file__).resolve().parents[2] / "python-common"
+if str(PYTHON_COMMON_DIR) not in sys.path:
+    sys.path.insert(0, str(PYTHON_COMMON_DIR))
 
-from app.services.recognition_features import (  # noqa: E402
-    EMBEDDING_DIMENSION,
-    MODEL_VERSION,
+from campusvista_recognition import (  # noqa: E402
+    HANDCRAFTED_ENCODER_NAME,
     decode_image,
-    embeddings_for_views,
+    encoder_from_environment,
     reference_views,
 )
 
@@ -545,11 +544,9 @@ def generate_all() -> dict[str, Path]:
     create_seed_db(data, seed_db)
     publish_backend_assets(seed_db, config, recognition_index, recognition_metadata)
     publish_android_assets(seed_db, config, android_index, android_labels)
-    return {
+    outputs = {
         "seed_db": seed_db,
         "recognition_index": recognition_index,
-        "android_recognition_index_source": android_index,
-        "android_recognition_labels_source": android_labels,
         "recognition_metadata": recognition_metadata,
         "backend_seed_db": BACKEND_DATA_DIR / "campus_seed.db",
         "backend_recognition_index": BACKEND_DATA_DIR / "recognition" / RECOGNITION_INDEX_FILENAME,
@@ -561,6 +558,12 @@ def generate_all() -> dict[str, Path]:
         "android_map_config": ANDROID_ASSETS_DIR / "config" / "map_config.json",
         "android_map_asset": ANDROID_ASSETS_DIR / "maps" / str(config["campus_map_file"]),
     }
+    if android_index is not None and android_labels is not None:
+        outputs["android_recognition_index_source"] = android_index
+        outputs["android_recognition_labels_source"] = android_labels
+        outputs["android_recognition_index"] = ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_INDEX_FILENAME
+        outputs["android_recognition_labels"] = ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_LABELS_FILENAME
+    return outputs
 
 
 def write_processed_outputs(
@@ -597,8 +600,8 @@ def create_seed_db(data: dict[str, list[dict[str, str]]], output_path: Path) -> 
 def publish_android_assets(
     seed_db: Path,
     config: dict[str, Any],
-    recognition_index: Path,
-    recognition_labels: Path,
+    recognition_index: Path | None,
+    recognition_labels: Path | None,
 ) -> None:
     (ANDROID_ASSETS_DIR / "seed").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "config").mkdir(parents=True, exist_ok=True)
@@ -616,8 +619,9 @@ def publish_android_assets(
 
     for image_path in (RAW_DIR / "outdoor_panos").glob("*.jp*g"):
         shutil.copyfile(image_path, android_pano_dir / image_path.name)
-    shutil.copyfile(recognition_index, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_INDEX_FILENAME)
-    shutil.copyfile(recognition_labels, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_LABELS_FILENAME)
+    if recognition_index is not None and recognition_labels is not None:
+        shutil.copyfile(recognition_index, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_INDEX_FILENAME)
+        shutil.copyfile(recognition_labels, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_LABELS_FILENAME)
 
 
 def publish_backend_assets(
@@ -668,8 +672,13 @@ def build_recognition_refs(data: dict[str, list[dict[str, str]]]) -> list[dict[s
     return rows
 
 
-def build_recognition_index(data: dict[str, list[dict[str, str]]]) -> tuple[Path, Path, Path, Path]:
-    RECOGNITION_DIR.mkdir(parents=True, exist_ok=True)
+def build_recognition_index(
+    data: dict[str, list[dict[str, str]]],
+    output_dir: Path = RECOGNITION_DIR,
+) -> tuple[Path, Path, Path | None, Path | None]:
+    recognition_dir = Path(output_dir)
+    recognition_dir.mkdir(parents=True, exist_ok=True)
+    encoder = encoder_from_environment()
     embeddings: list[np.ndarray] = []
     checkpoint_ids: list[str] = []
     image_files: list[str] = []
@@ -684,7 +693,7 @@ def build_recognition_index(data: dict[str, list[dict[str, str]]]) -> tuple[Path
         if supported:
             image_path = RAW_DIR / "outdoor_panos" / image_file
             image = decode_image(image_path.read_bytes())
-            view_embeddings = embeddings_for_views(reference_views(image))
+            view_embeddings = encoder.embeddings_for_views(reference_views(image))
             reference_count = int(view_embeddings.shape[0])
             for index, embedding in enumerate(view_embeddings):
                 embeddings.append(embedding)
@@ -704,32 +713,45 @@ def build_recognition_index(data: dict[str, list[dict[str, str]]]) -> tuple[Path
     matrix = (
         np.vstack(embeddings).astype(np.float32)
         if embeddings
-        else np.empty((0, EMBEDDING_DIMENSION), dtype=np.float32)
+        else np.empty((0, encoder.embedding_dimension), dtype=np.float32)
     )
-    index_path = RECOGNITION_DIR / RECOGNITION_INDEX_FILENAME
-    android_index_path = RECOGNITION_DIR / RECOGNITION_ANDROID_INDEX_FILENAME
-    android_labels_path = RECOGNITION_DIR / RECOGNITION_ANDROID_LABELS_FILENAME
-    metadata_path = RECOGNITION_DIR / RECOGNITION_METADATA_FILENAME
+    index_path = recognition_dir / RECOGNITION_INDEX_FILENAME
+    android_index_path = (
+        recognition_dir / RECOGNITION_ANDROID_INDEX_FILENAME
+        if encoder.name == HANDCRAFTED_ENCODER_NAME
+        else None
+    )
+    android_labels_path = (
+        recognition_dir / RECOGNITION_ANDROID_LABELS_FILENAME
+        if encoder.name == HANDCRAFTED_ENCODER_NAME
+        else None
+    )
+    metadata_path = recognition_dir / RECOGNITION_METADATA_FILENAME
     np.savez_compressed(
         index_path,
         embeddings=matrix,
         checkpoint_ids=np.array(checkpoint_ids),
         image_files=np.array(image_files),
         view_indexes=np.array(view_indexes, dtype=np.int16),
-        model_version=np.array(MODEL_VERSION),
+        model_version=np.array(encoder.model_version),
     )
-    with android_index_path.open("wb") as file:
-        np.array([matrix.shape[0], matrix.shape[1]], dtype="<i4").tofile(file)
-        matrix.astype("<f4").tofile(file)
-    with android_labels_path.open("w", encoding="utf-8", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["checkpoint_id", "image_file"])
-        writer.writerows(zip(checkpoint_ids, image_files))
+    if android_index_path is not None and android_labels_path is not None:
+        with android_index_path.open("wb") as file:
+            np.array([matrix.shape[0], matrix.shape[1]], dtype="<i4").tofile(file)
+            matrix.astype("<f4").tofile(file)
+        with android_labels_path.open("w", encoding="utf-8", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["checkpoint_id", "image_file"])
+            writer.writerows(zip(checkpoint_ids, image_files))
     _write_json(
         metadata_path,
         {
-            "model_version": MODEL_VERSION,
+            "model_version": encoder.model_version,
+            "encoder": encoder.name,
             "embedding_count": int(matrix.shape[0]),
+            "embedding_dimension": int(matrix.shape[1]),
+            "confidence_floor": encoder.confidence_floor,
+            "confidence_span": encoder.confidence_span,
             "supported_checkpoint_count": sum(1 for row in metadata_rows if row["supported"]),
             "checkpoint_count": len(metadata_rows),
             "rows": metadata_rows,
