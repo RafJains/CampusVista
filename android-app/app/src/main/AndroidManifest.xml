@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".CampusVistaApp"
@@ -19,6 +24,7 @@
         <activity android:name=".ui.route.RoutePreviewActivity" />
         <activity android:name=".ui.place.PlaceDetailsActivity" />
         <activity android:name=".ui.search.SearchActivity" />
+        <activity android:name=".ui.location.PhotoRecognitionActivity" />
         <activity android:name=".ui.location.SetLocationActivity" />
         <activity android:name=".ui.home.HomeMapActivity" />
         <activity

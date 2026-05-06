@@ -74,6 +74,16 @@ Panorama metadata by checkpoint.
 - `orientation`
 - `description`
 
+### recognition_refs
+
+Photo-recognition coverage by checkpoint.
+
+- `checkpoint_id`
+- `image_file`
+- `embedding_file`
+- `supported`
+- `reference_count`
+
 ### search_aliases
 
 Alternate search strings for places.

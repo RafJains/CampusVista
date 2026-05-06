@@ -37,6 +37,8 @@ public final class SetLocationActivity extends Activity {
 
         findViewById(R.id.openSearchLocationButton).setOnClickListener(view ->
                 startActivity(new Intent(this, SearchActivity.class)));
+        findViewById(R.id.openPhotoRecognitionButton).setOnClickListener(view ->
+                startActivity(new Intent(this, PhotoRecognitionActivity.class)));
     }
 
     @Override

@@ -163,4 +163,26 @@ public final class BackendDtos {
         public List<String> warnings;
     }
 
+    public static final class RecognitionMatchDto {
+        @SerializedName("checkpoint_id")
+        public String checkpointId;
+        @SerializedName("checkpoint_name")
+        public String checkpointName;
+        @SerializedName("confidence_percent")
+        public double confidencePercent;
+        public int rank;
+        @SerializedName("reference_image_url")
+        public String referenceImageUrl;
+        @SerializedName("supporting_views")
+        public int supportingViews;
+    }
+
+    public static final class RecognitionResponseDto {
+        public boolean recognized;
+        public List<RecognitionMatchDto> matches;
+        public String message;
+        @SerializedName("model_version")
+        public String modelVersion;
+    }
+
 }

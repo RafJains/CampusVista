@@ -8,10 +8,25 @@ import re
 import shutil
 import sqlite3
 import struct
+import sys
 import zipfile
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any
+
+import numpy as np
+
+sys_path_backend = Path(__file__).resolve().parents[2] / "python-backend"
+if str(sys_path_backend) not in sys.path:
+    sys.path.insert(0, str(sys_path_backend))
+
+from app.services.recognition_features import (  # noqa: E402
+    EMBEDDING_DIMENSION,
+    MODEL_VERSION,
+    decode_image,
+    embeddings_for_views,
+    reference_views,
+)
 
 
 PYTHON_TOOLS_DIR = Path(__file__).resolve().parents[1]
@@ -20,6 +35,11 @@ RAW_DIR = PYTHON_TOOLS_DIR / "data" / "raw"
 PROCESSED_DIR = PYTHON_TOOLS_DIR / "data" / "processed"
 SEED_DIR = PYTHON_TOOLS_DIR / "data" / "seed"
 CONFIG_PATH = PYTHON_TOOLS_DIR / "config.json"
+RECOGNITION_DIR = PYTHON_TOOLS_DIR / "data" / "recognition"
+RECOGNITION_INDEX_FILENAME = "recognition_index.npz"
+RECOGNITION_ANDROID_INDEX_FILENAME = "recognition_index.bin"
+RECOGNITION_ANDROID_LABELS_FILENAME = "recognition_index_labels.csv"
+RECOGNITION_METADATA_FILENAME = "recognition_metadata.json"
 ANDROID_ASSETS_DIR = REPO_ROOT / "android-app" / "app" / "src" / "main" / "assets"
 BACKEND_DATA_DIR = REPO_ROOT / "python-backend" / "data"
 
@@ -140,7 +160,7 @@ TIME_RE = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
 MAX_PANO_BYTES = 2 * 1024 * 1024
 MAX_TOTAL_PANO_BYTES = 60 * 1024 * 1024
 MAX_MAP_BYTES = 8 * 1024 * 1024
-SEED_DB_VERSION = 2
+SEED_DB_VERSION = 3
 
 
 class ValidationError(Exception):
@@ -518,16 +538,26 @@ def validate_search_aliases(
 
 def generate_all() -> dict[str, Path]:
     data, config = validate_all()
+    data["recognition_refs"] = build_recognition_refs(data)
     write_processed_outputs(data, config)
+    recognition_index, recognition_metadata, android_index, android_labels = build_recognition_index(data)
     seed_db = SEED_DIR / "campus_seed.db"
     create_seed_db(data, seed_db)
-    publish_backend_assets(seed_db, config)
-    publish_android_assets(seed_db, config)
+    publish_backend_assets(seed_db, config, recognition_index, recognition_metadata)
+    publish_android_assets(seed_db, config, android_index, android_labels)
     return {
         "seed_db": seed_db,
+        "recognition_index": recognition_index,
+        "android_recognition_index_source": android_index,
+        "android_recognition_labels_source": android_labels,
+        "recognition_metadata": recognition_metadata,
         "backend_seed_db": BACKEND_DATA_DIR / "campus_seed.db",
+        "backend_recognition_index": BACKEND_DATA_DIR / "recognition" / RECOGNITION_INDEX_FILENAME,
+        "backend_recognition_metadata": BACKEND_DATA_DIR / "recognition" / RECOGNITION_METADATA_FILENAME,
         "backend_map_config": BACKEND_DATA_DIR / "map_config.json",
         "android_seed_db": ANDROID_ASSETS_DIR / "seed" / "campus_seed.db",
+        "android_recognition_index": ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_INDEX_FILENAME,
+        "android_recognition_labels": ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_LABELS_FILENAME,
         "android_map_config": ANDROID_ASSETS_DIR / "config" / "map_config.json",
         "android_map_asset": ANDROID_ASSETS_DIR / "maps" / str(config["campus_map_file"]),
     }
@@ -543,6 +573,7 @@ def write_processed_outputs(
     _write_json(PROCESSED_DIR / "edges.json", data["edges"])
     _write_json(PROCESSED_DIR / "crowd_rules.json", data["crowd_rules"])
     _write_json(PROCESSED_DIR / "outdoor_panos.json", data["outdoor_panos"])
+    _write_json(PROCESSED_DIR / "recognition_refs.json", data["recognition_refs"])
     _write_json(PROCESSED_DIR / "map_config.json", config)
     _write_json(PROCESSED_DIR / "search_index.json", build_search_index(data))
 
@@ -563,10 +594,16 @@ def create_seed_db(data: dict[str, list[dict[str, str]]], output_path: Path) -> 
         connection.close()
 
 
-def publish_android_assets(seed_db: Path, config: dict[str, Any]) -> None:
+def publish_android_assets(
+    seed_db: Path,
+    config: dict[str, Any],
+    recognition_index: Path,
+    recognition_labels: Path,
+) -> None:
     (ANDROID_ASSETS_DIR / "seed").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "config").mkdir(parents=True, exist_ok=True)
     (ANDROID_ASSETS_DIR / "maps").mkdir(parents=True, exist_ok=True)
+    (ANDROID_ASSETS_DIR / "ml").mkdir(parents=True, exist_ok=True)
     android_pano_dir = ANDROID_ASSETS_DIR / "pano" / "outdoor"
     if android_pano_dir.exists():
         shutil.rmtree(android_pano_dir)
@@ -579,22 +616,126 @@ def publish_android_assets(seed_db: Path, config: dict[str, Any]) -> None:
 
     for image_path in (RAW_DIR / "outdoor_panos").glob("*.jp*g"):
         shutil.copyfile(image_path, android_pano_dir / image_path.name)
+    shutil.copyfile(recognition_index, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_INDEX_FILENAME)
+    shutil.copyfile(recognition_labels, ANDROID_ASSETS_DIR / "ml" / RECOGNITION_ANDROID_LABELS_FILENAME)
 
 
-def publish_backend_assets(seed_db: Path, config: dict[str, Any]) -> None:
+def publish_backend_assets(
+    seed_db: Path,
+    config: dict[str, Any],
+    recognition_index: Path,
+    recognition_metadata: Path,
+) -> None:
     BACKEND_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    backend_recognition_dir = BACKEND_DATA_DIR / "recognition"
     backend_pano_dir = BACKEND_DATA_DIR / "pano" / "outdoor"
     if backend_pano_dir.exists():
         shutil.rmtree(backend_pano_dir)
     backend_pano_dir.mkdir(parents=True, exist_ok=True)
+    backend_recognition_dir.mkdir(parents=True, exist_ok=True)
     (BACKEND_DATA_DIR / "maps").mkdir(parents=True, exist_ok=True)
 
     shutil.copyfile(seed_db, BACKEND_DATA_DIR / "campus_seed.db")
+    shutil.copyfile(recognition_index, backend_recognition_dir / RECOGNITION_INDEX_FILENAME)
+    shutil.copyfile(recognition_metadata, backend_recognition_dir / RECOGNITION_METADATA_FILENAME)
     _write_json(BACKEND_DATA_DIR / "map_config.json", config)
     map_file = str(config["campus_map_file"])
     shutil.copyfile(RAW_DIR / "maps" / map_file, BACKEND_DATA_DIR / "maps" / map_file)
     for image_path in (RAW_DIR / "outdoor_panos").glob("*.jp*g"):
         shutil.copyfile(image_path, backend_pano_dir / image_path.name)
+
+
+def build_recognition_refs(data: dict[str, list[dict[str, str]]]) -> list[dict[str, str]]:
+    pano_by_checkpoint = {
+        row["checkpoint_id"]: row["image_file"]
+        for row in data["outdoor_panos"]
+        if row.get("checkpoint_id") and row.get("image_file")
+    }
+    rows: list[dict[str, str]] = []
+    for checkpoint in data["checkpoints"]:
+        checkpoint_id = checkpoint["checkpoint_id"]
+        image_file = pano_by_checkpoint.get(checkpoint_id, "")
+        reference_count = "27" if image_file else "0"
+        rows.append(
+            {
+                "checkpoint_id": checkpoint_id,
+                "image_file": image_file,
+                "embedding_file": RECOGNITION_INDEX_FILENAME if image_file else "",
+                "supported": "1" if image_file else "0",
+                "reference_count": reference_count,
+            }
+        )
+    return rows
+
+
+def build_recognition_index(data: dict[str, list[dict[str, str]]]) -> tuple[Path, Path, Path, Path]:
+    RECOGNITION_DIR.mkdir(parents=True, exist_ok=True)
+    embeddings: list[np.ndarray] = []
+    checkpoint_ids: list[str] = []
+    image_files: list[str] = []
+    view_indexes: list[int] = []
+    metadata_rows: list[dict[str, Any]] = []
+
+    for row in data["recognition_refs"]:
+        checkpoint_id = row["checkpoint_id"]
+        image_file = row["image_file"]
+        supported = row["supported"] == "1"
+        reference_count = 0
+        if supported:
+            image_path = RAW_DIR / "outdoor_panos" / image_file
+            image = decode_image(image_path.read_bytes())
+            view_embeddings = embeddings_for_views(reference_views(image))
+            reference_count = int(view_embeddings.shape[0])
+            for index, embedding in enumerate(view_embeddings):
+                embeddings.append(embedding)
+                checkpoint_ids.append(checkpoint_id)
+                image_files.append(image_file)
+                view_indexes.append(index)
+        metadata_rows.append(
+            {
+                "checkpoint_id": checkpoint_id,
+                "image_file": image_file or None,
+                "embedding_file": RECOGNITION_INDEX_FILENAME if supported else None,
+                "supported": supported,
+                "reference_count": reference_count,
+            }
+        )
+
+    matrix = (
+        np.vstack(embeddings).astype(np.float32)
+        if embeddings
+        else np.empty((0, EMBEDDING_DIMENSION), dtype=np.float32)
+    )
+    index_path = RECOGNITION_DIR / RECOGNITION_INDEX_FILENAME
+    android_index_path = RECOGNITION_DIR / RECOGNITION_ANDROID_INDEX_FILENAME
+    android_labels_path = RECOGNITION_DIR / RECOGNITION_ANDROID_LABELS_FILENAME
+    metadata_path = RECOGNITION_DIR / RECOGNITION_METADATA_FILENAME
+    np.savez_compressed(
+        index_path,
+        embeddings=matrix,
+        checkpoint_ids=np.array(checkpoint_ids),
+        image_files=np.array(image_files),
+        view_indexes=np.array(view_indexes, dtype=np.int16),
+        model_version=np.array(MODEL_VERSION),
+    )
+    with android_index_path.open("wb") as file:
+        np.array([matrix.shape[0], matrix.shape[1]], dtype="<i4").tofile(file)
+        matrix.astype("<f4").tofile(file)
+    with android_labels_path.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["checkpoint_id", "image_file"])
+        writer.writerows(zip(checkpoint_ids, image_files))
+    _write_json(
+        metadata_path,
+        {
+            "model_version": MODEL_VERSION,
+            "embedding_count": int(matrix.shape[0]),
+            "supported_checkpoint_count": sum(1 for row in metadata_rows if row["supported"]),
+            "checkpoint_count": len(metadata_rows),
+            "rows": metadata_rows,
+        },
+    )
+    return index_path, metadata_path, android_index_path, android_labels_path
 
 
 def build_search_index(data: dict[str, list[dict[str, str]]]) -> list[dict[str, str]]:
@@ -1283,6 +1424,10 @@ def main_validate(scope: str) -> None:
 
 
 def _insert_rows(connection: sqlite3.Connection, data: dict[str, list[dict[str, str]]]) -> None:
+    recognition_refs = data.get("recognition_refs")
+    if recognition_refs is None:
+        recognition_refs = build_recognition_refs(data)
+
     connection.executemany(
         """
         INSERT INTO checkpoints (
@@ -1397,6 +1542,23 @@ def _insert_rows(connection: sqlite3.Connection, data: dict[str, list[dict[str, 
                 _blank_to_none(row.get("description")),
             )
             for row in data["outdoor_panos"]
+        ],
+    )
+    connection.executemany(
+        """
+        INSERT INTO recognition_refs (
+            checkpoint_id, image_file, embedding_file, supported, reference_count
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        [
+            (
+                row["checkpoint_id"],
+                _blank_to_none(row.get("image_file")),
+                _blank_to_none(row.get("embedding_file")),
+                int(row["supported"]),
+                int(row["reference_count"]),
+            )
+            for row in recognition_refs
         ],
     )
     connection.executemany(
@@ -1619,6 +1781,15 @@ CREATE TABLE outdoor_panos (
     FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id)
 );
 
+CREATE TABLE recognition_refs (
+    checkpoint_id TEXT PRIMARY KEY,
+    image_file TEXT,
+    embedding_file TEXT,
+    supported INTEGER NOT NULL DEFAULT 0,
+    reference_count INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (checkpoint_id) REFERENCES checkpoints(checkpoint_id)
+);
+
 CREATE TABLE search_aliases (
     alias_id TEXT PRIMARY KEY,
     place_id TEXT NOT NULL,
@@ -1650,6 +1821,9 @@ ON crowd_rules(checkpoint_id, day_type, start_time, end_time);
 
 CREATE INDEX idx_panos_checkpoint
 ON outdoor_panos(checkpoint_id);
+
+CREATE INDEX idx_recognition_supported
+ON recognition_refs(supported);
 
 CREATE INDEX idx_alias_text
 ON search_aliases(alias_text);

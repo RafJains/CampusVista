@@ -96,3 +96,19 @@ class RouteResponse(BaseModel):
     panos: list[Optional[PanoOut]] = Field(default_factory=list)
     instructions: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+
+
+class RecognitionMatchOut(BaseModel):
+    checkpoint_id: str
+    checkpoint_name: str
+    confidence_percent: float
+    rank: int
+    reference_image_url: Optional[str] = None
+    supporting_views: int = 0
+
+
+class RecognitionResponse(BaseModel):
+    recognized: bool
+    matches: list[RecognitionMatchOut] = Field(default_factory=list)
+    message: str
+    model_version: str
