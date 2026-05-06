@@ -1,5 +1,6 @@
 import sqlite3
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -95,11 +96,15 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
         data["recognition_refs"] = cv.build_recognition_refs(data)
         supported_rows = [row for row in data["recognition_refs"] if row["supported"] == "1"]
 
-        index_path, metadata_path, android_index_path, android_labels_path = cv.build_recognition_index(data)
-        self.assertTrue(index_path.exists())
-        self.assertTrue(metadata_path.exists())
-        self.assertTrue(android_index_path.exists())
-        self.assertTrue(android_labels_path.exists())
+        with tempfile.TemporaryDirectory() as temp_dir:
+            index_path, metadata_path, android_index_path, android_labels_path = cv.build_recognition_index(
+                data,
+                output_dir=Path(temp_dir),
+            )
+            self.assertTrue(index_path.exists())
+            self.assertTrue(metadata_path.exists())
+            self.assertTrue(android_index_path.exists())
+            self.assertTrue(android_labels_path.exists())
         self.assertEqual(len(data["outdoor_panos"]), len(supported_rows))
         self.assertTrue(all(int(row["reference_count"]) > 0 for row in supported_rows))
 

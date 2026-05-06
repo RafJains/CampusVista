@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import sys
+import json
+import tempfile
 import unittest
 from io import BytesIO
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +18,12 @@ from app.services.recognition_service import RecognitionService  # noqa: E402
 from app.services.routing_service import RoutingService  # noqa: E402
 from app.services.search_service import SearchService  # noqa: E402
 from app.utils.image_uploads import extract_image_upload  # noqa: E402
+from campusvista_recognition import (  # noqa: E402
+    EMBEDDING_DIMENSION,
+    MODEL_VERSION,
+    create_encoder,
+    encoder_for_model_version,
+)
 
 
 DB_PATH = ROOT / "data" / "campus_seed.db"
@@ -89,7 +98,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertEqual(75, coverage["checkpoint_count"])
         self.assertEqual(59, coverage["supported_checkpoint_count"])
         self.assertGreater(coverage["embedding_count"], coverage["supported_checkpoint_count"])
-        self.assertEqual("campusvista-vpr-histogram-v1", coverage["model_version"])
+        self.assertTrue(coverage["model_version"].startswith("campusvista-vpr-openclip-"))
 
     def test_recognition_rejects_invalid_uploads_and_caches_index(self) -> None:
         service = RecognitionService(DB_PATH)
@@ -105,6 +114,41 @@ class BackendServiceTests(unittest.TestCase):
         first = service._load_index()
         second = service._load_index()
         self.assertIs(first, second)
+
+    def test_recognition_encoder_defaults_to_handcrafted_model(self) -> None:
+        encoder = create_encoder("handcrafted")
+
+        self.assertEqual(MODEL_VERSION, encoder.model_version)
+        self.assertEqual(EMBEDDING_DIMENSION, encoder.embedding_dimension)
+        self.assertIs(create_encoder("handcrafted"), encoder)
+        self.assertIs(encoder_for_model_version(MODEL_VERSION).__class__, encoder.__class__)
+
+    def test_recognition_rejects_mismatched_index_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            index_path = temp_path / "recognition_index.npz"
+            metadata_path = temp_path / "recognition_metadata.json"
+            np.savez_compressed(
+                index_path,
+                embeddings=np.zeros((1, EMBEDDING_DIMENSION), dtype=np.float32),
+                checkpoint_ids=np.array(["OUT_CP001"]),
+                image_files=np.array(["OUT_CP001.jpg"]),
+                model_version=np.array(MODEL_VERSION),
+            )
+            metadata_path.write_text(
+                json.dumps(
+                    {
+                        "model_version": "wrong-version",
+                        "embedding_dimension": EMBEDDING_DIMENSION,
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            service = RecognitionService(DB_PATH, index_path=index_path, metadata_path=metadata_path)
+
+            with self.assertRaises(ValueError):
+                service._load_index()
 
     def test_image_upload_parser_accepts_raw_and_multipart_images(self) -> None:
         raw_bytes, raw_type = extract_image_upload(b"jpeg-bytes", "image/jpeg")

@@ -1,7 +1,11 @@
 {
   "checkpoint_count": 75,
+  "confidence_floor": 0.93,
+  "confidence_span": 0.11,
   "embedding_count": 1593,
-  "model_version": "campusvista-vpr-histogram-v1",
+  "embedding_dimension": 512,
+  "encoder": "openclip",
+  "model_version": "campusvista-vpr-openclip-ViT-B-32-laion2b_s34b_b79k",
   "rows": [
     {
       "checkpoint_id": "OUT_CP001",
