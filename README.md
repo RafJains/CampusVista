@@ -37,7 +37,7 @@ This is not a standalone offline Android app unless the Python backend is also r
 
 ## MVP Features
 
-- Python FastAPI API for checkpoints, places, routing, and panos
+- Python FastAPI API for checkpoints, places, routing, panos, and photo recognition
 - SQLite-backed campus seed data
 - Excel-driven real-data import from `campus_data.xlsx`
 - PDF map extraction with numbered checkpoint coordinate extraction
@@ -46,6 +46,7 @@ This is not a standalone offline Android app unless the Python backend is also r
 - Shortest-path routing with active crowd warning popups
 - Nearest-checkpoint snapping from map coordinates
 - Generated outdoor walking instructions
+- Hybrid photo recognition from camera/gallery images against pano-backed checkpoint references
 - Java/XML Android screens using Retrofit as the primary data path
 - Android local fallback for search, checkpoints, routing, and panos
 
@@ -59,7 +60,10 @@ This is not a standalone offline Android app unless the Python backend is also r
 - `GET /places/search?q=cafeteria`
 - `GET /places/{place_id}`
 - `GET /panos/{checkpoint_id}`
+- `GET /recognition/refs`
+- `GET /recognition/coverage`
 - `POST /route`
+- `POST /recognize` with multipart field `image`
 
 Example route request:
 
@@ -109,7 +113,7 @@ CampusVista/
 |   |   |-- db.py
 |   |   |-- models.py
 |   |   |-- routes/api.py   # all MVP API endpoints
-|   |   |-- services/       # search, routing, crowd, panos
+|   |   |-- services/       # search, routing, crowd, panos, recognition
 |   |   `-- utils/
 |   |-- data/
 |   |-- tests/
@@ -182,15 +186,18 @@ Before the demo:
 - Start the FastAPI backend and confirm `/health`.
 - Confirm search works with `cafeteria`.
 - Confirm route generation from `OUT_CP001` to `PL_002`.
+- Confirm photo recognition with a supported pano image.
 - Build `:app:assembleDebug` successfully.
 - Launch the Android emulator before presenting.
 - Open CampusVista and verify the splash screen reaches the home map.
+- See `docs/recognition_implementation.md` for recognition phase status and accuracy limits.
 
 Suggested live flow:
 
 - Show the Python backend terminal running.
 - Open the Android app.
 - Pick or keep the current outdoor location.
+- Use Recognize location with a camera/gallery image and select the top checkpoint match.
 - Search for `cafeteria`.
 - Open Cafeteria details.
 - Preview a shortest route.
@@ -200,7 +207,7 @@ Suggested live flow:
 
 ## Demo Failure Notes
 
-- Backend not running: Android should fall back to local demo data, but Python-owned routing/search will not be demonstrated. Start backend first.
+- Backend not running: Android should fall back for routing/search, but photo recognition will show a backend-needed message. Start backend first.
 - Emulator cannot connect: use `10.0.2.2:8000`, not `localhost:8000`, inside Android.
 - Physical phone cannot connect: phone and laptop must be on the same network, Windows firewall may need to allow port `8000`, and the app backend URL must point to the laptop IP.
 - Port already in use: stop the other process or run FastAPI on another port and update Android before rebuilding.

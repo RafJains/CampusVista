@@ -7,6 +7,7 @@ import com.example.campusvista.network.BackendDtos.HealthDto;
 import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
 import com.example.campusvista.network.BackendDtos.PanoDto;
 import com.example.campusvista.network.BackendDtos.PlaceDto;
+import com.example.campusvista.network.BackendDtos.RecognitionResponseDto;
 import com.example.campusvista.network.BackendDtos.RouteRequestDto;
 import com.example.campusvista.network.BackendDtos.RouteResponseDto;
 import com.google.gson.Gson;
@@ -15,7 +16,10 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,7 +27,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -103,6 +109,23 @@ public final class BackendClient {
         enqueue(api.buildRoute(request), callback);
     }
 
+    public void recognize(
+            byte[] imageBytes,
+            String filename,
+            BackendCallback<RecognitionResponseDto> callback
+    ) {
+        RequestBody body = RequestBody.create(
+                MediaType.parse("image/jpeg"),
+                imageBytes
+        );
+        MultipartBody.Part image = MultipartBody.Part.createFormData(
+                "image",
+                filename,
+                body
+        );
+        enqueue(api.recognize(image), callback);
+    }
+
     private static <T> void enqueue(Call<T> call, BackendCallback<T> callback) {
         call.enqueue(new Callback<T>() {
             @Override
@@ -160,5 +183,9 @@ public final class BackendClient {
 
         @POST("route")
         Call<RouteResponseDto> buildRoute(@Body RouteRequestDto request);
+
+        @Multipart
+        @POST("recognize")
+        Call<RecognitionResponseDto> recognize(@Part MultipartBody.Part image);
     }
 }

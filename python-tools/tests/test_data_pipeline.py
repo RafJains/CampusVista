@@ -51,6 +51,7 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
             "edges",
             "crowd_rules",
             "outdoor_panos",
+            "recognition_refs",
             "search_aliases",
         }
 
@@ -76,6 +77,10 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
                     len(data["places"]),
                 )
                 self.assertEqual(
+                    len(data["checkpoints"]),
+                    connection.execute("SELECT COUNT(*) FROM recognition_refs").fetchone()[0],
+                )
+                self.assertEqual(
                     cv.SEED_DB_VERSION,
                     connection.execute("PRAGMA user_version").fetchone()[0],
                 )
@@ -84,6 +89,19 @@ class CampusVistaDataPipelineTests(unittest.TestCase):
         finally:
             if db_path.exists():
                 db_path.unlink()
+
+    def test_recognition_index_matches_supported_panos(self) -> None:
+        data, _ = cv.validate_all()
+        data["recognition_refs"] = cv.build_recognition_refs(data)
+        supported_rows = [row for row in data["recognition_refs"] if row["supported"] == "1"]
+
+        index_path, metadata_path, android_index_path, android_labels_path = cv.build_recognition_index(data)
+        self.assertTrue(index_path.exists())
+        self.assertTrue(metadata_path.exists())
+        self.assertTrue(android_index_path.exists())
+        self.assertTrue(android_labels_path.exists())
+        self.assertEqual(len(data["outdoor_panos"]), len(supported_rows))
+        self.assertTrue(all(int(row["reference_count"]) > 0 for row in supported_rows))
 
 
 if __name__ == "__main__":

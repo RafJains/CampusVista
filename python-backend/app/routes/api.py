@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 
 from app.models import (
     CheckpointOut,
@@ -10,19 +10,23 @@ from app.models import (
     NearestCheckpointOut,
     PanoOut,
     PlaceOut,
+    RecognitionResponse,
     RouteRequest,
     RouteResponse,
     SearchResultOut,
 )
 from app.services.pano_service import PanoService
+from app.services.recognition_service import RecognitionService
 from app.services.routing_service import RoutingService
 from app.services.search_service import SearchService
+from app.utils.image_uploads import extract_image_upload
 
 
 router = APIRouter()
 routing_service = RoutingService()
 search_service = SearchService()
 pano_service = PanoService()
+recognition_service = RecognitionService()
 
 
 @router.get("/checkpoints", response_model=list[CheckpointOut], tags=["checkpoints"])
@@ -80,5 +84,26 @@ def get_pano(checkpoint_id: str) -> dict:
 def build_route(request: RouteRequest) -> dict:
     try:
         return routing_service.compute_route(request)
+    except ValueError as exception:
+        raise HTTPException(status_code=400, detail=str(exception)) from exception
+
+
+@router.get("/recognition/refs", tags=["recognition"])
+def get_recognition_refs() -> list[dict]:
+    return recognition_service.get_reference_labels()
+
+
+@router.get("/recognition/coverage", tags=["recognition"])
+def get_recognition_coverage() -> dict:
+    return recognition_service.get_coverage_summary()
+
+
+@router.post("/recognize", response_model=RecognitionResponse, tags=["recognition"])
+async def recognize_location(request: Request) -> dict:
+    content_type = request.headers.get("content-type", "")
+    body = await request.body()
+    try:
+        image_bytes, image_content_type = extract_image_upload(body, content_type)
+        return recognition_service.recognize(image_bytes, image_content_type)
     except ValueError as exception:
         raise HTTPException(status_code=400, detail=str(exception)) from exception

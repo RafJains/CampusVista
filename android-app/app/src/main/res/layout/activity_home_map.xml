@@ -107,6 +107,16 @@
             android:text="Start navigation"
             android:textColor="@color/cv_white" />
 
+        <Button
+            android:id="@+id/recognizeLocationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cv_button_secondary"
+            android:minHeight="52dp"
+            android:text="Recognize location"
+            android:textColor="@color/cv_ink" />
+
         <TextView
             android:id="@+id/categoriesTitle"
             android:layout_width="match_parent"

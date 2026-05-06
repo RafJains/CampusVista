@@ -2,15 +2,19 @@ from __future__ import annotations
 
 import sys
 import unittest
+from io import BytesIO
 from pathlib import Path
 
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app.services.pano_service import PanoService  # noqa: E402
+from app.services.recognition_service import RecognitionService  # noqa: E402
 from app.services.routing_service import RoutingService  # noqa: E402
 from app.services.search_service import SearchService  # noqa: E402
+from app.utils.image_uploads import extract_image_upload  # noqa: E402
 
 
 DB_PATH = ROOT / "data" / "campus_seed.db"
@@ -66,6 +70,63 @@ class BackendServiceTests(unittest.TestCase):
         pano = PanoService(DB_PATH).get_pano_for_checkpoint("OUT_CP004")
         self.assertIsNotNone(pano)
         self.assertEqual("OUT_CP004.jpg", pano["image_file"])
+
+    def test_recognition_returns_ordered_matches_for_known_pano(self) -> None:
+        service = RecognitionService(DB_PATH)
+        image_bytes = (ROOT / "data" / "pano" / "outdoor" / "OUT_CP001.jpg").read_bytes()
+
+        result = service.recognize(image_bytes, "image/jpeg")
+
+        self.assertIn("recognized", result)
+        self.assertGreater(len(result["matches"]), 0)
+        self.assertEqual(1, result["matches"][0]["rank"])
+        self.assertGreaterEqual(result["matches"][0]["confidence_percent"], 0)
+        self.assertLessEqual(result["matches"][0]["confidence_percent"], 99)
+
+    def test_recognition_coverage_reports_supported_checkpoints(self) -> None:
+        coverage = RecognitionService(DB_PATH).get_coverage_summary()
+
+        self.assertEqual(75, coverage["checkpoint_count"])
+        self.assertEqual(59, coverage["supported_checkpoint_count"])
+        self.assertGreater(coverage["embedding_count"], coverage["supported_checkpoint_count"])
+        self.assertEqual("campusvista-vpr-histogram-v1", coverage["model_version"])
+
+    def test_recognition_rejects_invalid_uploads_and_caches_index(self) -> None:
+        service = RecognitionService(DB_PATH)
+
+        with self.assertRaises(ValueError):
+            service.recognize(b"not an image", "text/plain")
+        with self.assertRaises(ValueError):
+            service.recognize(b"", "image/jpeg")
+        blank = BytesIO()
+        Image.new("RGB", (224, 224), "white").save(blank, format="JPEG")
+        self.assertFalse(service.recognize(blank.getvalue(), "image/jpeg")["recognized"])
+
+        first = service._load_index()
+        second = service._load_index()
+        self.assertIs(first, second)
+
+    def test_image_upload_parser_accepts_raw_and_multipart_images(self) -> None:
+        raw_bytes, raw_type = extract_image_upload(b"jpeg-bytes", "image/jpeg")
+        self.assertEqual(b"jpeg-bytes", raw_bytes)
+        self.assertEqual("image/jpeg", raw_type)
+
+        boundary = "campusvista"
+        multipart = (
+            b"--campusvista\r\n"
+            b'Content-Disposition: form-data; name="image"; filename="photo.jpg"\r\n'
+            b"Content-Type: image/jpeg\r\n"
+            b"\r\n"
+            b"multipart-jpeg-bytes\r\n"
+            b"--campusvista--\r\n"
+        )
+        image_bytes, image_type = extract_image_upload(
+            multipart,
+            f"multipart/form-data; boundary={boundary}",
+        )
+
+        self.assertEqual(b"multipart-jpeg-bytes", image_bytes)
+        self.assertEqual("image/jpeg", image_type)
 
 
 if __name__ == "__main__":

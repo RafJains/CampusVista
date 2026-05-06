@@ -41,6 +41,16 @@
             android:text="Search Location"
             android:textColor="@color/cv_white" />
 
+        <Button
+            android:id="@+id/openPhotoRecognitionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cv_button_secondary"
+            android:minHeight="48dp"
+            android:text="Recognize from Photo"
+            android:textColor="@color/cv_ink" />
+
         <TextView
             android:id="@+id/checkpointPickerTitle"
             android:layout_width="match_parent"

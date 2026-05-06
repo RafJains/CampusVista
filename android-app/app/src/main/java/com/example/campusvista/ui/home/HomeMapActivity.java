@@ -30,6 +30,7 @@ import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
+import com.example.campusvista.ui.location.PhotoRecognitionActivity;
 import com.example.campusvista.ui.place.PlaceDetailsActivity;
 import com.example.campusvista.ui.route.RoutePreviewActivity;
 import com.example.campusvista.ui.search.SearchActivity;
@@ -77,6 +78,8 @@ public final class HomeMapActivity extends Activity {
 
         startLocationField.setOnClickListener(view -> showStartPicker());
         endLocationField.setOnClickListener(view -> showEndPicker());
+        findViewById(R.id.recognizeLocationButton).setOnClickListener(view ->
+                startActivity(new Intent(this, PhotoRecognitionActivity.class)));
         findViewById(R.id.startNavigationButton).setOnClickListener(view -> startSelectedRoute());
     }
 

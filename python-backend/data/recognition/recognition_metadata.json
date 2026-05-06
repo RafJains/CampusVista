@@ -1,0 +1,533 @@
+{
+  "checkpoint_count": 75,
+  "embedding_count": 1593,
+  "model_version": "campusvista-vpr-histogram-v1",
+  "rows": [
+    {
+      "checkpoint_id": "OUT_CP001",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP001.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP002",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP002.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP003",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP003.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP004",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP004.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP005",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP005.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP006",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP006.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP007",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP007.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP008",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP008.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP009",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP009.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP010",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP010.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP011",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP011.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP012",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP012.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP013",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP013.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP014",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP014.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP015",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP015.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP016",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP016.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP017",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP017.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP018",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP018.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP019",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP019.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP020",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP020.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP021",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP022",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP022.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP023",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP023.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP024",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP024.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP025",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP025.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP026",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP026.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP027",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP027.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP028",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP028.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP029",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP029.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP030",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP030.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP031",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP031.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP032",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP032.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP033",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP033.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP034",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP034.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP035",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP036",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP037",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP038",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP038.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP039",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP039.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP040",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP040.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP041",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP041.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP042",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP042.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP043",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP044",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP044.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP045",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP045.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP046",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP046.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP047",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP047.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP048",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP048.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP049",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP050",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP050.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP051",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP052",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP052.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP053",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP053.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP054",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP054.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP055",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP055.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP056",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP056.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP057",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP057.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP058",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP059",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP059.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP060",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP061",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP061.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP062",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP062.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP063",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP063.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP064",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP064.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP065",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP065.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP066",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP066.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP067",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP067.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP068",
+      "embedding_file": "recognition_index.npz",
+      "image_file": "OUT_CP068.jpg",
+      "reference_count": 27,
+      "supported": true
+    },
+    {
+      "checkpoint_id": "OUT_CP069",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP070",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP071",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP072",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP073",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP074",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    },
+    {
+      "checkpoint_id": "OUT_CP075",
+      "embedding_file": null,
+      "image_file": null,
+      "reference_count": 0,
+      "supported": false
+    }
+  ],
+  "supported_checkpoint_count": 59
+}
