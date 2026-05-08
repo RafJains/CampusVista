@@ -57,28 +57,36 @@ final class VisualFeatureExtractor {
         bitmaps.add(source);
         int width = source.getWidth();
         int height = source.getHeight();
-        int cropWidth = Math.max(1, Math.round(width * 0.78f));
-        int cropHeight = Math.max(1, Math.round(height * 0.78f));
-        int[] xPositions = new int[]{
-                0,
-                Math.max(0, (width - cropWidth) / 2),
-                Math.max(0, width - cropWidth)
-        };
-        int[] yPositions = new int[]{
-                0,
-                Math.max(0, (height - cropHeight) / 2),
-                Math.max(0, height - cropHeight)
-        };
-        for (int i = 0; i < xPositions.length; i++) {
-            bitmaps.add(Bitmap.createBitmap(
-                    source,
-                    xPositions[i],
-                    yPositions[i],
-                    cropWidth,
-                    cropHeight
-            ));
-        }
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 0.5f, 0.5f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 0.0f, 0.5f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 1.0f, 0.5f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 0.5f, 0.0f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 0.5f, 1.0f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 0.0f, 0.0f);
+        addCrop(bitmaps, source, width, height, 0.78f, 0.78f, 1.0f, 1.0f);
+        addCrop(bitmaps, source, width, height, 0.62f, 0.86f, 0.0f, 0.5f);
+        addCrop(bitmaps, source, width, height, 0.62f, 0.86f, 0.5f, 0.5f);
+        addCrop(bitmaps, source, width, height, 0.62f, 0.86f, 1.0f, 0.5f);
         return bitmaps;
+    }
+
+    private static void addCrop(
+            List<Bitmap> bitmaps,
+            Bitmap source,
+            int width,
+            int height,
+            float widthRatio,
+            float heightRatio,
+            float xFraction,
+            float yFraction
+    ) {
+        int cropWidth = Math.max(1, Math.round(width * widthRatio));
+        int cropHeight = Math.max(1, Math.round(height * heightRatio));
+        int maxX = Math.max(0, width - cropWidth);
+        int maxY = Math.max(0, height - cropHeight);
+        int x = Math.round(maxX * xFraction);
+        int y = Math.round(maxY * yFraction);
+        bitmaps.add(Bitmap.createBitmap(source, x, y, cropWidth, cropHeight));
     }
 
     private static float[] extractEmbedding(Bitmap source) {

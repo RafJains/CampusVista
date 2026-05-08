@@ -54,12 +54,33 @@ def query_views(image: Image.Image) -> list[Image.Image]:
     source = image.convert("RGB")
     width, height = source.size
     crops = [source]
-    crop_width = max(1, int(width * 0.78))
-    crop_height = max(1, int(height * 0.78))
-    x_positions = [0, (width - crop_width) // 2, width - crop_width]
-    y_positions = [0, (height - crop_height) // 2, height - crop_height]
-    for x0, y0 in zip(x_positions, y_positions):
+    seen = {(0, 0, width, height)}
+
+    def add_crop(width_ratio: float, height_ratio: float, x_fraction: float, y_fraction: float) -> None:
+        crop_width = max(1, int(width * width_ratio))
+        crop_height = max(1, int(height * height_ratio))
+        max_x = max(0, width - crop_width)
+        max_y = max(0, height - crop_height)
+        x0 = int(round(max_x * x_fraction))
+        y0 = int(round(max_y * y_fraction))
+        key = (x0, y0, crop_width, crop_height)
+        if key in seen:
+            return
+        seen.add(key)
         crops.append(source.crop((x0, y0, x0 + crop_width, y0 + crop_height)))
+
+    for x_fraction, y_fraction in (
+        (0.5, 0.5),
+        (0.0, 0.5),
+        (1.0, 0.5),
+        (0.5, 0.0),
+        (0.5, 1.0),
+        (0.0, 0.0),
+        (1.0, 1.0),
+    ):
+        add_crop(0.78, 0.78, x_fraction, y_fraction)
+    for x_fraction in (0.0, 0.5, 1.0):
+        add_crop(0.62, 0.86, x_fraction, 0.5)
     return crops
 
 

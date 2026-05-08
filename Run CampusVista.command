@@ -101,21 +101,32 @@ install_and_launch_if_device_ready() {
   fi
 
   local adb="$sdk_dir/platform-tools/adb"
-  if ! "$adb" devices | awk 'NR > 1 && $2 == "device" { found=1 } END { exit found ? 0 : 1 }'; then
+  local connected_devices
+  connected_devices=("${(@f)$("$adb" devices | awk 'NR > 1 && $2 == "device" { print $1 }')}")
+  if (( ${#connected_devices[@]} == 0 )); then
     print_step "No emulator/device is connected yet; opening Android Studio"
     open -a "Android Studio" "$ANDROID_DIR" >/dev/null 2>&1 || true
     printf "Start an emulator in Android Studio, then run this file again to auto-install and launch.\n"
     return
   fi
 
+  print_step "Configuring Android backend tunnel over USB/ADB"
+  local device
+  for device in "${connected_devices[@]}"; do
+    "$adb" -s "$device" reverse tcp:8000 tcp:8000 \
+      || fail "Could not configure adb reverse for device $device."
+  done
+
   print_step "Installing Android app on connected emulator/device"
   (
     cd "$ANDROID_DIR"
-    ./gradlew :app:installDebug
+    ./gradlew :app:installDebug -PcampusVistaBackendUrl=http://127.0.0.1:8000/
   )
 
   print_step "Launching CampusVista"
-  "$adb" shell am start -n com.example.campusvista/.ui.splash.SplashActivity >/dev/null
+  for device in "${connected_devices[@]}"; do
+    "$adb" -s "$device" shell am start -n com.example.campusvista/.ui.splash.SplashActivity >/dev/null
+  done
 }
 
 start_backend
@@ -130,6 +141,9 @@ Backend:
 
 Emulator backend URL:
   http://10.0.2.2:8000/
+
+USB phone backend URL used by this launcher:
+  http://127.0.0.1:8000/
 
 Backend log:
   $BACKEND_LOG

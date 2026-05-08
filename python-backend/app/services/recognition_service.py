@@ -17,17 +17,26 @@ from campusvista_recognition import (  # noqa: E402
     MODEL_VERSION,
     ImageDecodeError,
     decode_image,
+    extract_embedding,
     encoder_for_model_version,
     query_views,
+    reference_views,
 )
 
 
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
 SUPPORTED_CONTENT_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp"}
 TOP_MATCH_LIMIT = 5
+CANDIDATE_REFERENCE_LIMIT = 600
+HYBRID_CONFIDENCE_FLOOR = 0.78
+HYBRID_CONFIDENCE_SPAN = 0.16
+MIN_RECOGNIZED_CONFIDENCE_PERCENT = 75.0
+MIN_RECOGNIZED_MARGIN_PERCENT = 8.0
+MIN_RECOGNIZED_SUPPORTING_VIEWS = 2
 RECOGNITION_DIR = db.DATA_DIR / "recognition"
 INDEX_PATH = RECOGNITION_DIR / "recognition_index.npz"
 METADATA_PATH = RECOGNITION_DIR / "recognition_metadata.json"
+PANO_DIR = db.DATA_DIR / "pano" / "outdoor"
 
 
 @dataclass(frozen=True)
@@ -35,6 +44,7 @@ class RecognitionIndex:
     embeddings: np.ndarray
     checkpoint_ids: np.ndarray
     image_files: np.ndarray
+    view_indexes: np.ndarray
     model_version: str
     embedding_dimension: int
     metadata: dict[str, Any]
@@ -60,6 +70,8 @@ class RecognitionService:
         self.metadata_path = Path(metadata_path)
         self._index: RecognitionIndex | None = None
         self._checkpoint_names_cache: dict[str, str] | None = None
+        self._handcrafted_reference_cache: dict[str, np.ndarray] = {}
+        self._nearby_checkpoints_cache: dict[str, set[str]] | None = None
 
     def get_reference_labels(self) -> list[dict[str, Any]]:
         rows = db.fetch_all(
@@ -106,11 +118,13 @@ class RecognitionService:
             return self._empty_response("Image is too blank, dark, or low-detail to recognize.")
 
         encoder = encoder_for_model_version(index.model_version)
-        query_embeddings = encoder.embeddings_for_views(query_views(image))
+        views = query_views(image)
+        query_embeddings = encoder.embeddings_for_views(views)
         similarities = query_embeddings @ index.embeddings.T
         best_by_reference = similarities.max(axis=0)
-        ranked_reference_indexes = np.argsort(best_by_reference)[::-1][:80]
-        scores = self._aggregate_scores(best_by_reference, ranked_reference_indexes, index)
+        ranked_reference_indexes = np.argsort(best_by_reference)[::-1][:CANDIDATE_REFERENCE_LIMIT]
+        scores = self._aggregate_scores(similarities, best_by_reference, ranked_reference_indexes, index)
+        self._add_layout_scores(scores, views)
         matches = self._rank_matches(scores, max(1, min(limit, TOP_MATCH_LIMIT)), index)
         if not matches:
             return self._empty_response("No supported visual reference matched the photo.")
@@ -119,9 +133,9 @@ class RecognitionService:
         second_percent = matches[1]["confidence_percent"] if len(matches) > 1 else 0.0
         margin = top["confidence_percent"] - second_percent
         recognized = (
-            top["confidence_percent"] >= 70.0
-            and margin >= 6.0
-            and top["supporting_views"] >= 2
+            top["confidence_percent"] >= MIN_RECOGNIZED_CONFIDENCE_PERCENT
+            and margin >= MIN_RECOGNIZED_MARGIN_PERCENT
+            and top["supporting_views"] >= MIN_RECOGNIZED_SUPPORTING_VIEWS
         )
         message = (
             "Location recognized."
@@ -152,6 +166,7 @@ class RecognitionService:
                 embeddings=np.empty((0, 1), dtype=np.float32),
                 checkpoint_ids=np.array([]),
                 image_files=np.array([]),
+                view_indexes=np.array([], dtype=np.int16),
                 model_version=MODEL_VERSION,
                 embedding_dimension=1,
                 metadata={},
@@ -163,15 +178,21 @@ class RecognitionService:
         embeddings = payload["embeddings"].astype(np.float32)
         checkpoint_ids = payload["checkpoint_ids"].astype(str)
         image_files = payload["image_files"].astype(str)
+        view_indexes = (
+            payload["view_indexes"].astype(np.int16)
+            if "view_indexes" in payload.files
+            else np.zeros(checkpoint_ids.shape[0], dtype=np.int16)
+        )
         model_version = str(payload["model_version"].item())
         encoder = encoder_for_model_version(model_version)
-        self._validate_index_payload(embeddings, checkpoint_ids, image_files, encoder.embedding_dimension)
+        self._validate_index_payload(embeddings, checkpoint_ids, image_files, view_indexes, encoder.embedding_dimension)
         self._validate_metadata(metadata, model_version, encoder.embedding_dimension)
 
         self._index = RecognitionIndex(
             embeddings=embeddings,
             checkpoint_ids=checkpoint_ids,
             image_files=image_files,
+            view_indexes=view_indexes,
             model_version=model_version,
             embedding_dimension=encoder.embedding_dimension,
             metadata=metadata,
@@ -183,12 +204,15 @@ class RecognitionService:
         embeddings: np.ndarray,
         checkpoint_ids: np.ndarray,
         image_files: np.ndarray,
+        view_indexes: np.ndarray,
         embedding_dimension: int,
     ) -> None:
         if embeddings.ndim != 2 or embeddings.shape[1] != embedding_dimension:
             raise ValueError("Recognition index has an unexpected embedding shape.")
         if embeddings.shape[0] != checkpoint_ids.shape[0] or embeddings.shape[0] != image_files.shape[0]:
             raise ValueError("Recognition index labels do not match embedding rows.")
+        if embeddings.shape[0] != view_indexes.shape[0]:
+            raise ValueError("Recognition index view labels do not match embedding rows.")
 
     @staticmethod
     def _validate_metadata(
@@ -204,6 +228,7 @@ class RecognitionService:
 
     def _aggregate_scores(
         self,
+        similarities: np.ndarray,
         best_by_reference: np.ndarray,
         ranked_reference_indexes: np.ndarray,
         index: RecognitionIndex,
@@ -215,11 +240,21 @@ class RecognitionService:
             entry = scores.setdefault(
                 checkpoint_id,
                 {
-                    "scores": [],
+                    "reference_scores": [],
                     "image_file": str(index.image_files[reference_index]),
                 },
             )
-            entry["scores"].append(score)
+            entry["reference_scores"].append(score)
+        for checkpoint_id, entry in scores.items():
+            reference_indexes = np.flatnonzero(index.checkpoint_ids == checkpoint_id)
+            if reference_indexes.size == 0:
+                entry["query_scores"] = []
+                entry["max_score"] = 0.0
+                continue
+            checkpoint_similarities = similarities[:, reference_indexes]
+            query_scores = checkpoint_similarities.max(axis=1).astype(float)
+            entry["query_scores"] = query_scores.tolist()
+            entry["max_score"] = float(checkpoint_similarities.max())
         return scores
 
     def _rank_matches(
@@ -231,18 +266,35 @@ class RecognitionService:
         checkpoint_names = self._checkpoint_names()
         ranked: list[tuple[float, str, dict[str, Any]]] = []
         for checkpoint_id, entry in scores.items():
-            top_scores = sorted(entry["scores"], reverse=True)[:5]
-            if not top_scores:
+            reference_scores = sorted(entry["reference_scores"], reverse=True)[:7]
+            query_scores = sorted(entry.get("query_scores", []), reverse=True)
+            if not reference_scores or not query_scores:
                 continue
-            mean_score = float(np.mean(top_scores))
-            vote_bonus = min(len(top_scores), 5) * 0.01
-            aggregate = mean_score + vote_bonus
+            reference_mean = float(np.mean(reference_scores[:5]))
+            query_mean = float(np.mean(query_scores[:3]))
+            max_score = max(float(entry.get("max_score", 0.0)), reference_scores[0], query_scores[0])
+            layout_score = float(entry.get("layout_score", 0.0))
+            support_threshold = max_score - 0.035
+            query_support = sum(1 for score in query_scores if score >= support_threshold)
+            support_bonus = min(query_support, 5) * 0.003
+            low_support_penalty = 0.015 if query_support < 2 else 0.0
+            aggregate = (
+                reference_mean * 0.45
+                + query_mean * 0.30
+                + max_score * 0.10
+                + layout_score * 0.15
+                + support_bonus
+                - low_support_penalty
+            )
+            entry["raw_score"] = aggregate
+            entry["query_support"] = query_support
             ranked.append((aggregate, checkpoint_id, entry))
 
+        ranked = self._apply_neighborhood_smoothing(ranked)
         ranked.sort(reverse=True, key=lambda item: item[0])
         matches: list[dict[str, Any]] = []
         for rank, (score, checkpoint_id, entry) in enumerate(ranked[:limit], start=1):
-            percent = self._confidence_percent(score, index.confidence_floor, index.confidence_span)
+            percent = self._confidence_percent(score, HYBRID_CONFIDENCE_FLOOR, HYBRID_CONFIDENCE_SPAN)
             image_file = entry["image_file"]
             matches.append(
                 {
@@ -251,10 +303,97 @@ class RecognitionService:
                     "confidence_percent": percent,
                     "rank": rank,
                     "reference_image_url": f"/assets/pano/outdoor/{image_file}",
-                    "supporting_views": min(len(entry["scores"]), 5),
+                    "supporting_views": min(int(entry.get("query_support", 0)), 5),
                 }
             )
         return matches
+
+    def _add_layout_scores(
+        self,
+        scores: dict[str, dict[str, Any]],
+        query_view_images: list[Any],
+    ) -> None:
+        query_embeddings = np.vstack(
+            [extract_embedding(view) for view in query_view_images]
+        ).astype(np.float32)
+        for entry in scores.values():
+            image_file = str(entry.get("image_file", ""))
+            reference_embeddings = self._handcrafted_reference_embeddings(image_file)
+            if reference_embeddings.size == 0:
+                entry["layout_score"] = 0.0
+                continue
+            similarities = query_embeddings @ reference_embeddings.T
+            query_scores = np.sort(similarities.max(axis=1))[::-1]
+            reference_scores = np.sort(similarities.max(axis=0))[::-1]
+            layout_score = (
+                float(np.mean(query_scores[: min(3, query_scores.size)])) * 0.65
+                + float(np.mean(reference_scores[: min(5, reference_scores.size)])) * 0.35
+            )
+            entry["layout_score"] = layout_score
+
+    def _handcrafted_reference_embeddings(self, image_file: str) -> np.ndarray:
+        if not image_file:
+            return np.empty((0, 1), dtype=np.float32)
+        cached = self._handcrafted_reference_cache.get(image_file)
+        if cached is not None:
+            return cached
+        image_path = PANO_DIR / image_file
+        if not image_path.exists():
+            embeddings = np.empty((0, 1), dtype=np.float32)
+        else:
+            image = decode_image(image_path.read_bytes())
+            embeddings = np.vstack(
+                [extract_embedding(view) for view in reference_views(image)]
+            ).astype(np.float32)
+        self._handcrafted_reference_cache[image_file] = embeddings
+        return embeddings
+
+    def _apply_neighborhood_smoothing(
+        self,
+        ranked: list[tuple[float, str, dict[str, Any]]],
+    ) -> list[tuple[float, str, dict[str, Any]]]:
+        if not ranked:
+            return ranked
+        raw_by_checkpoint = {checkpoint_id: score for score, checkpoint_id, _ in ranked}
+        nearby = self._nearby_checkpoints()
+        smoothed: list[tuple[float, str, dict[str, Any]]] = []
+        for score, checkpoint_id, entry in ranked:
+            neighbor_scores = [
+                raw_by_checkpoint[neighbor]
+                for neighbor in nearby.get(checkpoint_id, set())
+                if neighbor in raw_by_checkpoint
+            ]
+            if neighbor_scores:
+                score = score * 0.84 + max(neighbor_scores) * 0.16
+            smoothed.append((score, checkpoint_id, entry))
+        return smoothed
+
+    def _nearby_checkpoints(self) -> dict[str, set[str]]:
+        if self._nearby_checkpoints_cache is not None:
+            return self._nearby_checkpoints_cache
+        rows = db.fetch_all(
+            """
+            SELECT from_checkpoint_id, to_checkpoint_id
+            FROM edges
+            """,
+            db_path=self.db_path,
+        )
+        direct: dict[str, set[str]] = {}
+        for row in rows:
+            start = str(row["from_checkpoint_id"])
+            end = str(row["to_checkpoint_id"])
+            direct.setdefault(start, set()).add(end)
+            direct.setdefault(end, set()).add(start)
+
+        nearby: dict[str, set[str]] = {}
+        for checkpoint_id, neighbors in direct.items():
+            expanded = set(neighbors)
+            for neighbor in neighbors:
+                expanded.update(direct.get(neighbor, set()))
+            expanded.discard(checkpoint_id)
+            nearby[checkpoint_id] = expanded
+        self._nearby_checkpoints_cache = nearby
+        return nearby
 
     def _checkpoint_names(self) -> dict[str, str]:
         if self._checkpoint_names_cache is not None:

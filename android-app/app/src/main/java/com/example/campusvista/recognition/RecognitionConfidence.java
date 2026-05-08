@@ -5,8 +5,8 @@ import com.example.campusvista.network.BackendDtos.RecognitionMatchDto;
 import java.util.List;
 
 public final class RecognitionConfidence {
-    private static final double MIN_CONFIDENCE_PERCENT = 70.0;
-    private static final double MIN_MARGIN_PERCENT = 6.0;
+    private static final double MIN_CONFIDENCE_PERCENT = 75.0;
+    private static final double MIN_MARGIN_PERCENT = 8.0;
     private static final int MIN_SUPPORTING_VIEWS = 2;
 
     private RecognitionConfidence() {
