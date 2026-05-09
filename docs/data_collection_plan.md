@@ -1,8 +1,9 @@
 # Data Collection Plan
 
-## Current Data
+## Private Source Data
 
-Current MVP data lives in:
+The public repository intentionally excludes raw campus data. In private local
+checkouts, source data is expected under:
 
 ```text
 python-tools/data/raw/
@@ -34,8 +35,7 @@ python scripts/generate_seed_db.py
 
 ## Backend Copy
 
-After data generation, copy the seed DB and assets into `python-backend/data/` for API runtime. This keeps Android assets and backend assets explicit during the architecture transition.
-
-Future improvement:
-
-Add a single sync script that publishes generated data to both Android and Python backend asset folders.
+After data generation, the tooling publishes generated assets into both
+`python-backend/data/` for oracle API runtime and
+`android-app/app/src/main/assets/` for Android runtime. These outputs are
+private/generated and must stay ignored in the public repository.

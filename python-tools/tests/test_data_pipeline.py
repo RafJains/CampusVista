@@ -11,6 +11,17 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import campusvista_data as cv  # noqa: E402
 
 
+def private_source_data_present() -> bool:
+    return (
+        cv.CONFIG_PATH.exists()
+        and all((cv.RAW_DIR / filename).exists() for filename in cv.CSV_FILES.values())
+    )
+
+
+@unittest.skipUnless(
+    private_source_data_present(),
+    "private raw campus source data is not present",
+)
 class CampusVistaDataPipelineTests(unittest.TestCase):
     def test_final_spec_source_data_validates(self) -> None:
         data, config = cv.validate_all()

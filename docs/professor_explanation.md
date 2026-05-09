@@ -122,7 +122,7 @@ This is the Android Java/XML application. It contains:
 - AndroidManifest.
 - Java activities and classes.
 - XML layouts and drawable resources.
-- Android assets such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
+- Private/generated Android assets such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
 - `CampusVistaEngine`, local repositories, routing, recognition, and UI code.
 
 ### `python-backend/`
@@ -132,7 +132,7 @@ This is the FastAPI backend. It contains:
 - API app startup code.
 - Route definitions.
 - SQLite database access helpers.
-- Generated backend data such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
+- Private/generated backend data such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
 - Backend tests.
 
 ### `python-tools/`

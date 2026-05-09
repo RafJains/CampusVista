@@ -27,15 +27,30 @@ from campusvista_recognition import (  # noqa: E402
 
 
 DB_PATH = ROOT / "data" / "campus_seed.db"
+PANO_PATH = ROOT / "data" / "pano" / "outdoor" / "OUT_CP001.jpg"
+INDEX_PATH = ROOT / "data" / "recognition" / "recognition_index.npz"
+METADATA_PATH = ROOT / "data" / "recognition" / "recognition_metadata.json"
+
+requires_private_backend_data = unittest.skipUnless(
+    DB_PATH.exists(),
+    "private generated backend seed database is not present",
+)
+
+requires_private_recognition_data = unittest.skipUnless(
+    DB_PATH.exists() and PANO_PATH.exists() and INDEX_PATH.exists() and METADATA_PATH.exists(),
+    "private generated backend recognition data is not present",
+)
 
 
 class BackendServiceTests(unittest.TestCase):
+    @requires_private_backend_data
     def test_search_finds_place_and_alias(self) -> None:
         service = SearchService(DB_PATH)
 
         self.assertEqual("PL_002", service.search("cafeteria", limit=1)[0]["place_id"])
         self.assertEqual("PL_002", service.search("canteen", limit=1)[0]["place_id"])
 
+    @requires_private_backend_data
     def test_route_uses_astar_and_generates_arrival(self) -> None:
         service = RoutingService(DB_PATH)
         route = service.compute_route(
@@ -56,6 +71,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertEqual("OUT_CP001", route["panos"][0]["checkpoint_id"])
         self.assertTrue(any(pano and pano["checkpoint_id"] == "OUT_CP004" for pano in route["panos"]))
 
+    @requires_private_backend_data
     def test_crowd_rules_create_warnings_without_cost_penalty(self) -> None:
         service = RoutingService(DB_PATH)
         route = service.compute_route(
@@ -71,6 +87,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertEqual(route["total_distance"], route["total_cost"])
         self.assertTrue(any("may be" in warning for warning in route["warnings"]))
 
+    @requires_private_backend_data
     def test_nearest_checkpoint_and_pano_metadata(self) -> None:
         routing = RoutingService(DB_PATH)
         nearest = routing.nearest_checkpoint(97, 43)
@@ -80,9 +97,10 @@ class BackendServiceTests(unittest.TestCase):
         self.assertIsNotNone(pano)
         self.assertEqual("OUT_CP004.jpg", pano["image_file"])
 
+    @requires_private_recognition_data
     def test_recognition_returns_ordered_matches_for_known_pano(self) -> None:
         service = RecognitionService(DB_PATH)
-        image_bytes = (ROOT / "data" / "pano" / "outdoor" / "OUT_CP001.jpg").read_bytes()
+        image_bytes = PANO_PATH.read_bytes()
 
         result = service.recognize(image_bytes, "image/jpeg")
 
@@ -92,6 +110,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertGreaterEqual(result["matches"][0]["confidence_percent"], 0)
         self.assertLessEqual(result["matches"][0]["confidence_percent"], 99)
 
+    @requires_private_recognition_data
     def test_recognition_coverage_reports_supported_checkpoints(self) -> None:
         coverage = RecognitionService(DB_PATH).get_coverage_summary()
 

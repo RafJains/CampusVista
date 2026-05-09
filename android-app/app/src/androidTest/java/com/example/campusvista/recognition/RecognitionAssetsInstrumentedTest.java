@@ -2,6 +2,7 @@ package com.example.campusvista.recognition;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assume.assumeTrue;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -22,6 +23,9 @@ public final class RecognitionAssetsInstrumentedTest {
     @Test
     public void packagedLocalRecognitionReturnsExpectedReferenceMatch() throws Exception {
         Context context = ApplicationProvider.getApplicationContext();
+        assumeTrue(assetExists(context.getAssets(), "pano/outdoor/OUT_CP001.jpg"));
+        assumeTrue(assetExists(context.getAssets(), "ml/recognition_index.bin"));
+        assumeTrue(assetExists(context.getAssets(), "ml/recognition_index_labels.csv"));
         byte[] imageBytes = readAsset(context.getAssets(), "pano/outdoor/OUT_CP001.jpg");
 
         List<RecognitionMatch> matches = LocalRecognitionEngine.getInstance(context)
@@ -29,6 +33,14 @@ public final class RecognitionAssetsInstrumentedTest {
 
         assertFalse(matches.isEmpty());
         assertEquals("OUT_CP001", matches.get(0).checkpointId);
+    }
+
+    private static boolean assetExists(AssetManager assets, String path) {
+        try (InputStream ignored = assets.open(path)) {
+            return true;
+        } catch (IOException exception) {
+            return false;
+        }
     }
 
     private static byte[] readAsset(AssetManager assets, String path) throws IOException {

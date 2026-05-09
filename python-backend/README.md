@@ -1,8 +1,11 @@
 # CampusVista Python Backend
 
-This backend is now the primary intelligence layer for CampusVista.
+This backend is the development oracle for CampusVista. The installed Android
+app runs offline with packaged data, while this service is useful for validating
+search, routing, pano metadata, and recognition behavior during development.
 
-Android is the Java/XML frontend. Python owns SQLite access, search, fuzzy search, graph routing, crowd-aware costs, nearest-checkpoint snapping, route validation, instruction generation, panorama metadata, and photo recognition.
+The public repository does not include generated campus data. Create or restore
+private local `python-backend/data/` assets before running the API endpoints.
 
 ## Run
 
@@ -12,18 +15,6 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Android emulator URL:
-
-```text
-http://10.0.2.2:8000
-```
-
-Real phone URL:
-
-```text
-http://<laptop-ip>:8000
 ```
 
 ## API
