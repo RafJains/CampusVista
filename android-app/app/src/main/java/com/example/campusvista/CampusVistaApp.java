@@ -7,6 +7,7 @@ import com.example.campusvista.data.repository.CheckpointRepository;
 import com.example.campusvista.data.repository.MapConfigRepository;
 import com.example.campusvista.data.repository.PanoRepository;
 import com.example.campusvista.data.repository.PlaceRepository;
+import com.example.campusvista.engine.CampusVistaEngine;
 import com.example.campusvista.routing.CrowdCostCalculator;
 import com.example.campusvista.routing.Graph;
 import com.example.campusvista.routing.GraphBuilder;
@@ -21,6 +22,7 @@ public final class CampusVistaApp extends Application {
     private PanoRepository panoRepository;
     private RoutePlanner routePlanner;
     private NearestCheckpointFinder nearestCheckpointFinder;
+    private CampusVistaEngine campusVistaEngine;
 
     @Override
     public void onCreate() {
@@ -40,6 +42,7 @@ public final class CampusVistaApp extends Application {
                 mapConfig.getMetersPerPixel()
         );
         nearestCheckpointFinder = new NearestCheckpointFinder(staticGraph);
+        campusVistaEngine = new CampusVistaEngine(this);
     }
 
     public MapConfigRepository.MapConfig getMapConfig() {
@@ -64,5 +67,9 @@ public final class CampusVistaApp extends Application {
 
     public NearestCheckpointFinder getNearestCheckpointFinder() {
         return nearestCheckpointFinder;
+    }
+
+    public CampusVistaEngine getCampusVistaEngine() {
+        return campusVistaEngine;
     }
 }

@@ -3,7 +3,7 @@ package com.example.campusvista.recognition;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.example.campusvista.network.BackendDtos.RecognitionMatchDto;
+import com.example.campusvista.recognition.RecognitionMatch;
 
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public final class RecognitionConfidenceTest {
         assertFalse(RecognitionConfidence.isConfident(Collections.singletonList(match(82.0, 1))));
     }
 
-    private static RecognitionMatchDto match(double confidencePercent, int supportingViews) {
-        RecognitionMatchDto match = new RecognitionMatchDto();
+    private static RecognitionMatch match(double confidencePercent, int supportingViews) {
+        RecognitionMatch match = new RecognitionMatch();
         match.confidencePercent = confidencePercent;
         match.supportingViews = supportingViews;
         return match;

@@ -11,11 +11,6 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.CheckpointDto;
-import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
@@ -59,20 +54,7 @@ public final class SetLocationActivity extends Activity {
 
         checkpointList.removeAllViews();
         checkpointList.addView(ViewFactory.sectionLine(this, "Loading campus locations..."));
-        BackendClient.getInstance(this).getCheckpoints(new BackendCallback<List<CheckpointDto>>() {
-            @Override
-            public void onSuccess(List<CheckpointDto> value) {
-                bindCheckpointButtons(BackendMapper.toCheckpoints(value), null);
-            }
-
-            @Override
-            public void onFallback(Throwable throwable) {
-                bindCheckpointButtons(
-                        app.getCheckpointRepository().getAllCheckpoints(),
-                        "Showing available locations."
-                );
-            }
-        });
+        bindCheckpointButtons(app.getCampusVistaEngine().getCheckpoints(), null);
     }
 
     private void bindCheckpointButtons(List<Checkpoint> checkpoints, String note) {
@@ -91,22 +73,11 @@ public final class SetLocationActivity extends Activity {
     }
 
     private void setLocationViaNearestCheckpoint(Checkpoint selectedCheckpoint) {
-        BackendClient.getInstance(this).getNearestCheckpoint(
+        Checkpoint nearest = ((CampusVistaApp) getApplication()).getCampusVistaEngine().nearestCheckpoint(
                 selectedCheckpoint.getMapX(),
-                selectedCheckpoint.getMapY(),
-                new BackendCallback<NearestCheckpointDto>() {
-                    @Override
-                    public void onSuccess(NearestCheckpointDto value) {
-                        Checkpoint nearest = BackendMapper.toCheckpoint(value.checkpoint);
-                        setCurrentLocation(nearest == null ? selectedCheckpoint : nearest);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        setCurrentLocation(selectedCheckpoint);
-                    }
-                }
+                selectedCheckpoint.getMapY()
         );
+        setCurrentLocation(nearest == null ? selectedCheckpoint : nearest);
     }
 
     private void setCurrentLocation(Checkpoint checkpoint) {

@@ -21,13 +21,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.RecognitionMatchDto;
-import com.example.campusvista.network.BackendDtos.RecognitionResponseDto;
-import com.example.campusvista.recognition.LocalRecognitionEngine;
+import com.example.campusvista.recognition.RecognitionMatch;
+import com.example.campusvista.recognition.RecognitionResponse;
 import com.example.campusvista.recognition.PhotoInputPreprocessor;
-import com.example.campusvista.recognition.RecognitionConfidence;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
@@ -146,50 +142,31 @@ public final class PhotoRecognitionActivity extends ComponentActivity {
         }
         matchesList.removeAllViews();
         setStatus("Checking location...");
-        BackendClient.getInstance(this).recognize(
-                currentImageBytes,
-                "campus-photo.jpg",
-                new BackendCallback<RecognitionResponseDto>() {
-                    @Override
-                    public void onSuccess(RecognitionResponseDto value) {
-                        bindRecognitionResult(value);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        bindLocalRecognitionFallback();
-                    }
-                }
-        );
+        bindLocalRecognition();
     }
 
-    private void bindLocalRecognitionFallback() {
+    private void bindLocalRecognition() {
         try {
-            List<RecognitionMatchDto> matches = LocalRecognitionEngine.getInstance(this)
-                    .recognize(currentImageBytes, 5);
+            RecognitionResponse response = ((CampusVistaApp) getApplication())
+                    .getCampusVistaEngine()
+                    .recognize(currentImageBytes);
+            List<RecognitionMatch> matches = response.matches;
             if (matches.isEmpty()) {
-                setStatus("Recognition needs the backend. You can still set location manually.");
+                setStatus("No confident on-device match. You can still set location manually.");
                 matchesList.removeAllViews();
                 showManualLocationAction();
                 return;
             }
-            RecognitionResponseDto response = new RecognitionResponseDto();
-            response.recognized = RecognitionConfidence.isConfident(matches);
-            response.matches = matches;
-            response.message = response.recognized
-                    ? "Location recognized locally."
-                    : "Backend unavailable. Showing closest local matches.";
-            response.modelVersion = "android-local-vpr-v1";
             bindRecognitionResult(response);
         } catch (IOException | RuntimeException exception) {
-            setStatus("Recognition needs the backend. You can still set location manually.");
+            setStatus("On-device recognition is unavailable. You can still set location manually.");
             matchesList.removeAllViews();
             showManualLocationAction();
         }
     }
 
-    private void bindRecognitionResult(RecognitionResponseDto response) {
-        List<RecognitionMatchDto> matches = response == null || response.matches == null
+    private void bindRecognitionResult(RecognitionResponse response) {
+        List<RecognitionMatch> matches = response == null || response.matches == null
                 ? Collections.emptyList()
                 : response.matches;
         setStatus(response == null ? "No recognition response." : response.message);
@@ -199,12 +176,12 @@ public final class PhotoRecognitionActivity extends ComponentActivity {
             showManualLocationAction();
             return;
         }
-        for (RecognitionMatchDto match : matches) {
+        for (RecognitionMatch match : matches) {
             matchesList.addView(matchButton(match));
         }
     }
 
-    private Button matchButton(RecognitionMatchDto match) {
+    private Button matchButton(RecognitionMatch match) {
         String label = match.rank + ". " + match.checkpointName
                 + "\n" + match.checkpointId + " - " + Math.round(match.confidencePercent) + "% match";
         Button button = ViewFactory.listButton(this, label);
@@ -212,7 +189,7 @@ public final class PhotoRecognitionActivity extends ComponentActivity {
         return button;
     }
 
-    private void showMatchActions(RecognitionMatchDto match) {
+    private void showMatchActions(RecognitionMatch match) {
         String[] actions = {"Set as current location", "Route from here", "View on map"};
         new android.app.AlertDialog.Builder(this)
                 .setTitle(match.checkpointName)
@@ -222,7 +199,7 @@ public final class PhotoRecognitionActivity extends ComponentActivity {
                 .show();
     }
 
-    private void handleMatchAction(RecognitionMatchDto match, int actionIndex) {
+    private void handleMatchAction(RecognitionMatch match, int actionIndex) {
         setCurrentCheckpoint(match.checkpointId);
         if (actionIndex == 0) {
             finish();

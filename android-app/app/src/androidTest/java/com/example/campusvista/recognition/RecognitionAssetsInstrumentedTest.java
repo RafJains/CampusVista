@@ -9,8 +9,6 @@ import android.content.res.AssetManager;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.campusvista.network.BackendDtos.RecognitionMatchDto;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,7 +24,7 @@ public final class RecognitionAssetsInstrumentedTest {
         Context context = ApplicationProvider.getApplicationContext();
         byte[] imageBytes = readAsset(context.getAssets(), "pano/outdoor/OUT_CP001.jpg");
 
-        List<RecognitionMatchDto> matches = LocalRecognitionEngine.getInstance(context)
+        List<RecognitionMatch> matches = LocalRecognitionEngine.getInstance(context)
                 .recognize(imageBytes, 3);
 
         assertFalse(matches.isEmpty());

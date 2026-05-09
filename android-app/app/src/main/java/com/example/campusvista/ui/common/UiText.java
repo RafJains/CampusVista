@@ -1,5 +1,8 @@
 package com.example.campusvista.ui.common;
 
+import com.example.campusvista.data.model.Checkpoint;
+
+import java.util.List;
 import java.util.Locale;
 
 public final class UiText {
@@ -25,5 +28,22 @@ public final class UiText {
             }
         }
         return builder.toString();
+    }
+
+    public static String checkpointName(Checkpoint checkpoint, String fallbackId) {
+        return checkpoint == null ? fallbackId : checkpoint.getCheckpointName();
+    }
+
+    public static String crowdWarningMessage(List<String> warnings) {
+        StringBuilder message = new StringBuilder();
+        for (String warning : warnings) {
+            if (warning != null && warning.toLowerCase(Locale.US).contains("may be")) {
+                if (message.length() > 0) {
+                    message.append("\n\n");
+                }
+                message.append(warning);
+            }
+        }
+        return message.toString();
     }
 }

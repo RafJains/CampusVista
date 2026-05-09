@@ -22,10 +22,6 @@ import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
 import com.example.campusvista.data.repository.MapConfigRepository;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.NearestCheckpointDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -434,29 +430,12 @@ public final class HomeMapActivity extends Activity {
 
         double mapX = mapPoint[0];
         double mapY = mapPoint[1];
-        BackendClient.getInstance(this).getNearestCheckpoint(
-                mapX,
-                mapY,
-                new BackendCallback<NearestCheckpointDto>() {
-                    @Override
-                    public void onSuccess(NearestCheckpointDto value) {
-                        Checkpoint checkpoint = BackendMapper.toCheckpoint(value.checkpoint);
-                        if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint);
-                        }
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        Checkpoint checkpoint = ((CampusVistaApp) getApplication())
-                                .getNearestCheckpointFinder()
-                                .findNearest(mapX, mapY);
-                        if (checkpoint != null) {
-                            setCurrentFromMap(checkpoint);
-                        }
-                    }
-                }
-        );
+        Checkpoint checkpoint = ((CampusVistaApp) getApplication())
+                .getCampusVistaEngine()
+                .nearestCheckpoint(mapX, mapY);
+        if (checkpoint != null) {
+            setCurrentFromMap(checkpoint);
+        }
     }
 
     private double[] viewPointToMapPoint(float touchX, float touchY) {
@@ -475,22 +454,11 @@ public final class HomeMapActivity extends Activity {
     }
 
     private void setLocationViaNearestCheckpoint(Checkpoint selectedCheckpoint) {
-        BackendClient.getInstance(this).getNearestCheckpoint(
+        Checkpoint nearest = ((CampusVistaApp) getApplication()).getCampusVistaEngine().nearestCheckpoint(
                 selectedCheckpoint.getMapX(),
-                selectedCheckpoint.getMapY(),
-                new BackendCallback<NearestCheckpointDto>() {
-                    @Override
-                    public void onSuccess(NearestCheckpointDto value) {
-                        Checkpoint nearest = BackendMapper.toCheckpoint(value.checkpoint);
-                        setCurrentFromMap(nearest == null ? selectedCheckpoint : nearest);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        setCurrentFromMap(selectedCheckpoint);
-                    }
-                }
+                selectedCheckpoint.getMapY()
         );
+        setCurrentFromMap(nearest == null ? selectedCheckpoint : nearest);
     }
 
     private void setCurrentFromMap(Checkpoint checkpoint) {

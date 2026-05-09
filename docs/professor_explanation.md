@@ -15,31 +15,31 @@ In the current MVP, CampusVista supports:
 - Step-by-step route instructions.
 - Crowd warning messages.
 - Outdoor pano viewing for checkpoints that have pano images.
-- Offline fallback logic inside Android if the Python backend is unavailable.
+- Fully offline Android runtime using packaged data and on-device recognition.
 
 The main idea is:
 
 ```text
-Android app = user interface
-Python FastAPI backend = main intelligence layer
-SQLite seed database = campus data storage
-Android local Java/SQLite = fallback for demo safety
+Android app = user interface + local engine
+Packaged SQLite/assets = campus data storage
+ONNX Runtime Mobile = OpenCLIP-style on-device recognition
+Python FastAPI backend = development oracle and fixture generator
 ```
 
 ## 2. Final Architecture
 
-CampusVista currently uses a Python-heavy architecture.
+CampusVista currently uses an offline-native Android architecture.
 
 ```text
 Android App
-   |
-   | Retrofit API calls
-   v
-Python FastAPI Backend
-   |
-   | SQLite queries and Python services
-   v
-campus_seed.db + map/pano assets
+   -> packaged campus_seed.db
+   -> packaged map/pano/ML assets
+   -> Android local search/routing/pano/recognition services
+
+Python Backend / Tools
+   -> development parity
+   -> seed DB and asset generation
+   -> OpenCLIP mobile export
 ```
 
 ### Android Layer
@@ -47,13 +47,13 @@ campus_seed.db + map/pano assets
 The Android app is mainly responsible for display and interaction:
 
 - Shows the splash screen, home screen, map, search, route preview, navigation, pano, and camera screens.
-- Sends API requests to the Python backend.
+- Uses local repositories and `CampusVistaEngine` for app behavior.
 - Displays search results, route results, warnings, instructions, and pano images.
-- Keeps local fallback repositories and routing classes so the demo can still work if the backend is not running.
+- Runs installed-app functionality without a Python backend.
 
 ### Python Backend Layer
 
-The Python FastAPI backend is the primary intelligence layer:
+The Python FastAPI backend is the development oracle:
 
 - Reads the SQLite campus database.
 - Performs search and fuzzy matching.
@@ -76,9 +76,10 @@ The generated SQLite database stores the campus data:
 - Crowd rules.
 - Search aliases.
 
-### Android Fallback Layer
+### Android Runtime Layer
 
-Android still contains local Java/SQLite logic. This is intentionally kept as a fallback. If the Python backend is not running during a demo, the app can still show saved/offline results instead of becoming unusable.
+Android contains the production local Java/SQLite logic. It is the primary path
+for Play Store builds.
 
 ## 3. Why We Use Python
 
@@ -107,7 +108,7 @@ Android handles:
 - Outdoor pano image display.
 - Map tap, zoom, and pan interaction.
 - Pano swipe/drag and pinch zoom interaction.
-- Calling the Python backend through Retrofit.
+- On-device search, routing, pano lookup, and recognition.
 
 In simple words, Android is the screen and user experience. Python is the brain.
 
@@ -122,8 +123,7 @@ This is the Android Java/XML application. It contains:
 - Java activities and classes.
 - XML layouts and drawable resources.
 - Android assets such as `campus_seed.db`, `map_config.json`, campus map image, and pano images.
-- Retrofit API client code.
-- Local fallback repositories and routing classes.
+- `CampusVistaEngine`, local repositories, routing, recognition, and UI code.
 
 ### `python-backend/`
 
@@ -176,8 +176,7 @@ Important behavior:
 - Supports map zoom and pan.
 - Keeps the search bar and controls fixed while only the map area moves.
 - Converts tapped screen coordinates back into raw map coordinates.
-- Calls the backend nearest-checkpoint API.
-- Uses local nearest-checkpoint fallback if the backend is unavailable.
+- Uses local nearest-checkpoint logic through the Android engine.
 
 ### `SetLocationActivity`
 
@@ -185,7 +184,8 @@ Important behavior:
 
 ### `SearchActivity`
 
-`SearchActivity` lets the user search for a destination. The primary search comes from the Python backend. If the backend is not available, Android can show offline fallback search results.
+`SearchActivity` lets the user search for a destination using the packaged
+Android seed database.
 
 ### `PlaceDetailsActivity`
 
@@ -224,31 +224,13 @@ Current MVP behavior:
 
 - Handles confidence and fallback options.
 
-### `BackendClient`
+### `CampusVistaEngine`
 
-`BackendClient` is the Retrofit client. It sends HTTP requests from Android to the Python FastAPI backend.
-
-It is responsible for API calls such as:
-
-- `GET /health`
-- `GET /places/search`
-- `GET /checkpoints`
-- `GET /checkpoints/nearest`
-- `GET /panos/{checkpoint_id}`
-- `POST /route`
-
-It also handles backend failures so Android can switch to fallback behavior.
-
-### `BackendDtos`
-
-
-### `BackendMapper`
-
-`BackendMapper` converts backend DTO objects into Android local model objects, such as `Checkpoint`, `Place`, and route-related data.
+`CampusVistaEngine` is the Android-native facade used by release screens. It calls local repositories, route planning, pano lookup, and on-device recognition directly so the installed app does not need a Python backend, Wi-Fi, or USB tunnel.
 
 ### `DBHelper`, `SeedDbCopier`, and `DBConfig`
 
-These classes manage the Android local SQLite fallback database.
+These classes manage the Android local SQLite database.
 
 - `DBConfig` stores database constants.
 - `SeedDbCopier` copies the generated seed database from Android assets into the app's local storage.
@@ -265,9 +247,10 @@ Android includes local repository classes such as:
 - `CrowdRepository`
 - `MapConfigRepository`
 
-These read local data from the Android seed database and assets. They are mainly used as fallback if the backend is unavailable.
+These read local data from the Android seed database and assets. They are the
+primary app data path.
 
-### Fallback Routing Classes
+### Routing Classes
 
 Android still contains routing classes such as:
 
@@ -279,7 +262,8 @@ Android still contains routing classes such as:
 - `InstructionBuilder`
 - `RouteResult`
 
-These were originally the main Android-side routing engine. In the final architecture, Python is primary, but these classes remain useful as reference and fallback for demo safety.
+These are the Android-side routing engine used by the installed app. The Python
+implementation remains useful as a parity oracle.
 
 ## 7. Important Python Backend Files
 
@@ -817,25 +801,21 @@ Important behavior:
 - The map image comes from generated assets.
 - Checkpoints are based on raw map coordinates.
 - The user can tap the map to select the nearest checkpoint.
-- The app sends tapped map coordinates to the backend nearest-checkpoint API.
-- If the backend is unavailable, Android uses local fallback nearest-checkpoint logic.
+- The app snaps tapped map coordinates to the nearest local checkpoint.
 - The map supports zoom and pan.
 - Only the map area zooms and pans. Search bars, buttons, route cards, and other controls remain fixed.
 
 Tap-to-checkpoint accuracy depends on converting screen touch coordinates back into raw map coordinates after zoom and pan.
 
-## 15. Backend Unavailable Fallback
+## 15. Offline Runtime
 
-If the Python backend is not running, the Android app may show a friendly fallback message and use local data.
-
-This is intentional.
-
-The reason is demo safety. If the backend server is not started, or the emulator cannot reach the laptop network, the app should still remain usable instead of crashing.
+The installed Android app uses packaged data and on-device services. The Python
+backend is optional and used for development parity only.
 
 
 ## 16. How to Run the Project
 
-### Start the Python Backend
+### Optional: Start the Python Backend For Development
 
 Open a terminal:
 
@@ -874,44 +854,24 @@ http://localhost:8000/docs
 4. Start an Android emulator.
 5. Run the app.
 
-For Android Emulator, the backend base URL should be:
-
-```text
-http://10.0.2.2:8000/
-```
-
-For a real phone, use the laptop's local IP address:
-
-```text
-http://192.168.x.x:8000/
-```
-
-The laptop and phone must be on the same network, and the backend must be running with:
-
-```text
---host 0.0.0.0
-```
+No backend URL is required for the installed app.
 
 ## 17. Demo Flow
 
 A simple demo flow:
 
-1. Start the Python backend.
-2. Open `http://localhost:8000/health` and show that the backend is ready.
-3. Open `http://localhost:8000/docs` and briefly show the API endpoints.
-4. Launch the Android app.
-5. Show the splash screen and home map.
-6. Set the current location using `SetLocationActivity` or by tapping the map.
-7. Search for a place in `SearchActivity`.
-8. Open the place details screen.
-9. Preview the route.
-10. Show distance, estimated time, instructions, and warnings.
-11. Start outdoor navigation.
-12. Move through route steps with Previous and Next.
-13. Open or switch pano view for checkpoints.
-14. Show placeholder behavior if a checkpoint has no pano.
-15. If an active crowd rule applies, show the crowd warning card or popup.
-16. Optionally stop the backend and show that the Android fallback still keeps the app usable.
+1. Launch the Android app.
+2. Show the splash screen and home map.
+3. Set the current location using `SetLocationActivity` or by tapping the map.
+4. Search for a place in `SearchActivity`.
+5. Open the place details screen.
+6. Preview the route.
+7. Show distance, estimated time, instructions, and warnings.
+8. Start outdoor navigation.
+9. Move through route steps with Previous and Next.
+10. Open or switch pano view for checkpoints.
+11. Show placeholder behavior if a checkpoint has no pano.
+12. If an active crowd rule applies, show the crowd warning card or popup.
 
 ## 18. Professor/Viva Q&A
 
@@ -959,13 +919,15 @@ meters_per_pixel = 0.1489
 
 This gives approximate walking distance in meters.
 
-### Q11. What happens if the backend fails?
+### Q11. What happens if the backend is not running?
 
-Android shows a user-friendly fallback message and uses local SQLite/repository logic where possible. This is intentional so the demo does not fail completely if the backend is not running.
+The installed Android app still works. Backend availability is not required for
+normal app use.
 
 ### Q12. How are pano images linked?
 
-Each pano row links a `checkpoint_id` to an image filename. During route generation, the backend returns pano metadata for each route checkpoint. Android loads the matching image when the user navigates to that checkpoint.
+Each pano row links a `checkpoint_id` to an image filename. Android loads the
+matching packaged image when the user navigates to that checkpoint.
 
 ### Q13. What happens if a pano is missing?
 
@@ -979,9 +941,8 @@ The app shows a placeholder image and keeps navigation working. Missing panos do
 ## 19. Current Limitations
 
 - Only available pano images are used. Not every checkpoint has a pano yet.
-- A real phone needs correct network configuration and the laptop IP address.
-- The Python backend must be running for the full Python-heavy demo.
-- Android fallback is useful, but it is not the main intended architecture.
+- Real phone recognition latency should be benchmarked on target devices.
+- The Python backend is optional and used for development parity only.
 - Map and pano pinch zoom should be manually tested on the emulator or phone before final demo.
 - Checkpoint detection depends on the quality and consistency of the marked campus map PDF.
 - Edge distances generated from map pixels are approximate and depend on the correctness of `meters_per_pixel`.
@@ -1001,6 +962,10 @@ Planned or possible improvements:
 
 ## 21. Short Viva Summary
 
-CampusVista is a checkpoint-based campus navigation app. Android is used as the mobile user interface, while Python FastAPI is used as the intelligence layer. Campus data is stored in a generated SQLite database. The Python backend performs search, route calculation, instruction generation, pano lookup, and crowd warning logic. Android displays the map, route, instructions, pano images, and camera placeholder flow. If the backend is unavailable, Android has local fallback logic so the demo can still continue.
+CampusVista is a checkpoint-based campus navigation app. Android is the mobile
+runtime and includes the local engine for search, route calculation,
+instruction generation, pano lookup, crowd warnings, and on-device recognition.
+Python FastAPI remains a development oracle. Campus data is stored in a
+generated SQLite database and packaged with the Android app.
 
 The system is data-driven. The team provides `campus_data.xlsx`, `campus_map.pdf`, and `outdoor_panos.zip`. The Python tools extract the map, detect checkpoints, calculate coordinates and distances using `meters_per_pixel = 0.1489`, normalize pano assets, generate search aliases, and build the seed database. This makes the project easier to update when real campus data changes.

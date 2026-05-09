@@ -9,10 +9,6 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.OutdoorPano;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.PanoDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.pano.OutdoorPanoViewer;
 import com.example.campusvista.ui.common.NavExtras;
 
@@ -33,28 +29,8 @@ public final class OutdoorPanoActivity extends Activity {
         }
 
         ((TextView) findViewById(R.id.panoLocationName)).setText("Loading panorama...");
-        loadPanoFromBackend();
-    }
-
-    private void loadPanoFromBackend() {
-        BackendClient.getInstance(this).getPano(
-                checkpointId,
-                new BackendCallback<PanoDto>() {
-                    @Override
-                    public void onSuccess(PanoDto value) {
-                        OutdoorPano pano = BackendMapper.toPano(value);
-                        bindPano(pano);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        OutdoorPano pano = ((CampusVistaApp) getApplication())
-                                .getPanoRepository()
-                                .getOutdoorPanoForCheckpoint(checkpointId);
-                        bindPano(pano);
-                    }
-                }
-        );
+        OutdoorPano pano = ((CampusVistaApp) getApplication()).getCampusVistaEngine().getPano(checkpointId);
+        bindPano(pano);
     }
 
     private void bindPano(OutdoorPano pano) {

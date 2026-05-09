@@ -5,10 +5,11 @@
 Owns:
 
 - Java/XML screens
-- Retrofit API client
+- Android-native engine and local repositories
 - loading and error UI
 - route display
 - pano image display
+- on-device recognition integration
 
 ## Python Backend
 
@@ -22,6 +23,7 @@ Owns:
 - crowd-aware route costs
 - route validation
 - instruction generation
+- development parity and fixture validation
 
 ## Data/ML
 
@@ -31,3 +33,4 @@ Owns:
 - map config
 - pano reference assets
 - seed DB generation
+- OpenCLIP/ONNX mobile asset generation

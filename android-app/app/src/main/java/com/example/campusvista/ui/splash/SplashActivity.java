@@ -8,9 +8,6 @@ import android.os.Looper;
 import android.widget.TextView;
 
 import com.example.campusvista.R;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.HealthDto;
 import com.example.campusvista.ui.home.HomeMapActivity;
 
 public final class SplashActivity extends Activity {
@@ -22,22 +19,7 @@ public final class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
 
         TextView status = findViewById(R.id.splashStatus);
-        status.setText("Checking campus services...");
-        BackendClient.getInstance(this).checkHealth(new BackendCallback<HealthDto>() {
-            @Override
-            public void onSuccess(HealthDto value) {
-                if (!isFinishing() && !isDestroyed()) {
-                    status.setText("Live campus service ready");
-                }
-            }
-
-            @Override
-            public void onFallback(Throwable throwable) {
-                if (!isFinishing() && !isDestroyed()) {
-                    status.setText("Saved campus data ready");
-                }
-            }
-        });
+        status.setText("Campus data ready");
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override

@@ -1,6 +1,30 @@
 # Decision Log
 
-## Architecture Pivot
+## Offline-Native Android Pivot
+
+Decision:
+
+CampusVista release builds run fully offline on Android. Python remains a
+development oracle and data/model generator.
+
+```text
+Android = UI + local engine + packaged assets + on-device recognition
+Python = fixture generation, backend parity, validation, ML export
+```
+
+Reason:
+
+The product goal is Play Store distribution where the installed app works
+without a laptop backend, Wi-Fi, USB tunnel, or localhost server.
+
+Impact:
+
+- Android runtime backend calls were removed from release paths.
+- `CampusVistaEngine` became the Android facade for search, routing, panos, and recognition.
+- OpenCLIP-style mobile recognition assets are packaged with ONNX Runtime Mobile.
+- The Python backend remains available for parity tests and data/index generation.
+
+## Historical Architecture Pivot
 
 Decision:
 
@@ -18,9 +42,13 @@ The project now prioritizes Python/backend work. Python is better suited for gra
 Impact:
 
 - FastAPI backend added under `python-backend/`
-- Android Retrofit client added under `android-app/app/src/main/java/com/example/campusvista/network/`
-- Android local routing remains as fallback/reference
-- The system is no longer standalone offline Android unless the Python backend is available locally
+- Android Retrofit client was added under `android-app/app/src/main/java/com/example/campusvista/network/`
+- Android local routing remained as fallback/reference
+- At that time, the system was no longer standalone offline Android unless the Python backend was available locally
+
+Status:
+
+Superseded by the offline-native Android pivot above.
 
 ## Routing Ownership
 

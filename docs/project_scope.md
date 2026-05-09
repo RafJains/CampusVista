@@ -2,7 +2,8 @@
 
 ## Current MVP
 
-CampusVista provides outdoor campus navigation with an Android frontend and a Python backend.
+CampusVista provides offline outdoor campus navigation with an Android runtime
+and Python development tooling.
 
 Included:
 
@@ -26,6 +27,7 @@ Included:
 - real-time crowd feeds
 - admin dashboard
 
-## Transitional Constraint
+## Runtime Constraint
 
-The Android app still contains the previous offline Java routing code as fallback/reference. The new target architecture makes Python FastAPI the primary brain. The next milestone is to connect Android screens to backend APIs.
+The Android app is the primary runtime. Python FastAPI remains in the project as
+a development oracle and validation fixture source.

@@ -12,10 +12,6 @@ import android.widget.TextView;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.PlaceDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
@@ -63,25 +59,7 @@ public final class SearchActivity extends Activity {
         String query = searchInput.getText().toString().trim();
         emptyState.setText("Searching...");
         ViewFactory.setVisible(emptyState, true);
-        BackendClient.getInstance(this).searchPlaces(
-                query,
-                initialType,
-                RESULT_LIMIT,
-                new BackendCallback<List<PlaceDto>>() {
-                    @Override
-                    public void onSuccess(List<PlaceDto> value) {
-                        bindResults(BackendMapper.toPlaces(value), null);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        bindResults(
-                                localSearch(query),
-                                "Showing available results."
-                        );
-                    }
-                }
-        );
+        bindResults(localSearch(query), null);
     }
 
     private List<Place> localSearch(String query) {

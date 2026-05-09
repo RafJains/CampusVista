@@ -10,15 +10,11 @@ import android.widget.Toast;
 import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.RouteRequestDto;
-import com.example.campusvista.network.BackendDtos.RouteResponseDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
+import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.navigation.OutdoorNavActivity;
 
 import java.util.Locale;
@@ -57,31 +53,8 @@ public final class RoutePreviewActivity extends Activity {
         }
 
         ((TextView) findViewById(R.id.previewStatus)).setText("Calculating route...");
-        RouteRequestDto request = RouteRequestDto.forCheckpoints(
-                startId,
-                destinationCheckpointId,
-                routeMode
-        );
-        if (destinationPlaceId != null) {
-            request.destinationPlaceId = destinationPlaceId;
-            request.destinationCheckpointId = null;
-        }
-        BackendClient.getInstance(this).buildRoute(
-                request,
-                new BackendCallback<RouteResponseDto>() {
-                    @Override
-                    public void onSuccess(RouteResponseDto value) {
-                        routeResult = BackendMapper.toRouteResult(value, routeMode);
-                        bindRouteOrUnavailable(startId);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        routeResult = computeLocalRoute(startId);
-                        bindRouteOrUnavailable(startId);
-                    }
-                }
-        );
+        routeResult = computeLocalRoute(startId);
+        bindRouteOrUnavailable(startId);
     }
 
     private RouteResult computeLocalRoute(String startId) {
@@ -111,8 +84,10 @@ public final class RoutePreviewActivity extends Activity {
         }
 
         bindMetrics(
-                checkpointName(start, startId),
-                destinationName == null ? checkpointName(destination, destinationCheckpointId) : destinationName,
+                UiText.checkpointName(start, startId),
+                destinationName == null
+                        ? UiText.checkpointName(destination, destinationCheckpointId)
+                        : destinationName,
                 routeResult.getTotalDistanceMeters()
         );
         ((TextView) findViewById(R.id.previewStatus)).setText("");
@@ -152,23 +127,11 @@ public final class RoutePreviewActivity extends Activity {
         startActivity(intent);
     }
 
-    private static String checkpointName(Checkpoint checkpoint, String fallbackId) {
-        return checkpoint == null ? fallbackId : checkpoint.getCheckpointName();
-    }
-
     private void showCrowdWarningsIfNeeded() {
         if (warningsShown || routeResult == null || routeResult.getWarnings().isEmpty()) {
             return;
         }
-        StringBuilder message = new StringBuilder();
-        for (String warning : routeResult.getWarnings()) {
-            if (warning != null && warning.toLowerCase(Locale.US).contains("may be")) {
-                if (message.length() > 0) {
-                    message.append("\n\n");
-                }
-                message.append(warning);
-            }
-        }
+        String message = UiText.crowdWarningMessage(routeResult.getWarnings());
         if (message.length() == 0) {
             return;
         }

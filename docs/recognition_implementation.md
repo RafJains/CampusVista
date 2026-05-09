@@ -5,16 +5,16 @@ CampusVista photo recognition is implemented as hybrid visual place recognition.
 ## Phase Status
 
 - Phase 1, backend retrieval baseline: complete.
-- Phase 2, mobile runtime: complete as an Android local retrieval fallback using packaged embeddings. A TFLite encoder is still the preferred future upgrade once a real model artifact is available.
-- Phase 3, accuracy improvement: benchmark tooling is complete, including a real-phone-photo validation mode. Real 8/10 phone-photo accuracy still requires a held-out phone-photo validation set.
+- Phase 2, mobile runtime: complete with ONNX Runtime Mobile and packaged OpenCLIP-style assets.
+- Phase 3, accuracy improvement: benchmark tooling is complete, including a real-phone-photo validation mode. Real field accuracy claims still require a held-out phone-photo validation set.
 
 ## Runtime Flow
 
 - Android lets the user take a photo or choose an image from gallery.
-- The image is resized, JPEG-compressed, and sent to `POST /recognize`.
-- The backend compares the photo embedding against pano-derived reference embeddings and returns ranked checkpoint matches.
-- If the backend is unavailable, Android uses `assets/ml/recognition_index.bin` and `assets/ml/recognition_index_labels.csv` for local fallback matches.
-- `GET /recognition/coverage` reports total checkpoints, supported checkpoints, embedding count, and coverage percentage.
+- The image is resized, JPEG-compressed, and passed to the local Android recognition engine.
+- The primary Android path runs `assets/ml/openclip_image_encoder.onnx` with ONNX Runtime Mobile and compares the output against `assets/ml/openclip_recognition_index.bin`.
+- If the ONNX model or OpenCLIP index cannot load, Android uses `assets/ml/recognition_index.bin` and `assets/ml/recognition_index_labels.csv` as an emergency handcrafted fallback.
+- The Python backend `POST /recognize` and `GET /recognition/coverage` endpoints remain available for development parity and diagnostics.
 - The user can set the selected checkpoint as the current start location.
 
 ## Data Coverage
@@ -50,9 +50,11 @@ Regenerate the OpenCLIP backend index with:
 CAMPUSVISTA_RECOGNITION_ENCODER=openclip python3 python-tools/scripts/build_recognition_index.py
 ```
 
-OpenCLIP indexes are backend-only. Android local fallback intentionally
-continues to use the handcrafted `assets/ml/recognition_index.bin` format
-because the Android runtime does not ship an OpenCLIP/TFLite encoder yet.
+Regenerate the Android OpenCLIP ONNX model and mobile-matched index with:
+
+```bash
+python3 python-tools/scripts/export_openclip_mobile.py
+```
 
 The handcrafted generator still exists for Android fallback and low-dependency
 rebuilds.

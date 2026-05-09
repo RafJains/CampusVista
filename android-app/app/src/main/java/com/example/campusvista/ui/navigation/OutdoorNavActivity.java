@@ -13,23 +13,16 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.OutdoorPano;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.PanoDto;
-import com.example.campusvista.network.BackendDtos.RouteRequestDto;
-import com.example.campusvista.network.BackendDtos.RouteResponseDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.pano.OutdoorPanoViewer;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
+import com.example.campusvista.ui.common.UiText;
 import com.example.campusvista.ui.common.ViewFactory;
 import com.example.campusvista.ui.home.HomeMapActivity;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public final class OutdoorNavActivity extends Activity {
     private String destinationCheckpointId;
@@ -41,7 +34,6 @@ public final class OutdoorNavActivity extends Activity {
     private boolean panoMode;
     private boolean startInPano;
     private boolean warningsShown;
-    private final Map<String, OutdoorPano> backendPanosByCheckpoint = new HashMap<>();
 
     private TextView navTitle;
     private TextView navStart;
@@ -103,34 +95,8 @@ public final class OutdoorNavActivity extends Activity {
             finish();
             return;
         }
-        RouteRequestDto request = RouteRequestDto.forCheckpoints(
-                startId,
-                destinationCheckpointId,
-                routeMode
-        );
-        if (destinationPlaceId != null) {
-            request.destinationPlaceId = destinationPlaceId;
-            request.destinationCheckpointId = null;
-        }
-        BackendClient.getInstance(this).buildRoute(
-                request,
-                new BackendCallback<RouteResponseDto>() {
-                    @Override
-                    public void onSuccess(RouteResponseDto value) {
-                        backendPanosByCheckpoint.clear();
-                        cacheBackendPanos(value);
-                        routeResult = BackendMapper.toRouteResult(value, routeMode);
-                        handleRouteLoaded();
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        backendPanosByCheckpoint.clear();
-                        routeResult = computeLocalRoute(startId);
-                        handleRouteLoaded();
-                    }
-                }
-        );
+        routeResult = computeLocalRoute(startId);
+        handleRouteLoaded();
     }
 
     private RouteResult computeLocalRoute(String startId) {
@@ -190,9 +156,12 @@ public final class OutdoorNavActivity extends Activity {
             start = routeResult.getCheckpointPath().get(0);
             end = routeResult.getCheckpointPath().get(routeResult.getCheckpointPath().size() - 1);
         }
-        navStart.setText("Start\n" + checkpointName(start, LocationStore.getCurrentCheckpointId(this)));
+        navStart.setText("Start\n" + UiText.checkpointName(
+                start,
+                LocationStore.getCurrentCheckpointId(this)
+        ));
         navEnd.setText("End\n" + (destinationName == null
-                ? checkpointName(end, destinationCheckpointId)
+                ? UiText.checkpointName(end, destinationCheckpointId)
                 : destinationName));
         navDistance.setText("Distance\n" + Math.round(routeResult.getTotalDistanceMeters()) + " m");
     }
@@ -297,44 +266,16 @@ public final class OutdoorNavActivity extends Activity {
     }
 
     private OutdoorPano panoForCheckpoint(String checkpointId) {
-        OutdoorPano backendPano = backendPanosByCheckpoint.get(checkpointId);
-        if (backendPano != null) {
-            return backendPano;
-        }
         return ((CampusVistaApp) getApplication())
-                .getPanoRepository()
-                .getOutdoorPanoForCheckpoint(checkpointId);
-    }
-
-    private void cacheBackendPanos(RouteResponseDto value) {
-        if (value == null || value.panos == null) {
-            return;
-        }
-        for (PanoDto dto : value.panos) {
-            OutdoorPano pano = BackendMapper.toPano(dto);
-            if (pano != null && pano.getCheckpointId() != null) {
-                backendPanosByCheckpoint.put(pano.getCheckpointId(), pano);
-            }
-        }
-    }
-
-    private static String checkpointName(Checkpoint checkpoint, String fallbackId) {
-        return checkpoint == null ? fallbackId : checkpoint.getCheckpointName();
+                .getCampusVistaEngine()
+                .getPano(checkpointId);
     }
 
     private void showCrowdWarningsIfNeeded() {
         if (warningsShown || routeResult == null || routeResult.getWarnings().isEmpty()) {
             return;
         }
-        StringBuilder message = new StringBuilder();
-        for (String warning : routeResult.getWarnings()) {
-            if (warning != null && warning.toLowerCase(Locale.US).contains("may be")) {
-                if (message.length() > 0) {
-                    message.append("\n\n");
-                }
-                message.append(warning);
-            }
-        }
+        String message = UiText.crowdWarningMessage(routeResult.getWarnings());
         if (message.length() == 0) {
             return;
         }

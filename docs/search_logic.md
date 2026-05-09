@@ -1,6 +1,9 @@
 # Search Logic
 
-Search now lives primarily in `python-backend/app/services/search_service.py`.
+Search lives in two maintained implementations:
+
+- `python-backend/app/services/search_service.py` for the development oracle
+- Android local repositories for the installed offline app
 
 The backend searches:
 
@@ -34,4 +37,5 @@ GET /places/search?q=block&place_type=academic_block&limit=5
 
 ## Android Usage
 
-Android should send raw user input to the backend and display the returned `SearchResultOut` list. Android should not duplicate fuzzy search logic once Retrofit integration is complete.
+The installed Android app searches the packaged SQLite seed database directly.
+Backend search remains useful for parity tests and local development checks.

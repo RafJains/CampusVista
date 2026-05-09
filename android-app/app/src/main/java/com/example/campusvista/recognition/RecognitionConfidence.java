@@ -1,6 +1,6 @@
 package com.example.campusvista.recognition;
 
-import com.example.campusvista.network.BackendDtos.RecognitionMatchDto;
+import com.example.campusvista.recognition.RecognitionMatch;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ public final class RecognitionConfidence {
     private RecognitionConfidence() {
     }
 
-    public static boolean isConfident(List<RecognitionMatchDto> matches) {
+    public static boolean isConfident(List<RecognitionMatch> matches) {
         if (matches == null || matches.isEmpty()) {
             return false;
         }
-        RecognitionMatchDto top = matches.get(0);
+        RecognitionMatch top = matches.get(0);
         double second = matches.size() > 1 ? matches.get(1).confidencePercent : 0.0;
         return top.confidencePercent >= MIN_CONFIDENCE_PERCENT
                 && top.confidencePercent - second >= MIN_MARGIN_PERCENT

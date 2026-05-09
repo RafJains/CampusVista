@@ -1,77 +1,87 @@
 # CampusVista Architecture
 
-CampusVista is moving from an Android-heavy offline app to a Python-heavy client/server MVP.
+CampusVista is now an offline-native Android app with Python kept as the
+development oracle and data/model generation environment.
 
 ```text
 Android App
-  -> FastAPI request
-Python Backend
-  -> SQLite / JSON / CSV
-Python Services
-  -> route/search/pano responses
-Android App
-  -> displays returned results
+  -> packaged SQLite seed database
+  -> packaged JSON/map/pano assets
+  -> Android-native search/routing/pano services
+  -> ONNX Runtime Mobile OpenCLIP image encoder when bundled
+
+Python Backend / Tools
+  -> validate behavior
+  -> regenerate seed DB/assets/indexes
+  -> provide parity fixtures
 ```
 
-## Responsibilities
+## Android Runtime Responsibilities
 
-Android owns UI and device interaction:
+Android owns all installed-app behavior:
 
-- splash screen
+- splash screen and startup validation
 - home/map screen
-- search input
 - current location selection
-- route display
+- place search and aliases
+- place and checkpoint lookup
+- nearest-checkpoint snapping
+- graph routing and instruction generation
+- crowd warning calculation
 - outdoor navigation screen
-- pano image display
-- Retrofit calls to the Python backend
+- pano metadata lookup and image display
+- camera/gallery photo recognition
+- OpenCLIP-style on-device image embedding through ONNX Runtime Mobile
 
-Python owns the intelligence layer:
+The release app must not require a Python process, local network, USB tunnel, or
+backend URL.
 
-- SQLite database access
-- checkpoint/place search
-- fuzzy search
-- graph building
-- A* routing
-- Dijkstra fallback
-- crowd-aware route costs
-- nearest checkpoint snapping
-- instruction generation
-- route validation
-- map coordinate calculations
-- panorama metadata lookup
+## Python Responsibilities
 
-## Runtime
+Python remains useful, but not as a production runtime dependency:
 
-Demo backend:
+- FastAPI parity/oracle endpoints for local development
+- SQLite seed DB generation
+- raw CSV/asset validation
+- OpenCLIP index generation and benchmark tooling
+- backend fixture tests
+- route/search/pano/recognition behavior validation
+
+## Data Flow
+
+Raw and processed data are generated under `python-tools/`, copied into
+`python-backend/data/` for the oracle backend, and packaged into
+`android-app/app/src/main/assets/` for the installed app.
+
+The duplicated copies are intentional:
+
+- `python-tools/data/raw/`: source-of-truth import inputs
+- `python-tools/data/processed/`: generated intermediate JSON fixtures
+- `python-backend/data/`: backend oracle/runtime fixtures
+- `android-app/app/src/main/assets/`: Play Store app payload
+
+Do not delete one of these copies unless the generation pipeline and every
+runtime reference are updated at the same time.
+
+## Recognition
+
+Android recognition uses:
+
+- `ml/openclip_image_encoder.onnx`
+- `ml/openclip_recognition_index.bin`
+- `ml/openclip_recognition_index_labels.csv`
+
+The legacy handcrafted `ml/recognition_index.bin` remains as an emergency local
+fallback if the ONNX model or OpenCLIP index cannot load.
+
+## Backend
+
+The Python backend can still be started for development:
 
 ```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+cd python-backend
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Android emulator backend URL:
-
-```text
-http://10.0.2.2:8000
-```
-
-Real phone backend URL:
-
-```text
-http://<laptop-ip>:8000
-```
-
-The app is no longer a true standalone offline Android app unless the Python server is also available locally.
-
-## Android Integration Status
-
-The Android app now calls the backend first for:
-
-- place search
-- place and checkpoint lookup
-- route calculation
-- outdoor navigation route refresh
-- nearest checkpoint snapping from map/list coordinates
-- outdoor pano metadata
-
-If the backend is down, Android falls back to the existing local repositories and Java routing code.
+It should be treated as a test oracle and fixture server, not as a production
+dependency for the Android release build.

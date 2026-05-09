@@ -10,12 +10,6 @@ import com.example.campusvista.CampusVistaApp;
 import com.example.campusvista.R;
 import com.example.campusvista.data.model.Checkpoint;
 import com.example.campusvista.data.model.Place;
-import com.example.campusvista.network.BackendClient;
-import com.example.campusvista.network.BackendClient.BackendCallback;
-import com.example.campusvista.network.BackendDtos.CheckpointDto;
-import com.example.campusvista.network.BackendDtos.PanoDto;
-import com.example.campusvista.network.BackendDtos.PlaceDto;
-import com.example.campusvista.network.BackendMapper;
 import com.example.campusvista.ui.common.LocationStore;
 import com.example.campusvista.ui.common.NavExtras;
 import com.example.campusvista.ui.common.UiText;
@@ -43,22 +37,7 @@ public final class PlaceDetailsActivity extends Activity {
 
         ((TextView) findViewById(R.id.placeName)).setText("Loading place...");
         ViewFactory.setVisible(findViewById(R.id.placePanoButton), false);
-        loadPlaceFromBackend(placeId);
-    }
-
-    private void loadPlaceFromBackend(String placeId) {
-        BackendClient.getInstance(this).getPlace(placeId, new BackendCallback<PlaceDto>() {
-            @Override
-            public void onSuccess(PlaceDto value) {
-                place = BackendMapper.toPlace(value);
-                loadCheckpointFromBackend(place.getCheckpointId());
-            }
-
-            @Override
-            public void onFallback(Throwable throwable) {
-                loadPlaceLocal(placeId);
-            }
-        });
+        loadPlaceLocal(placeId);
     }
 
     private void loadPlaceLocal(String placeId) {
@@ -73,52 +52,6 @@ public final class PlaceDetailsActivity extends Activity {
         bindPlace();
         bindActions();
         bindPanoAvailabilityLocal();
-    }
-
-    private void loadCheckpointFromBackend(String checkpointId) {
-        BackendClient.getInstance(this).getCheckpoint(
-                checkpointId,
-                new BackendCallback<CheckpointDto>() {
-                    @Override
-                    public void onSuccess(CheckpointDto value) {
-                        checkpoint = BackendMapper.toCheckpoint(value);
-                        bindPlace();
-                        bindActions();
-                        bindPanoAvailabilityFromBackend();
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        checkpoint = ((CampusVistaApp) getApplication())
-                                .getCheckpointRepository()
-                                .getCheckpointById(checkpointId);
-                        bindPlace();
-                        bindActions();
-                        bindPanoAvailabilityLocal();
-                    }
-                }
-        );
-    }
-
-    private void bindPanoAvailabilityFromBackend() {
-        if (checkpoint == null) {
-            ViewFactory.setVisible(findViewById(R.id.placePanoButton), false);
-            return;
-        }
-        BackendClient.getInstance(this).getPano(
-                checkpoint.getCheckpointId(),
-                new BackendCallback<PanoDto>() {
-                    @Override
-                    public void onSuccess(PanoDto value) {
-                        ViewFactory.setVisible(findViewById(R.id.placePanoButton), true);
-                    }
-
-                    @Override
-                    public void onFallback(Throwable throwable) {
-                        bindPanoAvailabilityLocal();
-                    }
-                }
-        );
     }
 
     private void bindPanoAvailabilityLocal() {

@@ -16,6 +16,25 @@ Thumbs.db
 # Generated report scratch assets
 .report_assets/
 
+# Private/generated CampusVista data and release payloads
+python-tools/data/raw/**
+python-tools/data/processed/**
+python-tools/data/seed/**
+python-tools/data/recognition/**
+python-backend/data/**
+android-app/app/src/main/assets/**
+docs/*.pdf
+*.db
+*.csv
+*.jpg
+*.jpeg
+*.png
+*.onnx
+*.npz
+*.bin
+*.xlsx
+*.zip
+
 # Python tooling
 __pycache__/
 *.py[cod]
@@ -42,6 +61,7 @@ render.experimental.xml
 # Keystore files
 *.jks
 *.keystore
+keystore.properties
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
