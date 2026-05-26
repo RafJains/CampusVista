@@ -110,7 +110,7 @@ CampusVista/
 |   |   |-- ui/             # MVP screens
 |   |   |-- data/           # local repositories and seed DB access
 |   |   |-- routing/        # local graph routing
-|   |   `-- recognition/    # local/OpenCLIP mobile recognition
+|   |   `-- recognition/    # local recognition fallback and placeholder flow
 |   `-- app/src/main/res/
 |-- python-backend/
 |   |-- app/
@@ -196,7 +196,9 @@ Before the demo:
 - Build `:app:assembleDebug` successfully.
 - Launch the Android emulator before presenting.
 - Open CampusVista and verify the splash screen reaches the home map.
-- See `docs/recognition_implementation.md` for recognition phase status and accuracy limits.
+- Recognition is currently safe fallback/placeholder behavior in the default APK.
+  Android ONNX Runtime was removed from the default APK, and core demo features
+  do not depend on ONNX.
 
 Suggested live flow:
 

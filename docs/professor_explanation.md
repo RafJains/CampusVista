@@ -22,7 +22,7 @@ The main idea is:
 ```text
 Android app = user interface + local engine
 Packaged SQLite/assets = campus data storage
-ONNX Runtime Mobile = OpenCLIP-style on-device recognition
+Recognition = safe placeholder/fallback flow
 Python FastAPI backend = development oracle and fixture generator
 ```
 
@@ -33,13 +33,13 @@ CampusVista currently uses an offline-native Android architecture.
 ```text
 Android App
    -> packaged campus_seed.db
-   -> packaged map/pano/ML assets
+   -> packaged map/pano/recognition fallback assets
    -> Android local search/routing/pano/recognition services
 
 Python Backend / Tools
    -> development parity
    -> seed DB and asset generation
-   -> OpenCLIP mobile export
+   -> optional recognition model/index experiments
 ```
 
 ### Android Layer
@@ -147,14 +147,11 @@ This is the data pipeline and seed database generation area. It contains:
 
 ### `docs/`
 
-This folder contains project documentation:
+This folder contains the final project documentation:
 
 - Architecture notes.
-- Database schema.
-- Data collection plan.
-- Routing and search logic.
-- Project scope and decision logs.
-- This professor explanation document.
+- Professor/viva explanation.
+- Project plan and progress notes.
 
 ## 6. Important Android Files and Classes
 
@@ -791,6 +788,14 @@ The pano viewer supports:
 - Missing-image fallback.
 
 This gives a lightweight Street View style MVP without adding a heavy 3D engine.
+
+## Recognition Note
+
+Android ONNX Runtime was removed from the default APK to avoid native-library
+packaging issues. Recognition is currently kept as a safe placeholder/fallback
+flow unless optional model and reference assets are added later. Core demo
+features such as map display, search, routing, crowd warnings, and pano
+navigation do not depend on ONNX.
 
 ## 14. Map Behavior
 

@@ -1,15 +1,8 @@
-# The first data-pipeline milestone runs on the Python standard library.
-# Install pytest if you prefer pytest over the included unittest suite.
-pytest>=8.0
-
-# Future training/preprocessing milestones from the final spec.
+# Data pipeline and optional recognition tooling dependencies.
 pandas>=2.0
 openpyxl>=3.1
 numpy>=1.26
 pypdf>=4.0
 Pillow>=10.0
-opencv-python>=4.9
 torch>=2.2
 open_clip_torch>=3.3
-onnx>=1.16
-onnxruntime>=1.19,<1.20

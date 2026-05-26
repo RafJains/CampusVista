@@ -9,7 +9,6 @@ import com.example.campusvista.data.model.Place;
 import com.example.campusvista.recognition.RecognitionMatch;
 import com.example.campusvista.recognition.RecognitionResponse;
 import com.example.campusvista.recognition.LocalRecognitionEngine;
-import com.example.campusvista.recognition.MobileClipRecognitionEngine;
 import com.example.campusvista.recognition.RecognitionConfidence;
 import com.example.campusvista.routing.RouteMode;
 import com.example.campusvista.routing.RouteResult;
@@ -84,19 +83,15 @@ public final class CampusVistaEngine {
     }
 
     public RecognitionResponse recognize(byte[] imageBytes) throws IOException {
-        MobileClipRecognitionEngine mobileClip = MobileClipRecognitionEngine.getInstance(context);
-        List<RecognitionMatch> matches = mobileClip.isAvailable()
-                ? mobileClip.recognize(imageBytes, DEFAULT_RECOGNITION_LIMIT)
-                : LocalRecognitionEngine.getInstance(context).recognize(imageBytes, DEFAULT_RECOGNITION_LIMIT);
+        List<RecognitionMatch> matches = LocalRecognitionEngine.getInstance(context)
+                .recognize(imageBytes, DEFAULT_RECOGNITION_LIMIT);
         RecognitionResponse response = new RecognitionResponse();
         response.matches = matches == null ? Collections.emptyList() : matches;
         response.recognized = RecognitionConfidence.isConfident(response.matches);
         response.message = response.recognized
                 ? "Location recognized on device."
                 : "Showing closest on-device matches.";
-        response.modelVersion = mobileClip.isAvailable()
-                ? "android-openclip-onnx-v1"
-                : "android-local-vpr-v1";
+        response.modelVersion = "android-local-vpr-v1";
         return response;
     }
 }

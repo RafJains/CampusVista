@@ -8,7 +8,7 @@ Android App
   -> packaged SQLite seed database
   -> packaged JSON/map/pano assets
   -> Android-native search/routing/pano services
-  -> ONNX Runtime Mobile OpenCLIP image encoder when bundled
+  -> local recognition fallback / placeholder flow
 
 Python Backend / Tools
   -> validate behavior
@@ -31,7 +31,7 @@ Android owns all installed-app behavior:
 - outdoor navigation screen
 - pano metadata lookup and image display
 - camera/gallery photo recognition
-- OpenCLIP-style on-device image embedding through ONNX Runtime Mobile
+- safe recognition fallback behavior without ONNX in the default APK
 
 The release app must not require a Python process, local network, USB tunnel, or
 backend URL.
@@ -43,7 +43,7 @@ Python remains useful, but not as a production runtime dependency:
 - FastAPI parity/oracle endpoints for local development
 - SQLite seed DB generation
 - raw CSV/asset validation
-- OpenCLIP index generation and benchmark tooling
+- optional recognition index generation and benchmark tooling
 - backend fixture tests
 - route/search/pano/recognition behavior validation
 
@@ -65,14 +65,11 @@ runtime reference are updated at the same time.
 
 ## Recognition
 
-Android recognition uses:
-
-- `ml/openclip_image_encoder.onnx`
-- `ml/openclip_recognition_index.bin`
-- `ml/openclip_recognition_index_labels.csv`
-
-The legacy handcrafted `ml/recognition_index.bin` remains as an emergency local
-fallback if the ONNX model or OpenCLIP index cannot load.
+Android ONNX Runtime was removed from the default APK to avoid native library
+packaging issues, including Android 16 KB page-size warnings. Recognition is
+currently a safe placeholder/fallback flow unless optional model and reference
+assets are added later. Core demo features such as map display, search, routing,
+crowd warnings, and pano navigation do not depend on ONNX.
 
 ## Backend
 
