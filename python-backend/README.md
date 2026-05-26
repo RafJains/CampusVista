@@ -37,9 +37,12 @@ Example route request:
 {
   "start_checkpoint_id": "OUT_CP001",
   "destination_query": "library",
-  "route_mode": "avoid_crowded"
+  "route_mode": "shortest"
 }
 ```
+
+Crowd rules are used for warning messages only. The old avoid-crowded route
+mode is not part of the final MVP routing flow.
 
 Example response shape:
 

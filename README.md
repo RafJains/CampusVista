@@ -46,8 +46,8 @@ tunneling, or a local backend after installation.
 - Shortest-path routing with active crowd warning popups
 - Nearest-checkpoint snapping from map coordinates
 - Generated outdoor walking instructions
-- Hybrid photo recognition from camera/gallery images against pano-backed checkpoint references
-- Optional ONNX Runtime Mobile OpenCLIP image encoder path when exported model assets are present
+- Photo recognition UI with local/fallback matching against pano-backed checkpoint references
+- No ONNX Runtime dependency is packaged in the default Android build
 - Java/XML Android screens using packaged data as the primary data path
 
 ## API
@@ -214,7 +214,7 @@ Suggested live flow:
 
 - Public checkout missing data/assets: regenerate private assets locally before
   expecting the full Android runtime or backend parity endpoints to work.
-- On-device recognition weak: export and package the ONNX OpenCLIP assets with `python-tools/scripts/export_openclip_mobile.py`.
+- On-device recognition weak: verify that local recognition reference assets are generated, or use the manual checkpoint fallback during the demo.
 - Missing seed data: verify private generated `python-backend/data/campus_seed.db`
   exists locally.
 
