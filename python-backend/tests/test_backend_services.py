@@ -42,6 +42,28 @@ requires_private_recognition_data = unittest.skipUnless(
 )
 
 
+def has_openclip_dependencies() -> bool:
+    try:
+        import open_clip  # type: ignore[import-not-found]  # noqa: F401
+        import torch  # type: ignore[import-not-found]  # noqa: F401
+    except ImportError:
+        return False
+    return True
+
+
+def recognition_fixture_requires_openclip() -> bool:
+    if not METADATA_PATH.exists():
+        return False
+    metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
+    return str(metadata.get("model_version", "")).startswith("campusvista-vpr-openclip-")
+
+
+requires_recognition_runtime = unittest.skipUnless(
+    not recognition_fixture_requires_openclip() or has_openclip_dependencies(),
+    "private recognition fixture uses OpenCLIP but optional open_clip_torch/torch dependencies are not installed",
+)
+
+
 class BackendServiceTests(unittest.TestCase):
     @requires_private_backend_data
     def test_search_finds_place_and_alias(self) -> None:
@@ -98,6 +120,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertEqual("OUT_CP004.jpg", pano["image_file"])
 
     @requires_private_recognition_data
+    @requires_recognition_runtime
     def test_recognition_returns_ordered_matches_for_known_pano(self) -> None:
         service = RecognitionService(DB_PATH)
         image_bytes = PANO_PATH.read_bytes()
@@ -111,6 +134,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertLessEqual(result["matches"][0]["confidence_percent"], 99)
 
     @requires_private_recognition_data
+    @requires_recognition_runtime
     def test_recognition_coverage_reports_supported_checkpoints(self) -> None:
         coverage = RecognitionService(DB_PATH).get_coverage_summary()
 
@@ -119,6 +143,7 @@ class BackendServiceTests(unittest.TestCase):
         self.assertGreater(coverage["embedding_count"], coverage["supported_checkpoint_count"])
         self.assertTrue(coverage["model_version"].startswith("campusvista-vpr-openclip-"))
 
+    @requires_recognition_runtime
     def test_recognition_rejects_invalid_uploads_and_caches_index(self) -> None:
         service = RecognitionService(DB_PATH)
 
