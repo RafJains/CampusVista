@@ -46,6 +46,9 @@ public final class OutdoorNavActivity extends Activity {
     private ImageView panoImage;
     private Button panoPreviousButton;
     private Button panoNextButton;
+    private Button navNextButton;
+    private Button navCompleteButton;
+    private Button navPanoButton;
     private OutdoorPanoViewer panoViewer;
 
     @Override
@@ -64,6 +67,9 @@ public final class OutdoorNavActivity extends Activity {
         panoImage = findViewById(R.id.navPanoImage);
         panoPreviousButton = findViewById(R.id.navPanoPreviousButton);
         panoNextButton = findViewById(R.id.navPanoNextButton);
+        navNextButton = findViewById(R.id.navNextButton);
+        navCompleteButton = findViewById(R.id.navCompleteButton);
+        navPanoButton = findViewById(R.id.navPanoButton);
         panoViewer = new OutdoorPanoViewer(
                 this,
                 ((CampusVistaApp) getApplication()).getPanoRepository()
@@ -75,15 +81,15 @@ public final class OutdoorNavActivity extends Activity {
         routeMode = RouteMode.SHORTEST_PATH;
         startInPano = getIntent().getBooleanExtra(NavExtras.EXTRA_START_IN_PANO, false);
 
-        findViewById(R.id.navNextButton).setOnClickListener(view -> moveNext());
-        findViewById(R.id.navCompleteButton).setOnClickListener(view -> completeRoute());
-        findViewById(R.id.navPanoButton).setOnClickListener(view -> setPanoMode(true));
+        navNextButton.setOnClickListener(view -> moveNext());
+        navCompleteButton.setOnClickListener(view -> completeRoute());
+        navPanoButton.setOnClickListener(view -> setPanoMode(true));
         panoPreviousButton.setOnClickListener(view -> movePrevious());
         panoNextButton.setOnClickListener(view -> moveNext());
         findViewById(R.id.navBackToMapButton).setOnClickListener(view -> setPanoMode(false));
 
-        ViewFactory.setVisible(findViewById(R.id.navPanoButton), false);
-        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), false);
+        ViewFactory.setVisible(navPanoButton, false);
+        ViewFactory.setVisible(navCompleteButton, false);
         navProgress.setText("Preparing route...");
         computeRoute();
     }
@@ -118,7 +124,7 @@ public final class OutdoorNavActivity extends Activity {
             finish();
             return;
         }
-        ViewFactory.setVisible(findViewById(R.id.navPanoButton), true);
+        ViewFactory.setVisible(navPanoButton, true);
         updateStep();
         if (startInPano) {
             setPanoMode(true);
@@ -136,16 +142,16 @@ public final class OutdoorNavActivity extends Activity {
         if (instructionIndex >= total) {
             navProgress.setText("Route complete");
             navInstruction.setText("You have arrived at " + destinationName + ".");
-            ViewFactory.setVisible(findViewById(R.id.navNextButton), false);
-            ViewFactory.setVisible(findViewById(R.id.navCompleteButton), true);
+            ViewFactory.setVisible(navNextButton, false);
+            ViewFactory.setVisible(navCompleteButton, !panoMode);
             updatePanoStep();
             return;
         }
 
         navProgress.setText("Step " + (instructionIndex + 1) + " of " + total);
         navInstruction.setText(routeResult.getInstructions().get(instructionIndex));
-        ViewFactory.setVisible(findViewById(R.id.navNextButton), true);
-        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), false);
+        ViewFactory.setVisible(navNextButton, !panoMode);
+        ViewFactory.setVisible(navCompleteButton, false);
         updatePanoStep();
     }
 
@@ -225,8 +231,9 @@ public final class OutdoorNavActivity extends Activity {
         ViewFactory.setVisible(navProgress, !enabled);
         ViewFactory.setVisible(navInstruction, !enabled);
         ViewFactory.setVisible(findViewById(R.id.navPanoPanel), enabled);
-        ViewFactory.setVisible(findViewById(R.id.navPanoButton), !enabled);
-        ViewFactory.setVisible(findViewById(R.id.navCompleteButton), !enabled && isRouteComplete());
+        ViewFactory.setVisible(navPanoButton, !enabled);
+        ViewFactory.setVisible(navNextButton, !enabled && !isRouteComplete());
+        ViewFactory.setVisible(navCompleteButton, !enabled && isRouteComplete());
         updatePanoStep();
     }
 
